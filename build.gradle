@@ -97,7 +97,7 @@ jar {
     exclude('assets/**', 'data/**', '.cache/**') // Exclude generated assets, can't find a better way to do this :(
     manifest {
         attributes(
-            'FMLModType': 'LIBRARY'
+            'FMLModType': 'LIBRARY',
             "Specification-Title"     : "noobutil",
             "Specification-Vendor"    : "noobanidus",
             "Specification-Version"   : "1", // We are version 1 of ourselves
