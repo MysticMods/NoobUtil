@@ -1,4 +1,4 @@
-package noobanidus.mods.wishingforsunshine.util;
+package noobanidus.libs.noobutil.util;
 
 import net.minecraft.item.ItemStack;
 

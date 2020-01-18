@@ -1,4 +1,4 @@
-package noobanidus.mods.wishingforsunshine.util;
+package noobanidus.libs.noobutil.util;
 
 public class StringUtil {
   public static String capitalize(String name) {
