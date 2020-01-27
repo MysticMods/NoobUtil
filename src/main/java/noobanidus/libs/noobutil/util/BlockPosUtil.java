@@ -16,7 +16,7 @@ public class BlockPosUtil {
    * @param box AxisAlignedBB defining the area you wish to iterate over
    * @return A *mutable* iterable consisting of each block position within `box`.
    */
-  public Iterable<BlockPos> getAllInBoxMutable (AxisAlignedBB box) {
+  public static Iterable<BlockPos> getAllInBoxMutable (AxisAlignedBB box) {
     return BlockPos.getAllInBoxMutable((int)box.maxX, (int)box.maxY, (int)box.maxZ, (int)box.minX, (int)box.minY, (int)box.minZ);
   }
 
@@ -26,7 +26,7 @@ public class BlockPosUtil {
    * @param box AxisAlignedBB defining the area you wish to iterate over
    * @return A stream of BlockPos (non-mutable) consisting of each block position within `box`
    */
-  public Stream<BlockPos> getAllInBox (AxisAlignedBB box) {
+  public static Stream<BlockPos> getAllInBox (AxisAlignedBB box) {
     return BlockPos.getAllInBox((int)box.maxX, (int)box.maxY, (int)box.maxZ, (int)box.minX, (int)box.minY, (int)box.minZ);
   }
 }
