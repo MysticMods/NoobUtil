@@ -13,7 +13,7 @@ public class StringUtil {
    * i.e., `capitalize("test")` will return `Test`.
    */
   public static String capitalize(String string) {
-    if (string == null || !string.isEmpty()) {
+    if (string == null || string.isEmpty()) {
       return string;
     }
 
