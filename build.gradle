@@ -85,12 +85,20 @@ minecraft {
     }
 }
 
+repositories {
+    maven {
+        url "http://maven.tterrag.com/"
+    }
+}
+
 sourceSets.main.resources {
     srcDir 'src/generated/resources'
 }
 
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
+
+    compile fg.deobf("com.tterrag.registrate:Registrate:MC${minecraft_version}-${registrate_version}")
 }
 
 jar {
