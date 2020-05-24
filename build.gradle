@@ -27,7 +27,7 @@ sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
 
 minecraft {
-    mappings channel: 'snapshot', version: "${mcp_mappings}"
+    mappings channel: 'stable', version: "${mcp_mappings}"
 
     accessTransformer = file('src/main/resources/META-INF/accesstransformer_noobutil.cfg')
 

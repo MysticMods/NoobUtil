@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
 public class TileUtil {
-  public static <T extends TileEntity> void updateViaState (T tile) {
+  public static <T extends TileEntity> void updateViaState(T tile) {
     World world = tile.getWorld();
     if (world == null || world.isRemote()) {
       return;
