@@ -83,20 +83,20 @@ public class CustomRegistrate extends AbstractRegistrate<CustomRegistrate> {
   }
 
   // Features
-  public <FC extends IFeatureConfig, T extends Feature<FC>> FeatureBuilder<FC, T, CustomRegistrate> feature(String name, FeatureBuilder.IFactory<FC, T> factory, Function<Dynamic<?>, FC> config) {
-    return feature(this, name, factory, config);
+  public <FC extends IFeatureConfig, T extends Feature<FC>> FeatureBuilder<FC, T, CustomRegistrate> feature(String name, FeatureBuilder.IFactory<FC, T> factory, Function<Dynamic<?>, FC> config, boolean doBlockNotify) {
+    return feature(this, name, factory, config, doBlockNotify);
   }
 
-  public <FC extends IFeatureConfig, T extends Feature<FC>> FeatureBuilder<FC, T, CustomRegistrate> feature(FeatureBuilder.IFactory<FC, T> factory, Function<Dynamic<?>, FC> config) {
-    return feature(this, factory, config);
+  public <FC extends IFeatureConfig, T extends Feature<FC>> FeatureBuilder<FC, T, CustomRegistrate> feature(FeatureBuilder.IFactory<FC, T> factory, Function<Dynamic<?>, FC> config, boolean doBlockNotify) {
+    return feature(this, factory, config, doBlockNotify);
   }
 
-  public <FC extends IFeatureConfig, T extends Feature<FC>, P> FeatureBuilder<FC, T, P> feature(P parent, FeatureBuilder.IFactory<FC, T> factory, Function<Dynamic<?>, FC> config)  {
-    return feature(parent, currentName(), factory, config);
+  public <FC extends IFeatureConfig, T extends Feature<FC>, P> FeatureBuilder<FC, T, P> feature(P parent, FeatureBuilder.IFactory<FC, T> factory, Function<Dynamic<?>, FC> config, boolean doBlockNotify)  {
+    return feature(parent, currentName(), factory, config, doBlockNotify);
   }
 
-  public <FC extends IFeatureConfig, T extends Feature<FC>, P> FeatureBuilder<FC, T, P> feature(P parent, String name, FeatureBuilder.IFactory<FC, T> factory, Function<Dynamic<?>, FC> config) {
-    return entry(name, callback -> new FeatureBuilder<>(this, parent, name, callback, config, factory));
+  public <FC extends IFeatureConfig, T extends Feature<FC>, P> FeatureBuilder<FC, T, P> feature(P parent, String name, FeatureBuilder.IFactory<FC, T> factory, Function<Dynamic<?>, FC> config, boolean doBlockNotify) {
+    return entry(name, callback -> new FeatureBuilder<>(this, parent, name, callback, config, doBlockNotify, factory));
   }
 
   public SoundEventBuilder<SoundEvent, CustomRegistrate> soundEvent() {
