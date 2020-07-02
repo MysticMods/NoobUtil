@@ -11,20 +11,22 @@ import java.util.function.Function;
 public class FeatureBuilder<FC extends IFeatureConfig, T extends Feature<FC>, P> extends AbstractBuilder<Feature<?>, T, P, FeatureBuilder<FC, T, P>> {
   private IFactory<FC, T> factory;
   private Function<Dynamic<?>, FC> configFactory;
+  private boolean doBlockNotify;
 
-  public FeatureBuilder(CustomRegistrate owner, P parent, String name, BuilderCallback callback, Function<Dynamic<?>, FC> configfactory, IFactory<FC, T> factory) {
+  public FeatureBuilder(CustomRegistrate owner, P parent, String name, BuilderCallback callback, Function<Dynamic<?>, FC> configfactory, boolean doBlockNotify, IFactory<FC, T> factory) {
     super(owner, parent, name, callback, Feature.class);
     this.factory = factory;
     this.configFactory = configfactory;
+    this.doBlockNotify = doBlockNotify;
   }
 
   @Override
   protected T createEntry() {
-    return factory.create(configFactory);
+    return factory.create(configFactory, doBlockNotify);
   }
 
   @FunctionalInterface
   public interface IFactory<FC extends IFeatureConfig, T extends Feature<FC>> {
-    T create(Function<Dynamic<?>, FC> factory);
+    T create(Function<Dynamic<?>, FC> factory, boolean doBlockNotify);
   }
 }
