@@ -16,6 +16,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.gen.placement.IPlacementConfig;
+import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.function.Function;
@@ -114,6 +116,24 @@ public class CustomRegistrate extends AbstractRegistrate<CustomRegistrate> {
 
   public <FC extends IFeatureConfig, T extends Feature<FC>, P> FeatureBuilder<FC, T, P> feature(P parent, String name, FeatureBuilder.IFactory<FC, T> factory, Function<Dynamic<?>, FC> config) {
     return entry(name, callback -> new FeatureBuilder<>(this, parent, name, callback, config, factory));
+  }
+
+  // Placement
+  // Features
+  public <DC extends IPlacementConfig, T extends Placement<DC>> PlacementBuilder<DC, T, CustomRegistrate> placement(String name, PlacementBuilder.IFactory<DC, T> factory, Function<Dynamic<?>, DC> config) {
+    return placement(this, name, factory, config);
+  }
+
+  public <DC extends IPlacementConfig, T extends Placement<DC>> PlacementBuilder<DC, T, CustomRegistrate> placement(PlacementBuilder.IFactory<DC, T> factory, Function<Dynamic<?>, DC> config) {
+    return placement(this, factory, config);
+  }
+
+  public <DC extends IPlacementConfig, T extends Placement<DC>, P> PlacementBuilder<DC, T, P> placement(P parent, PlacementBuilder.IFactory<DC, T> factory, Function<Dynamic<?>, DC> config)  {
+    return placement(parent, currentName(), factory, config);
+  }
+
+  public <DC extends IPlacementConfig, T extends Placement<DC>, P> PlacementBuilder<DC, T, P> placement(P parent, String name, PlacementBuilder.IFactory<DC, T> factory, Function<Dynamic<?>, DC> config) {
+    return entry(name, callback -> new PlacementBuilder<>(this, parent, name, callback, config, factory));
   }
 
   public SoundEventBuilder<SoundEvent, CustomRegistrate> soundEvent() {
