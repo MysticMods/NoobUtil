@@ -25,7 +25,7 @@ public class VoxelUtil {
   private static final Vec3d fromOrigin = new Vec3d(-0.5, -0.5, -0.5);
 
   /**
-   * @param base   The base voxel shape that all additional shapes will be {@link VoxelShapes::or VoxelShapes::or'd} into.
+   * @param base   The base voxel shape that all additional shapes will be {@link VoxelShapes ::or VoxelShapes::or'd} into.
    * @param shapes Additional shapes to be combined into the main shape.
    * @return The combination of base and each item contained within `shapes`.
    */
@@ -41,7 +41,7 @@ public class VoxelUtil {
 
   /**
    * @param base   6 doubles defining the uppermost and lowermost points of a cube, that all additional shapes will
-   *               be {@link VoxelShapes::or VoxelShapes::or'd} into.
+   *               be {@link VoxelShapes ::or VoxelShapes::or'd} into.
    * @param shapes Additional shapes defined as an array of 6 doubles, to be combined into the main shape.
    * @return The combination of the base and each subsequent shape.
    */
