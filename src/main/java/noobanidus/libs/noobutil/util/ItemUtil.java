@@ -27,6 +27,10 @@ public class ItemUtil {
     }
   }
 
+  public static boolean equalWithoutDamage(ItemStack stack1, ItemStack stack2) {
+    return ItemStack.areItemsEqual(stack1, stack2) && ItemStack.areItemStackTagsEqual(stack1, stack2);
+  }
+
   public static class Spawn {
     public static ItemEntity spawnItem(World world, BlockPos pos, ItemStack stack) {
       return spawnItem(world, pos, stack, -1);
