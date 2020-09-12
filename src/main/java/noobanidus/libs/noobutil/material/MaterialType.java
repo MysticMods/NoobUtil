@@ -94,7 +94,7 @@ public class MaterialType {
     return this;
   }
 
-  public MaterialType itemMaterial(int maxUses, float efficiency, float attackDamage, int harvestLevel, int enchantability, Supplier<Ingredient> repairMaterial) {
+  public MaterialType itemMaterial(int maxUses, float efficiency, float attackDamage, int harvestLevel, int enchantability, @Nonnull Supplier<Ingredient> repairMaterial) {
     return itemMaterial(maxUses, efficiency, attackDamage, harvestLevel, enchantability);
   }
 
