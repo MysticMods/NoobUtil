@@ -341,7 +341,7 @@ public class MaterialType {
     @Override
     @Nonnull
     public Ingredient getRepairMaterial() {
-      return tier == null ? repairMaterial.get() : tier.getRepairMaterial();
+      return tier == null ? repairMaterial == null ? Ingredient.EMPTY : repairMaterial.get() : tier.getRepairMaterial();
     }
   }
 }
