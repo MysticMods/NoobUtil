@@ -9,6 +9,7 @@ import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -36,7 +37,7 @@ public class MaterialType {
   private float attackDamage;
   private int harvestLevel;
   private int enchantability;
-  private Supplier<Ingredient> repairMaterial;
+  private Supplier<? extends Ingredient> repairMaterial = null;
 
   private int maxDamageFactor;
   private int[] damageReductionAmountArray;
@@ -90,11 +91,11 @@ public class MaterialType {
     this.attackDamage = attackDamage;
     this.harvestLevel = harvestLevel;
     this.enchantability = enchantability;
-    this.repairMaterial = () -> Ingredient.fromItems(item.get().get());
     return this;
   }
 
-  public MaterialType itemMaterial(int maxUses, float efficiency, float attackDamage, int harvestLevel, int enchantability, @Nonnull Supplier<Ingredient> repairMaterial) {
+  public MaterialType itemMaterial(int maxUses, float efficiency, float attackDamage, int harvestLevel, int enchantability, @Nonnull Supplier<? extends Ingredient> repairMaterial) {
+    this.repairMaterial = repairMaterial;
     return itemMaterial(maxUses, efficiency, attackDamage, harvestLevel, enchantability);
   }
 
@@ -204,6 +205,11 @@ public class MaterialType {
     return ore.get();
   }
 
+  public MaterialType repairMaterial (Supplier<Supplier<? extends Ingredient>> ingredient) {
+    this.repairMaterial = ingredient.get();
+    return this;
+  }
+
   public MaterialType item(Supplier<Supplier<? extends Item>> ingot) {
     this.item = ingot;
     return this;
@@ -273,6 +279,13 @@ public class MaterialType {
     return name + "_nugget";
   }
 
+  public Ingredient getActualRepairMaterial () {
+    if (repairMaterial == null) {
+      repairMaterial = () -> Ingredient.fromItems(item.get().get());
+    }
+    return repairMaterial.get();
+  }
+
   public class ArmorMaterial implements IArmorMaterial {
     @Override
     public int getDurability(EquipmentSlotType slotIn) {
@@ -297,7 +310,7 @@ public class MaterialType {
     @Override
     @Nonnull
     public Ingredient getRepairMaterial() {
-      return tier == null ? repairMaterial.get() : tier.getRepairMaterial();
+      return tier == null ? getActualRepairMaterial() : tier.getRepairMaterial();
     }
 
     @Override
@@ -341,7 +354,7 @@ public class MaterialType {
     @Override
     @Nonnull
     public Ingredient getRepairMaterial() {
-      return tier == null ? repairMaterial == null ? Ingredient.EMPTY : repairMaterial.get() : tier.getRepairMaterial();
+      return tier == null ? getActualRepairMaterial() : tier.getRepairMaterial();
     }
   }
 }
