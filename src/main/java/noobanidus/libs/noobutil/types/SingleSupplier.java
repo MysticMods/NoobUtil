@@ -2,11 +2,11 @@ package noobanidus.libs.noobutil.types;
 
 import java.util.function.Supplier;
 
-public class OneTimeSupplier<T> implements Supplier<T> {
+public class SingleSupplier<T> implements Supplier<T> {
   private T value = null;
   private final Supplier<T> creator;
 
-  public OneTimeSupplier(Supplier<T> creator) {
+  public SingleSupplier(Supplier<T> creator) {
     this.creator = creator;
   }
 
