@@ -1,12 +1,12 @@
 package noobanidus.libs.noobutil.util;
 
-import com.sun.javafx.geom.Vec3d;
 import net.minecraft.util.Direction;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.shapes.IBooleanFunction;
 import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.util.math.shapes.VoxelShapes;
+import net.minecraft.util.math.vector.Vector3d;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -22,7 +22,7 @@ import java.util.function.UnaryOperator;
 public class VoxelUtil {
   public static Logger logger = LogManager.getLogger();
 
-  private static final Vec3d fromOrigin = new Vec3d(-0.5, -0.5, -0.5);
+  private static final Vector3d fromOrigin = new Vector3d(-0.5, -0.5, -0.5);
 
   /**
    * @param base   The base voxel shape that all additional shapes will be {@link VoxelShapes ::or VoxelShapes::or'd} into.
@@ -284,9 +284,9 @@ public class VoxelUtil {
    * @param rotateAngleX Angle in radians in the X direction to rotate the input point
    * @param rotateAngleY Angle in radians in the Y direction to rotate the input point
    * @param rotateAngleZ Angle in radians in the Z direction to rotate the input point
-   * @return A {@link Vec3f} of the new positions for x, y, and z after rotating around the origin at the given angle.
+   * @return A {@link Vector3f} of the new positions for x, y, and z after rotating around the origin at the given angle.
    */
-  private static Vec3f rotateVector(float x, float y, float z, float rotateAngleX, float rotateAngleY, float rotateAngleZ) {
+  private static Vector3f rotateVector(float x, float y, float z, float rotateAngleX, float rotateAngleY, float rotateAngleZ) {
     //TODO: It does not seem that multi angle rotations work properly, at least when one of them is y
     float xReturn = x;
     float yReturn = y;
@@ -313,7 +313,7 @@ public class VoxelUtil {
       yReturn = y * cosX - z * sinX;
       zReturn = y * sinX + z * cosX;
     }
-    return new Vec3f(xReturn, yReturn, zReturn);
+    return new Vector3f(xReturn, yReturn, zReturn);
   }
 
   @FunctionalInterface
@@ -322,42 +322,42 @@ public class VoxelUtil {
   }
 
   /**
-   * Float version of Vec3d
+   * Float version of Vector3d
    */
-  private static class Vec3f {
+  private static class Vector3f {
 
     public final float x;
     public final float y;
     public final float z;
 
-    public Vec3f(float x, float y, float z) {
+    public Vector3f(float x, float y, float z) {
       this.x = x;
       this.y = y;
       this.z = z;
     }
 
-    public Vec3f scale(float factor) {
+    public Vector3f scale(float factor) {
       return mul(factor, factor, factor);
     }
 
-    public Vec3f subtract(Vec3f vec) {
+    public Vector3f subtract(Vector3f vec) {
       return subtract(vec.x, vec.y, vec.z);
     }
 
-    public Vec3f subtract(float x, float y, float z) {
+    public Vector3f subtract(float x, float y, float z) {
       return add(-x, -y, -z);
     }
 
-    public Vec3f add(Vec3f vec) {
+    public Vector3f add(Vector3f vec) {
       return add(vec.x, vec.y, vec.z);
     }
 
-    public Vec3f add(float x, float y, float z) {
-      return new Vec3f(this.x + x, this.y + y, this.z + z);
+    public Vector3f add(float x, float y, float z) {
+      return new Vector3f(this.x + x, this.y + y, this.z + z);
     }
 
-    public Vec3f mul(float factorX, float factorY, float factorZ) {
-      return new Vec3f(this.x * factorX, this.y * factorY, this.z * factorZ);
+    public Vector3f mul(float factorX, float factorY, float factorZ) {
+      return new Vector3f(this.x * factorX, this.y * factorY, this.z * factorZ);
     }
 
     public String toString() {
