@@ -1,7 +1,7 @@
 package noobanidus.libs.noobutil.util;
 
+import com.sun.javafx.geom.Vec3d;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 
 import javax.annotation.Nonnull;
 import java.util.Random;

@@ -1,7 +1,7 @@
 package noobanidus.libs.noobutil.modifiers;
 
-import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
-import net.minecraft.entity.ai.attributes.IAttribute;
+import net.minecraft.entity.ai.attributes.Attribute;
+import net.minecraft.entity.ai.attributes.AttributeModifierManager;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.event.entity.EntityEvent;
 
@@ -15,13 +15,13 @@ public class PlayerModifierRegistry {
     return INSTANCE;
   }
 
-  private List<IAttribute> attributes;
+  private List<Attribute> attributes;
 
   public PlayerModifierRegistry() {
     this.attributes = new ArrayList<>();
   }
 
-  public IAttribute registerAttribute(IAttribute attribute) {
+  public Attribute registerAttribute(Attribute attribute) {
     this.attributes.add(attribute);
     return attribute;
   }
@@ -30,12 +30,10 @@ public class PlayerModifierRegistry {
     if (event.getEntity() instanceof PlayerEntity) {
       PlayerEntity player = (PlayerEntity) event.getEntity();
 
-      AbstractAttributeMap map = player.getAttributes();
+      AttributeModifierManager map = player.getAttributeManager();
 
-      for (IAttribute attrib : attributes) {
-        if (map.getAttributeInstanceByName(attrib.getName()) == null) {
-          map.registerAttribute(attrib);
-        }
+      for (Attribute attrib : attributes) {
+        map.createInstanceIfAbsent(attrib);
       }
     }
   }

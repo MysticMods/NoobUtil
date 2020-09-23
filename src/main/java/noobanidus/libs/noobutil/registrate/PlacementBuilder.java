@@ -1,6 +1,6 @@
 package noobanidus.libs.noobutil.registrate;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Dynamic;
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
 import net.minecraft.world.gen.placement.IPlacementConfig;

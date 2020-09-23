@@ -36,6 +36,7 @@ public class MaterialType {
   private float attackDamage;
   private int harvestLevel;
   private int enchantability;
+  private float knockbackResistance;
   private Supplier<Ingredient> repairMaterial;
 
   private int maxDamageFactor;
@@ -98,11 +99,12 @@ public class MaterialType {
     return itemMaterial(maxUses, efficiency, attackDamage, harvestLevel, enchantability);
   }
 
-  public MaterialType armorMaterial(int maxDamageFactor, int[] damageReductionAmountArray, SoundEvent soundEvent, float toughness) {
+  public MaterialType armorMaterial(int maxDamageFactor, int[] damageReductionAmountArray, SoundEvent soundEvent, float toughness, float knockbackResistance) {
     this.maxDamageFactor = maxDamageFactor;
     this.damageReductionAmountArray = damageReductionAmountArray;
     this.soundEvent = soundEvent;
     this.toughness = toughness;
+    this.knockbackResistance = knockbackResistance;
     return this;
   }
 
@@ -292,6 +294,11 @@ public class MaterialType {
     @Override
     public float getToughness() {
       return material == null ? toughness : material.getToughness();
+    }
+
+    @Override
+    public float getKnockbackResistance() {
+      return material == null ? knockbackResistance : material.getKnockbackResistance();
     }
 
     @Override

@@ -98,7 +98,7 @@ sourceSets.main.resources {
 dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
-    compile fg.deobf("com.tterrag.registrate:Registrate:MC${minecraft_version}-${registrate_version}")
+    compile fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
 }
 
 jar {

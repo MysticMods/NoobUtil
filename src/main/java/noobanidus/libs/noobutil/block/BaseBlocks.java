@@ -12,6 +12,7 @@ import net.minecraft.world.IBlockReader;
 import javax.annotation.Nonnull;
 import java.util.Random;
 
+@SuppressWarnings("deprecation")
 public class BaseBlocks {
   public static class CropsBlock extends net.minecraft.block.CropsBlock {
     public CropsBlock(Properties builder) {

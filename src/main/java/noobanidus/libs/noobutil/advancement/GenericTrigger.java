@@ -8,7 +8,9 @@ import com.google.gson.JsonObject;
 import net.minecraft.advancements.ICriterionTrigger;
 import net.minecraft.advancements.PlayerAdvancements;
 import net.minecraft.advancements.criterion.CriterionInstance;
+import net.minecraft.advancements.criterion.EntityPredicate;
 import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.loot.ConditionArrayParser;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nonnull;
@@ -67,9 +69,8 @@ public class GenericTrigger<T> implements ICriterionTrigger<GenericTrigger.Insta
   }
 
   @Override
-  @Nonnull
-  public Instance<T> deserializeInstance(@Nonnull JsonObject json, @Nonnull JsonDeserializationContext context) {
-    return new Instance<>(getId(), predicate.deserialize(json));
+  public Instance<T> deserialize(JsonObject jsonObject, ConditionArrayParser conditionArrayParser) {
+    return new Instance<>(getId(), predicate.deserialize(jsonObject));
   }
 
   public void trigger(ServerPlayerEntity player, T condition) {
@@ -84,7 +85,7 @@ public class GenericTrigger<T> implements ICriterionTrigger<GenericTrigger.Insta
     IGenericPredicate<T> predicate;
 
     Instance(ResourceLocation location, IGenericPredicate<T> predicate) {
-      super(location);
+      super(location, EntityPredicate.AndPredicate.ANY_AND);
 
       this.predicate = predicate;
     }

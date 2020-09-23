@@ -1,13 +1,12 @@
 package noobanidus.libs.noobutil.registrate;
 
-import com.mojang.datafixers.Dynamic;
+import com.mojang.serialization.Dynamic;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import net.minecraft.block.Block;
-import net.minecraft.block.LogBlock;
+import net.minecraft.block.RotatedPillarBlock;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.material.MaterialColor;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.ContainerType;
 import net.minecraft.item.crafting.IRecipeSerializer;
@@ -93,7 +92,7 @@ public class CustomRegistrate extends AbstractRegistrate<CustomRegistrate> {
     return feature(this, factory, config, doBlockNotify);
   }
 
-  public <FC extends IFeatureConfig, T extends Feature<FC>, P> NotifyingFeatureBuilder<FC, T, P> feature(P parent, NotifyingFeatureBuilder.IFactoryNotify<FC, T> factory, Function<Dynamic<?>, FC> config, boolean doBlockNotify)  {
+  public <FC extends IFeatureConfig, T extends Feature<FC>, P> NotifyingFeatureBuilder<FC, T, P> feature(P parent, NotifyingFeatureBuilder.IFactoryNotify<FC, T> factory, Function<Dynamic<?>, FC> config, boolean doBlockNotify) {
     return feature(parent, currentName(), factory, config, doBlockNotify);
   }
 
@@ -110,7 +109,7 @@ public class CustomRegistrate extends AbstractRegistrate<CustomRegistrate> {
     return feature(this, factory, config);
   }
 
-  public <FC extends IFeatureConfig, T extends Feature<FC>, P> FeatureBuilder<FC, T, P> feature(P parent, FeatureBuilder.IFactory<FC, T> factory, Function<Dynamic<?>, FC> config)  {
+  public <FC extends IFeatureConfig, T extends Feature<FC>, P> FeatureBuilder<FC, T, P> feature(P parent, FeatureBuilder.IFactory<FC, T> factory, Function<Dynamic<?>, FC> config) {
     return feature(parent, currentName(), factory, config);
   }
 
@@ -128,7 +127,7 @@ public class CustomRegistrate extends AbstractRegistrate<CustomRegistrate> {
     return placement(this, factory, config);
   }
 
-  public <DC extends IPlacementConfig, T extends Placement<DC>, P> PlacementBuilder<DC, T, P> placement(P parent, PlacementBuilder.IFactory<DC, T> factory, Function<Dynamic<?>, DC> config)  {
+  public <DC extends IPlacementConfig, T extends Placement<DC>, P> PlacementBuilder<DC, T, P> placement(P parent, PlacementBuilder.IFactory<DC, T> factory, Function<Dynamic<?>, DC> config) {
     return placement(parent, currentName(), factory, config);
   }
 
@@ -156,11 +155,11 @@ public class CustomRegistrate extends AbstractRegistrate<CustomRegistrate> {
     return entry(name, callback -> new SoundEventBuilder<>(this, parent, name, callback, factory));
   }
 
-  public BlockBuilder<LogBlock, CustomRegistrate> log(String name, MaterialColor color) {
-    return this.log(this.self(), name, (b) -> new LogBlock(color, b), Material.WOOD);
+  public BlockBuilder<RotatedPillarBlock, CustomRegistrate> log(String name/*, MaterialColor color*/) {
+    return this.log(this.self(), name, RotatedPillarBlock::new, Material.WOOD/*, color*/);
   }
 
-  public <T extends LogBlock> BlockBuilder<T, CustomRegistrate> log(CustomRegistrate parent, String name, NonNullFunction<Block.Properties, T> factory, Material material) {
+  public <T extends RotatedPillarBlock> BlockBuilder<T, CustomRegistrate> log(CustomRegistrate parent, String name, NonNullFunction<Block.Properties, T> factory, Material material/*, MaterialColor color*/) {
     return this.entry(name, (callback) -> BlockBuilder.create(this, parent, name, callback, factory, material));
   }
 }
