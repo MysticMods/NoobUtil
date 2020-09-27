@@ -2,6 +2,7 @@ package noobanidus.libs.noobutil.registrate;
 
 import com.mojang.datafixers.Dynamic;
 import com.tterrag.registrate.AbstractRegistrate;
+import com.tterrag.registrate.builders.BiomeBuilder;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import net.minecraft.block.Block;
@@ -14,6 +15,7 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 import net.minecraft.world.gen.placement.IPlacementConfig;
@@ -163,4 +165,23 @@ public class CustomRegistrate extends AbstractRegistrate<CustomRegistrate> {
   public <T extends LogBlock> BlockBuilder<T, CustomRegistrate> log(CustomRegistrate parent, String name, NonNullFunction<Block.Properties, T> factory, Material material) {
     return this.entry(name, (callback) -> BlockBuilder.create(this, parent, name, callback, factory, material));
   }
+
+  // simple biomes
+
+  public <T extends Biome> SimpleBiomeBuilder<T, CustomRegistrate> biome(Supplier<T> factory) {
+    return biome(this, factory);
+  }
+
+  public <T extends Biome> SimpleBiomeBuilder<T, CustomRegistrate> biome(String name, Supplier<T> factory) {
+    return biome(this, name, factory);
+  }
+
+  public <T extends Biome, P> SimpleBiomeBuilder<T, P> biome(P parent, Supplier<T> factory) {
+    return biome(parent, currentName(), factory);
+  }
+
+  public <T extends Biome, P> SimpleBiomeBuilder<T, P> biome(P parent, String name, Supplier<T> factory) {
+    return entry(name, callback -> SimpleBiomeBuilder.create(this, parent, name, callback, factory));
+  }
+
 }
