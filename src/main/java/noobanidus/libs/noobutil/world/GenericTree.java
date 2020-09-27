@@ -13,6 +13,10 @@ public class GenericTree extends Tree {
   private final Supplier<TreeFeatureConfig> config;
   private boolean fancy;
 
+  public GenericTree(Supplier<TreeFeatureConfig> config) {
+    this(config, false);
+  }
+
   public GenericTree(Supplier<TreeFeatureConfig> config, boolean fancy) {
     this.config = config;
     this.fancy = fancy;
