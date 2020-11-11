@@ -1,6 +1,5 @@
 package noobanidus.libs.noobutil.registrate;
 
-import com.mojang.serialization.Dynamic;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
@@ -13,13 +12,8 @@ import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.potion.Effect;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.placement.IPlacementConfig;
-import net.minecraft.world.gen.placement.Placement;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class CustomRegistrate extends AbstractRegistrate<CustomRegistrate> {
@@ -81,58 +75,6 @@ public class CustomRegistrate extends AbstractRegistrate<CustomRegistrate> {
 
   public <T extends Container, P> ContainerBuilder<T, P> containerType(P parent, String name, ContainerType.IFactory<T> factory) {
     return entry(name, callback -> new ContainerBuilder<>(this, parent, name, callback, factory));
-  }
-
-  // Features
-  public <FC extends IFeatureConfig, T extends Feature<FC>> NotifyingFeatureBuilder<FC, T, CustomRegistrate> feature(String name, NotifyingFeatureBuilder.IFactoryNotify<FC, T> factory, Function<Dynamic<?>, FC> config, boolean doBlockNotify) {
-    return feature(this, name, factory, config, doBlockNotify);
-  }
-
-  public <FC extends IFeatureConfig, T extends Feature<FC>> NotifyingFeatureBuilder<FC, T, CustomRegistrate> feature(NotifyingFeatureBuilder.IFactoryNotify<FC, T> factory, Function<Dynamic<?>, FC> config, boolean doBlockNotify) {
-    return feature(this, factory, config, doBlockNotify);
-  }
-
-  public <FC extends IFeatureConfig, T extends Feature<FC>, P> NotifyingFeatureBuilder<FC, T, P> feature(P parent, NotifyingFeatureBuilder.IFactoryNotify<FC, T> factory, Function<Dynamic<?>, FC> config, boolean doBlockNotify) {
-    return feature(parent, currentName(), factory, config, doBlockNotify);
-  }
-
-  public <FC extends IFeatureConfig, T extends Feature<FC>, P> NotifyingFeatureBuilder<FC, T, P> feature(P parent, String name, NotifyingFeatureBuilder.IFactoryNotify<FC, T> factory, Function<Dynamic<?>, FC> config, boolean doBlockNotify) {
-    return entry(name, callback -> new NotifyingFeatureBuilder<>(this, parent, name, callback, config, doBlockNotify, factory));
-  }
-
-  // Features
-  public <FC extends IFeatureConfig, T extends Feature<FC>> FeatureBuilder<FC, T, CustomRegistrate> feature(String name, FeatureBuilder.IFactory<FC, T> factory, Function<Dynamic<?>, FC> config) {
-    return feature(this, name, factory, config);
-  }
-
-  public <FC extends IFeatureConfig, T extends Feature<FC>> FeatureBuilder<FC, T, CustomRegistrate> feature(FeatureBuilder.IFactory<FC, T> factory, Function<Dynamic<?>, FC> config) {
-    return feature(this, factory, config);
-  }
-
-  public <FC extends IFeatureConfig, T extends Feature<FC>, P> FeatureBuilder<FC, T, P> feature(P parent, FeatureBuilder.IFactory<FC, T> factory, Function<Dynamic<?>, FC> config) {
-    return feature(parent, currentName(), factory, config);
-  }
-
-  public <FC extends IFeatureConfig, T extends Feature<FC>, P> FeatureBuilder<FC, T, P> feature(P parent, String name, FeatureBuilder.IFactory<FC, T> factory, Function<Dynamic<?>, FC> config) {
-    return entry(name, callback -> new FeatureBuilder<>(this, parent, name, callback, config, factory));
-  }
-
-  // Placement
-  // Features
-  public <DC extends IPlacementConfig, T extends Placement<DC>> PlacementBuilder<DC, T, CustomRegistrate> placement(String name, PlacementBuilder.IFactory<DC, T> factory, Function<Dynamic<?>, DC> config) {
-    return placement(this, name, factory, config);
-  }
-
-  public <DC extends IPlacementConfig, T extends Placement<DC>> PlacementBuilder<DC, T, CustomRegistrate> placement(PlacementBuilder.IFactory<DC, T> factory, Function<Dynamic<?>, DC> config) {
-    return placement(this, factory, config);
-  }
-
-  public <DC extends IPlacementConfig, T extends Placement<DC>, P> PlacementBuilder<DC, T, P> placement(P parent, PlacementBuilder.IFactory<DC, T> factory, Function<Dynamic<?>, DC> config) {
-    return placement(parent, currentName(), factory, config);
-  }
-
-  public <DC extends IPlacementConfig, T extends Placement<DC>, P> PlacementBuilder<DC, T, P> placement(P parent, String name, PlacementBuilder.IFactory<DC, T> factory, Function<Dynamic<?>, DC> config) {
-    return entry(name, callback -> new PlacementBuilder<>(this, parent, name, callback, config, factory));
   }
 
   public SoundEventBuilder<SoundEvent, CustomRegistrate> soundEvent() {
