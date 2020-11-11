@@ -2,11 +2,8 @@ package noobanidus.libs.noobutil.data;
 
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateRecipeProvider;
-import com.tterrag.registrate.util.DataIngredient;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
-import net.minecraft.advancements.criterion.InventoryChangeTrigger;
-import net.minecraft.advancements.criterion.ItemPredicate;
 import net.minecraft.advancements.criterion.MinMaxBounds;
 import net.minecraft.block.Block;
 import net.minecraft.data.*;
@@ -15,6 +12,7 @@ import net.minecraft.item.Items;
 import net.minecraft.item.crafting.IRecipeSerializer;
 import net.minecraft.item.crafting.Ingredient;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagCollectionManager;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Tags;
@@ -43,6 +41,10 @@ public class RecipeGenerator {
     return new ResourceLocation(modid, comp);
   }
 
+  public ResourceLocation getId(Tag<Item> tag) {
+    return TagCollectionManager.getManager().getItemTags().getDirectIdFromTag(tag);
+  }
+
   public <T extends Item> NonNullBiConsumer<DataGenContext<Item, T>, RegistrateRecipeProvider> storage(Supplier<RegistryEntry<Block>> block, Supplier<RegistryEntry<Item>> ingot, Tag<Item> blockTag, Tag<Item> ingotTag, @Nullable Tag<Item> oreTag, @Nullable Supplier<RegistryEntry<Item>> nugget, @Nullable Tag<Item> nuggetTag, @Nullable Tag<Item> dustTag) {
     return (ctx, p) -> {
 
@@ -52,13 +54,13 @@ public class RecipeGenerator {
           .patternLine("###")
           .patternLine("###")
           .key('#', ingotTag)
-          .addCriterion("has_at_least_9_" + safeName(ingotTag.getId()), p.hasItem(ingotTag))
-          .build(p, rl(safeName(ingotTag.getId()) + "_to_storage_block"));
+          .addCriterion("has_at_least_9_" + safeName(getId(ingotTag)), p.hasItem(ingotTag))
+          .build(p, rl(safeName(getId(ingotTag)) + "_to_storage_block"));
       // Block to ingot
       ShapelessRecipeBuilder.shapelessRecipe(ingot.get().get(), 9)
           .addIngredient(blockTag)
-          .addCriterion("has_block_" + safeName(blockTag.getId()), p.hasItem(blockTag))
-          .build(p, rl(safeName(blockTag.getId()) + "_to_9_ingots"));
+          .addCriterion("has_block_" + safeName(getId(blockTag)), p.hasItem(blockTag))
+          .build(p, rl(safeName(getId(blockTag)) + "_to_9_ingots"));
       if (oreTag != null) {
         // Ore smelting
         ore(oreTag, ingot.get(), 0.125f, p);
@@ -69,12 +71,12 @@ public class RecipeGenerator {
             .patternLine("###")
             .patternLine("###")
             .key('#', nuggetTag)
-            .addCriterion("has_at_least_9_" + safeName(nuggetTag.getId()), p.hasItem(nuggetTag))
-            .build(p, rl(safeName(nuggetTag.getId()) + "_to_ingot"));
+            .addCriterion("has_at_least_9_" + safeName(getId(nuggetTag)), p.hasItem(nuggetTag))
+            .build(p, rl(safeName(getId(nuggetTag)) + "_to_ingot"));
         ShapelessRecipeBuilder.shapelessRecipe(Objects.requireNonNull(nugget).get().get(), 9)
             .addIngredient(ingotTag)
-            .addCriterion("has_ingot_" + safeName(ingotTag.getId()), p.hasItem(ingotTag))
-            .build(p, rl(safeName(ingotTag.getId()) + "_to_9_nuggets"));
+            .addCriterion("has_ingot_" + safeName(getId(ingotTag)), p.hasItem(ingotTag))
+            .build(p, rl(safeName(getId(ingotTag)) + "_to_9_nuggets"));
       }
       if (dustTag != null) {
         dust(dustTag, ingot.get(), 0.125f, p);
@@ -83,64 +85,64 @@ public class RecipeGenerator {
   }
 
   public <T extends IItemProvider & IForgeRegistryEntry<?>> void ore(Tag<Item> source, Supplier<T> result, float xp, Consumer<IFinishedRecipe> consumer) {
-    CookingRecipeBuilder.smeltingRecipe(Ingredient.fromTag(source), result.get(), xp, 200).addCriterion("has_" + safeName(source.getId()), this.hasItem(source)).build(consumer, rl(safeId(result.get()) + "_from_smelting"));
-    CookingRecipeBuilder.blastingRecipe(Ingredient.fromTag(source), result.get(), xp, 100).addCriterion("has_" + safeName(source.getId()), this.hasItem(source)).build(consumer, rl(safeId(result.get()) + "_from_blasting"));
+    CookingRecipeBuilder.smeltingRecipe(Ingredient.fromTag(source), result.get(), xp, 200).addCriterion("has_" + safeName(getId(source)), RegistrateRecipeProvider.hasItem(source)).build(consumer, rl(safeId(result.get()) + "_from_smelting"));
+    CookingRecipeBuilder.blastingRecipe(Ingredient.fromTag(source), result.get(), xp, 100).addCriterion("has_" + safeName(getId(source)), RegistrateRecipeProvider.hasItem(source)).build(consumer, rl(safeId(result.get()) + "_from_blasting"));
   }
 
   public <T extends IItemProvider & IForgeRegistryEntry<?>> void dust(Tag<Item> source, Supplier<T> result, float xp, Consumer<IFinishedRecipe> consumer) {
-    CookingRecipeBuilder.smeltingRecipe(Ingredient.fromTag(source), result.get(), xp, 200).addCriterion("has_" + safeName(source.getId()), this.hasItem(source)).build(consumer, rl(safeId(result.get()) + "_from_smelting_dust"));
-    CookingRecipeBuilder.blastingRecipe(Ingredient.fromTag(source), result.get(), xp, 100).addCriterion("has_" + safeName(source.getId()), this.hasItem(source)).build(consumer, rl(safeId(result.get()) + "_from_blasting_dust"));
+    CookingRecipeBuilder.smeltingRecipe(Ingredient.fromTag(source), result.get(), xp, 200).addCriterion("has_" + safeName(getId(source)), RegistrateRecipeProvider.hasItem(source)).build(consumer, rl(safeId(result.get()) + "_from_smelting_dust"));
+    CookingRecipeBuilder.blastingRecipe(Ingredient.fromTag(source), result.get(), xp, 100).addCriterion("has_" + safeName(getId(source)), RegistrateRecipeProvider.hasItem(source)).build(consumer, rl(safeId(result.get()) + "_from_blasting_dust"));
   }
 
   public <T extends IItemProvider & IForgeRegistryEntry<?>> void recycle(Supplier<? extends T> source, Supplier<? extends T> result, float xp, Consumer<IFinishedRecipe> consumer) {
     CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(source.get()), result.get(), xp, 200)
-        .addCriterion("has_" + safeName(source.get().getRegistryName()), this.hasItem(source.get()))
+        .addCriterion("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get()))
         .build(consumer, safeId(result.get()) + "_from_smelting");
     CookingRecipeBuilder.blastingRecipe(Ingredient.fromItems(source.get()), result.get(), xp, 100)
-        .addCriterion("has_" + safeName(source.get().getRegistryName()), this.hasItem(source.get()))
+        .addCriterion("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get()))
         .build(consumer, safeId(result.get()) + "_from_blasting");
   }
 
   public <T extends IItemProvider & IForgeRegistryEntry<?>> void recycle(Supplier<? extends T> source, Supplier<? extends T> result, float xp, String namespace, Consumer<IFinishedRecipe> consumer) {
     CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(source.get()), result.get(), xp, 200)
-        .addCriterion("has_" + safeName(source.get().getRegistryName()), this.hasItem(source.get()))
+        .addCriterion("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get()))
         .build(consumer, new ResourceLocation(namespace, safeName(result.get()) + "_from_smelting_" + safeName(source.get())));
     CookingRecipeBuilder.blastingRecipe(Ingredient.fromItems(source.get()), result.get(), xp, 100)
-        .addCriterion("has_" + safeName(source.get().getRegistryName()), this.hasItem(source.get()))
+        .addCriterion("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get()))
         .build(consumer, new ResourceLocation(namespace, safeName(result.get()) + "_from_blasting_" + safeName(source.get())));
   }
 
   public <T extends IItemProvider & IForgeRegistryEntry<?>> void recycle(Tag<Item> tag, Supplier<? extends T> result, float xp, Consumer<IFinishedRecipe> consumer) {
     CookingRecipeBuilder.smeltingRecipe(Ingredient.fromTag(tag), result.get(), xp, 200)
-        .addCriterion("has_" + safeName(result.get().getRegistryName()), this.hasItem(result.get()))
+        .addCriterion("has_" + safeName(result.get().getRegistryName()), RegistrateRecipeProvider.hasItem(result.get()))
         .build(consumer, safeId(result.get()) + "_from_smelting");
     CookingRecipeBuilder.blastingRecipe(Ingredient.fromTag(tag), result.get(), xp, 100)
-        .addCriterion("has_" + safeName(result.get().getRegistryName()), this.hasItem(result.get()))
+        .addCriterion("has_" + safeName(result.get().getRegistryName()), RegistrateRecipeProvider.hasItem(result.get()))
         .build(consumer, safeId(result.get()) + "_from_blasting");
   }
 
   public <T extends IItemProvider & IForgeRegistryEntry<?>> void food(Supplier<? extends T> source, Supplier<? extends T> result, float xp, Consumer<IFinishedRecipe> consumer) {
-    CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(source.get()), result.get(), xp, 200).addCriterion("has_" + safeName(source.get().getRegistryName()), this.hasItem(source.get())).build(consumer);
-    CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(source.get()), result.get(), xp, 100, IRecipeSerializer.SMOKING).addCriterion("has_" + safeName(source.get().getRegistryName()), this.hasItem(source.get())).build(consumer, safeId(result.get()) + "_from_smoker");
-    CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(source.get()), result.get(), xp, 600, IRecipeSerializer.CAMPFIRE_COOKING).addCriterion("has_" + safeName(source.get().getRegistryName()), this.hasItem(source.get())).build(consumer, safeId(result.get()) + "_from_campfire");
+    CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(source.get()), result.get(), xp, 200).addCriterion("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get())).build(consumer);
+    CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(source.get()), result.get(), xp, 100, IRecipeSerializer.SMOKING).addCriterion("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get())).build(consumer, safeId(result.get()) + "_from_smoker");
+    CookingRecipeBuilder.cookingRecipe(Ingredient.fromItems(source.get()), result.get(), xp, 600, IRecipeSerializer.CAMPFIRE_COOKING).addCriterion("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get())).build(consumer, safeId(result.get()) + "_from_campfire");
   }
 
   public <T extends IItemProvider & IForgeRegistryEntry<?>> void food(Tag<Item> source, Supplier<? extends T> result, float xp, Consumer<IFinishedRecipe> consumer) {
-    CookingRecipeBuilder.smeltingRecipe(Ingredient.fromTag(source), result.get(), xp, 200).addCriterion("has_" + safeName(source.getId()), this.hasItem(source)).build(consumer);
-    CookingRecipeBuilder.cookingRecipe(Ingredient.fromTag(source), result.get(), xp, 100, IRecipeSerializer.SMOKING).addCriterion("has_" + safeName(source.getId()), this.hasItem(source)).build(consumer, safeId(result.get()) + "_from_smoker");
-    CookingRecipeBuilder.cookingRecipe(Ingredient.fromTag(source), result.get(), xp, 600, IRecipeSerializer.CAMPFIRE_COOKING).addCriterion("has_" + safeName(source.getId()), this.hasItem(source)).build(consumer, safeId(result.get()) + "_from_campfire");
+    CookingRecipeBuilder.smeltingRecipe(Ingredient.fromTag(source), result.get(), xp, 200).addCriterion("has_" + safeName(getId(source)), RegistrateRecipeProvider.hasItem(source)).build(consumer);
+    CookingRecipeBuilder.cookingRecipe(Ingredient.fromTag(source), result.get(), xp, 100, IRecipeSerializer.SMOKING).addCriterion("has_" + safeName(getId(source)), RegistrateRecipeProvider.hasItem(source)).build(consumer, safeId(result.get()) + "_from_smoker");
+    CookingRecipeBuilder.cookingRecipe(Ingredient.fromTag(source), result.get(), xp, 600, IRecipeSerializer.CAMPFIRE_COOKING).addCriterion("has_" + safeName(getId(source)), RegistrateRecipeProvider.hasItem(source)).build(consumer, safeId(result.get()) + "_from_campfire");
   }
 
   public <T extends IItemProvider & IForgeRegistryEntry<?>> void smelting(Supplier<? extends T> source, Supplier<? extends T> result, float xp, boolean blast, Consumer<IFinishedRecipe> consumer) {
-    CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(source.get()), result.get(), xp, 200).addCriterion("has_" + safeName(source.get().getRegistryName()), this.hasItem(source.get())).build(consumer, safeId(result.get()) + "_from_smelting");
+    CookingRecipeBuilder.smeltingRecipe(Ingredient.fromItems(source.get()), result.get(), xp, 200).addCriterion("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get())).build(consumer, safeId(result.get()) + "_from_smelting");
     if (blast) {
-      CookingRecipeBuilder.blastingRecipe(Ingredient.fromItems(source.get()), result.get(), xp, 100).addCriterion("has_" + safeName(source.get().getRegistryName()), this.hasItem(source.get())).build(consumer, safeId(result.get()) + "_from_blasting");
+      CookingRecipeBuilder.blastingRecipe(Ingredient.fromItems(source.get()), result.get(), xp, 100).addCriterion("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get())).build(consumer, safeId(result.get()) + "_from_blasting");
     }
   }
 
   public <T extends IItemProvider & IForgeRegistryEntry<?>> void storage(Supplier<? extends T> input, Supplier<? extends T> output, Consumer<IFinishedRecipe> consumer) {
-    ShapedRecipeBuilder.shapedRecipe(output.get()).patternLine("###").patternLine("###").patternLine("###").key('#', input.get()).addCriterion("has_at_least_9_" + safeName(input.get()), this.hasItem(MinMaxBounds.IntBound.atLeast(9), input.get())).build(consumer);
-    ShapelessRecipeBuilder.shapelessRecipe(input.get(), 9).addIngredient(output.get()).addCriterion("has_" + safeName(output.get()), this.hasItem(output.get())).build(consumer, safeId(input.get()) + "_from_" + safeName(output.get()));
+    ShapedRecipeBuilder.shapedRecipe(output.get()).patternLine("###").patternLine("###").patternLine("###").key('#', input.get()).addCriterion("has_at_least_9_" + safeName(input.get()), RegistrateRecipeProvider.hasItem(input.get())).build(consumer);
+    ShapelessRecipeBuilder.shapelessRecipe(input.get(), 9).addIngredient(output.get()).addCriterion("has_" + safeName(output.get()), RegistrateRecipeProvider.hasItem(output.get())).build(consumer, safeId(input.get()) + "_from_" + safeName(output.get()));
   }
 
   public Item getModElement(Tag<Item> input) {
@@ -158,12 +160,12 @@ public class RecipeGenerator {
     ShapedRecipeBuilder.shapedRecipe(output.get())
         .patternLine("###")
         .patternLine("###")
-        .patternLine("###").key('#', input).addCriterion("has_at_least_9_" + safeName(input.getId()), this.hasItem(input)).build(consumer);
-    ShapelessRecipeBuilder.shapelessRecipe(getModElement(input), 9).addIngredient(output.get()).addCriterion("has_" + safeName(output.get()), this.hasItem(output.get())).build(consumer, new ResourceLocation(modid, safeName(input.getId()) + "_from_" + safeName(output.get())));
+        .patternLine("###").key('#', input).addCriterion("has_at_least_9_" + safeName(getId(input)), RegistrateRecipeProvider.hasItem(input)).build(consumer);
+    ShapelessRecipeBuilder.shapelessRecipe(getModElement(input), 9).addIngredient(output.get()).addCriterion("has_" + safeName(output.get()), RegistrateRecipeProvider.hasItem(output.get())).build(consumer, new ResourceLocation(modid, safeName(getId(input)) + "_from_" + safeName(output.get())));
   }
 
   public <T extends IItemProvider & IForgeRegistryEntry<?>> ShapelessRecipeBuilder singleItemUnfinished(Supplier<? extends T> source, Supplier<? extends T> result, int required, int amount) {
-    return ShapelessRecipeBuilder.shapelessRecipe(result.get(), amount).addIngredient(source.get(), required).addCriterion("has_" + safeName(source.get()), this.hasItem(source.get()));
+    return ShapelessRecipeBuilder.shapelessRecipe(result.get(), amount).addIngredient(source.get(), required).addCriterion("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()));
   }
 
   public ResourceLocation safeId(ResourceLocation id) {
@@ -205,7 +207,7 @@ public class RecipeGenerator {
         .patternLine("XX")
         .key('X', source.get())
         .setGroup(group)
-        .addCriterion("has_" + safeName(source.get()), this.hasItem(source.get()))
+        .addCriterion("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
         .build(consumer);
   }
 
@@ -219,11 +221,11 @@ public class RecipeGenerator {
         .patternLine("X  ").patternLine("XX ").patternLine("XXX")
         .key('X', source.get())
         .setGroup(group)
-        .addCriterion("has_" + safeName(source.get()), this.hasItem(source.get()))
+        .addCriterion("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
         .build(consumer);
     if (stone) {
       SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(source.get()), result.get())
-          .addCriterion("has_" + safeName(source.get()), this.hasItem(source.get()))
+          .addCriterion("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
           .build(consumer, safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting");
     }
   }
@@ -234,11 +236,11 @@ public class RecipeGenerator {
         .patternLine("XXX")
         .key('X', source.get())
         .setGroup(group)
-        .addCriterion("has_" + safeName(source.get()), this.hasItem(source.get()))
+        .addCriterion("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
         .build(consumer);
     if (stone) {
       SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(source.get()), result.get(), 2)
-          .addCriterion("has_" + safeName(source.get()), this.hasItem(source.get()))
+          .addCriterion("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
           .build(consumer, safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting");
     }
   }
@@ -250,11 +252,11 @@ public class RecipeGenerator {
         .patternLine("X")
         .key('X', source.get())
         .setGroup(group)
-        .addCriterion("has_" + safeName(source.get()), this.hasItem(source.get()))
+        .addCriterion("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
         .build(consumer);
     if (stone) {
       SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(source.get()), result.get(), 2)
-          .addCriterion("has_" + safeName(source.get()), this.hasItem(source.get()))
+          .addCriterion("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
           .build(consumer, safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting");
     }
   }
@@ -267,11 +269,11 @@ public class RecipeGenerator {
         .patternLine("X")
         .key('X', source.get())
         .setGroup(group)
-        .addCriterion("has_" + safeName(source.get()), this.hasItem(source.get()))
+        .addCriterion("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
         .build(consumer);
     if (stone) {
       SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(source.get()), result.get(), 2)
-          .addCriterion("has_" + safeName(source.get()), this.hasItem(source.get()))
+          .addCriterion("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
           .build(consumer, safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting");
     }
   }
@@ -283,7 +285,7 @@ public class RecipeGenerator {
         .key('W', source.get())
         .key('#', Tags.Items.RODS_WOODEN)
         .setGroup(group)
-        .addCriterion("has_" + safeName(source.get()), this.hasItem(source.get()))
+        .addCriterion("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
         .build(consumer);
   }
 
@@ -294,7 +296,7 @@ public class RecipeGenerator {
         .key('W', source.get())
         .key('#', Tags.Items.RODS_WOODEN)
         .setGroup(group)
-        .addCriterion("has_" + safeName(source.get()), this.hasItem(source.get()))
+        .addCriterion("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
         .build(consumer);
   }
 
@@ -302,11 +304,11 @@ public class RecipeGenerator {
     ShapedRecipeBuilder.shapedRecipe(result.get(), 6)
         .patternLine("XXX").patternLine("XXX")
         .key('X', source.get())
-        .addCriterion("has_" + safeName(source.get()), this.hasItem(source.get()))
+        .addCriterion("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
         .build(consumer);
     if (stone) {
       SingleItemRecipeBuilder.stonecuttingRecipe(Ingredient.fromItems(source.get()), result.get())
-          .addCriterion("has_" + safeName(source.get()), this.hasItem(source.get()))
+          .addCriterion("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
           .build(consumer, safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting");
     }
   }
@@ -317,7 +319,7 @@ public class RecipeGenerator {
         .patternLine("XX").patternLine("XX").patternLine("XX")
         .key('X', source.get())
         .setGroup(group)
-        .addCriterion("has_" + safeName(source.get()), this.hasItem(source.get()))
+        .addCriterion("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
         .build(consumer);
   }
 
@@ -327,7 +329,7 @@ public class RecipeGenerator {
         .patternLine("XXX").patternLine("XXX")
         .key('X', source.get())
         .setGroup(group)
-        .addCriterion("has_" + safeName(source.get()), this.hasItem(source.get()))
+        .addCriterion("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
         .build(consumer);
   }
 
@@ -340,7 +342,7 @@ public class RecipeGenerator {
         .key('X', material.get())
         .key('S', Tags.Items.RODS_WOODEN)
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.get()), this.hasItem(material.get()))
+        .addCriterion("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
         .build(consumer);
   }
 
@@ -353,7 +355,7 @@ public class RecipeGenerator {
         .key('X', material.get())
         .key('S', Tags.Items.RODS_WOODEN)
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.get()), this.hasItem(material.get()))
+        .addCriterion("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
         .build(consumer);
   }
 
@@ -366,7 +368,7 @@ public class RecipeGenerator {
         .key('X', material.get())
         .key('S', Tags.Items.RODS_WOODEN)
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.get()), this.hasItem(material.get()))
+        .addCriterion("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
         .build(consumer);
   }
 
@@ -379,7 +381,7 @@ public class RecipeGenerator {
         .key('X', material.get())
         .key('S', Tags.Items.RODS_WOODEN)
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.get()), this.hasItem(material.get()))
+        .addCriterion("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
         .build(consumer);
   }
 
@@ -391,7 +393,7 @@ public class RecipeGenerator {
         .key('X', material.get())
         .key('S', Tags.Items.RODS_WOODEN)
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.get()), this.hasItem(material.get()))
+        .addCriterion("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
         .build(consumer);
   }
 
@@ -403,8 +405,8 @@ public class RecipeGenerator {
         .key('X', material)
         .key('S', Tags.Items.RODS_WOODEN)
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.getId()), this.hasItem(material))
-        .build(consumer, safeName(result.get()) + "_from_" + safeName(material.getId()));
+        .addCriterion("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
+        .build(consumer, safeName(result.get()) + "_from_" + safeName(getId(material)));
   }
 
   @SuppressWarnings("ConstantConditions")
@@ -416,7 +418,7 @@ public class RecipeGenerator {
         .key('X', material.get())
         .key('S', Tags.Items.RODS_WOODEN)
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.get()), this.hasItem(material.get()))
+        .addCriterion("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
         .build(consumer);
   }
 
@@ -427,7 +429,7 @@ public class RecipeGenerator {
         .patternLine("X X")
         .key('X', material.get())
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.get()), this.hasItem(material.get()))
+        .addCriterion("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
         .build(consumer);
   }
 
@@ -440,7 +442,7 @@ public class RecipeGenerator {
         .key('X', sword.get())
         .key('S', Tags.Items.RODS_WOODEN)
         .setGroup(group)
-        .addCriterion("has_" + safeName(sword.get()), this.hasItem(sword.get()))
+        .addCriterion("has_" + safeName(sword.get()), RegistrateRecipeProvider.hasItem(sword.get()))
         .build(consumer, new ResourceLocation(modid, Objects.requireNonNull(result.get().getRegistryName()).getPath()));
   }
 
@@ -453,11 +455,11 @@ public class RecipeGenerator {
         .key('X', sword)
         .key('S', Tags.Items.RODS_WOODEN)
         .setGroup(group)
-        .addCriterion("has_" + safeName(sword), this.hasItem(sword))
+        .addCriterion("has_" + safeName(sword), RegistrateRecipeProvider.hasItem(sword))
         .build(consumer, new ResourceLocation(modid, Objects.requireNonNull(result.get().getRegistryName()).getPath()));
   }
 
-   @SuppressWarnings("ConstantConditions")
+  @SuppressWarnings("ConstantConditions")
   public <T extends IItemProvider & IForgeRegistryEntry<?>> void legs(Supplier<? extends T> material, Supplier<? extends T> result, @Nullable String group, Consumer<IFinishedRecipe> consumer) {
     ShapedRecipeBuilder.shapedRecipe(result.get(), 1)
         .patternLine("XXX")
@@ -465,7 +467,7 @@ public class RecipeGenerator {
         .patternLine("X X")
         .key('X', material.get())
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.get()), this.hasItem(material.get()))
+        .addCriterion("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
         .build(consumer);
   }
 
@@ -477,7 +479,7 @@ public class RecipeGenerator {
         .patternLine("XXX")
         .key('X', material.get())
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.get()), this.hasItem(material.get()))
+        .addCriterion("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
         .build(consumer);
   }
 
@@ -488,7 +490,7 @@ public class RecipeGenerator {
         .patternLine("X X")
         .key('X', material.get())
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.get()), this.hasItem(material.get()))
+        .addCriterion("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
         .build(consumer);
   }
 
@@ -501,7 +503,7 @@ public class RecipeGenerator {
         .key('X', material)
         .key('S', Tags.Items.RODS_WOODEN)
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.getId()), this.hasItem(material))
+        .addCriterion("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
         .build(consumer);
   }
 
@@ -514,7 +516,7 @@ public class RecipeGenerator {
         .key('X', material)
         .key('S', Tags.Items.RODS_WOODEN)
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.getId()), this.hasItem(material))
+        .addCriterion("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
         .build(consumer);
   }
 
@@ -527,7 +529,7 @@ public class RecipeGenerator {
         .key('X', material)
         .key('S', Tags.Items.RODS_WOODEN)
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.getId()), this.hasItem(material))
+        .addCriterion("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
         .build(consumer);
   }
 
@@ -540,7 +542,7 @@ public class RecipeGenerator {
         .key('X', material)
         .key('S', Tags.Items.RODS_WOODEN)
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.getId()), this.hasItem(material))
+        .addCriterion("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
         .build(consumer);
   }
 
@@ -553,7 +555,7 @@ public class RecipeGenerator {
         .key('X', material)
         .key('S', Tags.Items.RODS_WOODEN)
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.getId()), this.hasItem(material))
+        .addCriterion("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
         .build(consumer);
   }
 
@@ -564,7 +566,7 @@ public class RecipeGenerator {
         .patternLine("X X")
         .key('X', material)
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.getId()), this.hasItem(material))
+        .addCriterion("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
         .build(consumer);
   }
 
@@ -576,7 +578,7 @@ public class RecipeGenerator {
         .patternLine("X X")
         .key('X', material)
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.getId()), this.hasItem(material))
+        .addCriterion("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
         .build(consumer);
   }
 
@@ -588,7 +590,7 @@ public class RecipeGenerator {
         .patternLine("XXX")
         .key('X', material)
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.getId()), this.hasItem(material))
+        .addCriterion("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
         .build(consumer);
   }
 
@@ -599,7 +601,7 @@ public class RecipeGenerator {
         .patternLine("X X")
         .key('X', material)
         .setGroup(group)
-        .addCriterion("has_" + safeName(material.getId()), this.hasItem(material))
+        .addCriterion("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
         .build(consumer);
   }
 
@@ -621,24 +623,8 @@ public class RecipeGenerator {
             .key('S', Items.SUGAR)
             .key('B', Items.GLASS_BOTTLE)
             .key('W', Items.WATER_BUCKET)
-            .addCriterion("has_first", p.hasItem(ingredient.get()))
-            .addCriterion("has_sugar", p.hasItem(Items.SUGAR))
+            .addCriterion("has_first", RegistrateRecipeProvider.hasItem(ingredient.get()))
+            .addCriterion("has_sugar", RegistrateRecipeProvider.hasItem(Items.SUGAR))
             .build(p);
-  }
-
-  public InventoryChangeTrigger.Instance hasItem(MinMaxBounds.IntBound amount, IItemProvider itemIn) {
-    return this.hasItem(ItemPredicate.Builder.create().item(itemIn).build());
-  }
-
-  public InventoryChangeTrigger.Instance hasItem(IItemProvider itemIn) {
-    return this.hasItem(ItemPredicate.Builder.create().item(itemIn).build());
-  }
-
-  public InventoryChangeTrigger.Instance hasItem(Tag<Item> tagIn) {
-    return this.hasItem(ItemPredicate.Builder.create().tag(tagIn).build());
-  }
-
-  public InventoryChangeTrigger.Instance hasItem(ItemPredicate... predicates) {
-    return new InventoryChangeTrigger.Instance(MinMaxBounds.IntBound.UNBOUNDED, MinMaxBounds.IntBound.UNBOUNDED, MinMaxBounds.IntBound.UNBOUNDED, predicates);
   }
 }
