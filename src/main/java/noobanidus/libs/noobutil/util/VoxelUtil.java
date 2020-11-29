@@ -20,8 +20,6 @@ import java.util.function.UnaryOperator;
  */
 @SuppressWarnings({"unused", "Duplicates", "WeakerAccess"})
 public class VoxelUtil {
-  public static Logger logger = LogManager.getLogger();
-
   private static final Vector3d fromOrigin = new Vector3d(-0.5, -0.5, -0.5);
 
   /**
@@ -71,7 +69,7 @@ public class VoxelUtil {
   }
 
   public static void print(double x1, double y1, double z1, double x2, double y2, double z2) {
-    logger.info("makeCuboidShape(" + Math.min(x1, x2) + ", " + Math.min(y1, y2) + ", " + Math.min(z1, z2) + ", " +
+    NoobUtil.logger.info("makeCuboidShape(" + Math.min(x1, x2) + ", " + Math.min(y1, y2) + ", " + Math.min(z1, z2) + ", " +
         Math.max(x1, x2) + ", " + Math.max(y1, y2) + ", " + Math.max(z1, z2) + "),");
   }
 
@@ -79,7 +77,7 @@ public class VoxelUtil {
    * Prints out a set of strings that make copy pasting easier, for simplifying a voxel shape
    */
   public static void printSimplified(String name, VoxelShape shape) {
-    logger.info("Simplified: " + name);
+    NoobUtil.logger.info("Simplified: " + name);
     shape.simplify().toBoundingBoxList().forEach(box -> print(box.minX * 16, box.minY * 16, box.minZ * 16, box.maxX * 16, box.maxY * 16, box.maxZ * 16));
   }
 
