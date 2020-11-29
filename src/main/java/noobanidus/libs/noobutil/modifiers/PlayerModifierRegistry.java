@@ -39,5 +39,6 @@ public class PlayerModifierRegistry {
     }
     player.attributeMap = map;
     NoobUtil.logger.info("Added " + attributes.size() + " additional attributes to PlayerEntity.");
+    activated = true;
   }
 }
