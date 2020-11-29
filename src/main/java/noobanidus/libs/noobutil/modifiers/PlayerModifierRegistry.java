@@ -5,7 +5,7 @@ import net.minecraft.entity.ai.attributes.Attribute;
 import net.minecraft.entity.ai.attributes.AttributeModifierMap;
 import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
 import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
-import noobanidus.libs.noobutil.util.NoobUtil;
+import noobanidus.libs.noobutil.NoobUtil;
 
 import java.util.HashMap;
 import java.util.HashSet;
