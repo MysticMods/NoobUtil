@@ -15,8 +15,8 @@ import java.util.Random;
 public abstract class AbstractSBSP extends BlockStateProvider {
   // public static final Codec<SupplierBlockStateProvider> CODEC = ResourceLocation.CODEC.fieldOf("key").xmap(SupplierBlockStateProvider::new, (provider) -> provider.key).codec();
 
-  private final ResourceLocation key;
-  private BlockState state = null;
+  protected final ResourceLocation key;
+  protected BlockState state = null;
 
   public AbstractSBSP(String namespace, String path) {
     this(new ResourceLocation(namespace, path));
