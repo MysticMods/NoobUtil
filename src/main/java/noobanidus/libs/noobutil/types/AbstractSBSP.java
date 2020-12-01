@@ -1,6 +1,5 @@
 package noobanidus.libs.noobutil.types;
 
-import com.mojang.serialization.Codec;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
@@ -10,28 +9,25 @@ import net.minecraft.world.gen.blockstateprovider.BlockStateProvider;
 import net.minecraft.world.gen.blockstateprovider.BlockStateProviderType;
 import net.minecraftforge.registries.ForgeRegistries;
 import noobanidus.libs.noobutil.NoobUtil;
-import noobanidus.libs.noobutil.init.UtilRegistry;
 
 import java.util.Random;
 
-public class SupplierBlockStateProvider extends BlockStateProvider {
-  public static final Codec<SupplierBlockStateProvider> CODEC = ResourceLocation.CODEC.fieldOf("key").xmap(SupplierBlockStateProvider::new, (provider) -> provider.key).codec();
+public abstract class AbstractSBSP extends BlockStateProvider {
+  // public static final Codec<SupplierBlockStateProvider> CODEC = ResourceLocation.CODEC.fieldOf("key").xmap(SupplierBlockStateProvider::new, (provider) -> provider.key).codec();
 
   private final ResourceLocation key;
   private BlockState state = null;
 
-  public SupplierBlockStateProvider(String namespace, String path) {
+  public AbstractSBSP(String namespace, String path) {
     this(new ResourceLocation(namespace, path));
   }
 
-  public SupplierBlockStateProvider(ResourceLocation key) {
+  public AbstractSBSP(ResourceLocation key) {
     this.key = key;
   }
 
   @Override
-  protected BlockStateProviderType<?> getProviderType() {
-    return UtilRegistry.SUPPLIER_STATE_PROVIDER.get();
-  }
+  protected abstract BlockStateProviderType<?> getProviderType();
 
   @Override
   public BlockState getBlockState(Random randomIn, BlockPos blockPosIn) {
