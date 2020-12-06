@@ -1,4 +1,4 @@
-package epicsquid.mysticalworld.init;
+package noobanidus.libs.noobutil.data;
 
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateRecipeProvider;
