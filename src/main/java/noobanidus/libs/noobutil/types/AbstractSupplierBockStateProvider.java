@@ -1,8 +1,10 @@
 package noobanidus.libs.noobutil.types;
 
+import com.mojang.serialization.Codec;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
+import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.blockstateprovider.BlockStateProvider;
@@ -11,18 +13,21 @@ import net.minecraftforge.registries.ForgeRegistries;
 import noobanidus.libs.noobutil.NoobUtil;
 
 import java.util.Random;
+import java.util.function.Function;
 
-public abstract class AbstractSBSP extends BlockStateProvider {
-  // public static final Codec<SupplierBlockStateProvider> CODEC = ResourceLocation.CODEC.fieldOf("key").xmap(SupplierBlockStateProvider::new, (provider) -> provider.key).codec();
+public abstract class AbstractSupplierBockStateProvider extends BlockStateProvider {
+  public static <T extends AbstractSupplierBockStateProvider> Codec<T> codecBuilder (Function<ResourceLocation, T> builder) {
+    return ResourceLocation.CODEC.fieldOf("key").xmap(builder, (provider) -> provider.key).codec();
+  }
 
   protected final ResourceLocation key;
   protected BlockState state = null;
 
-  public AbstractSBSP(String namespace, String path) {
+  public AbstractSupplierBockStateProvider(String namespace, String path) {
     this(new ResourceLocation(namespace, path));
   }
 
-  public AbstractSBSP(ResourceLocation key) {
+  public AbstractSupplierBockStateProvider(ResourceLocation key) {
     this.key = key;
   }
 
