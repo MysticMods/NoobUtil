@@ -4,7 +4,6 @@ import com.mojang.serialization.Codec;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
-import net.minecraft.entity.monster.AbstractSkeletonEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.blockstateprovider.BlockStateProvider;
@@ -16,7 +15,7 @@ import java.util.Random;
 import java.util.function.Function;
 
 public abstract class AbstractSupplierBockStateProvider extends BlockStateProvider {
-  public static <T extends AbstractSupplierBockStateProvider> Codec<T> codecBuilder (Function<ResourceLocation, T> builder) {
+  public static <T extends AbstractSupplierBockStateProvider> Codec<T> codecBuilder(Function<ResourceLocation, T> builder) {
     return ResourceLocation.CODEC.fieldOf("key").xmap(builder, (provider) -> provider.key).codec();
   }
 
