@@ -4,13 +4,27 @@ import net.minecraft.util.LazyValue;
 
 import java.util.function.Supplier;
 
-public class LazySupplier<T> extends LazyValue<T> implements Supplier<T> {
-  public LazySupplier(Supplier<T> supplier) {
-    super(supplier);
-  }
+@SuppressWarnings("WeakerAccess")
+public class LazySupplier<T> implements Supplier<T> {
+   protected Supplier<T> supplier;
+   protected T value;
 
-  @Override
-  public T get() {
-    return getValue();
-  }
+   public LazySupplier () {
+      this.supplier = () -> null;
+   }
+
+   public LazySupplier(Supplier<T> supplierIn) {
+      this.supplier = supplierIn;
+   }
+
+   @Override
+   public T get() {
+      Supplier<T> supplier = this.supplier;
+      if (supplier != null) {
+         this.value = supplier.get();
+         this.supplier = null;
+      }
+
+      return this.value;
+   }
 }
