@@ -19,6 +19,10 @@ public class LazyStateSupplier extends LazySupplier<BlockState> {
   @SuppressWarnings("OptionalUsedAsFieldOrParameterType")
   private final Optional<BlockState> state;
 
+  public LazyStateSupplier(String namespace, String name) {
+    this(new ResourceLocation(namespace, name));
+  }
+
   public LazyStateSupplier(ResourceLocation location) {
     super();
     this.supplier = () -> {
