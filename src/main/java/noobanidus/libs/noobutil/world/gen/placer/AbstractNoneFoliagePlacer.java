@@ -19,7 +19,7 @@ public abstract class AbstractNoneFoliagePlacer extends FoliagePlacer {
     return RecordCodecBuilder.create((instance) -> func_242830_b(instance).apply(instance, builder));
   }
 
-  private AbstractNoneFoliagePlacer(FeatureSpread p_i241999_1_, FeatureSpread p_i241999_2_) {
+  protected AbstractNoneFoliagePlacer(FeatureSpread p_i241999_1_, FeatureSpread p_i241999_2_) {
     super(p_i241999_1_, p_i241999_2_);
   }
 
