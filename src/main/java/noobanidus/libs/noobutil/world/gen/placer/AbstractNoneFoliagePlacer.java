@@ -16,7 +16,11 @@ import java.util.function.BiFunction;
 
 public abstract class AbstractNoneFoliagePlacer extends FoliagePlacer {
   public static <T extends AbstractNoneFoliagePlacer> Codec<T> codecBuilder(BiFunction<FeatureSpread, FeatureSpread, T> builder) {
-    return RecordCodecBuilder.create((instance) -> func_242830_b(instance).apply(instance, builder::apply));
+    return RecordCodecBuilder.create((instance) -> func_242830_b(instance).apply(instance, builder));
+  }
+
+  private AbstractNoneFoliagePlacer(FeatureSpread p_i241999_1_, FeatureSpread p_i241999_2_) {
+    super(p_i241999_1_, p_i241999_2_);
   }
 
   public AbstractNoneFoliagePlacer() {
