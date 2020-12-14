@@ -1,4 +1,4 @@
-package noobanidus.libs.noobutil.world;
+package noobanidus.libs.noobutil.world.gen;
 
 import net.minecraft.util.RegistryKey;
 import net.minecraft.util.registry.DynamicRegistries;
