@@ -2,7 +2,7 @@
   "required": true,
   "package": "noobanidus.libs.noobutil.mixin",
   "compatibilityLevel": "JAVA_8",
-  "refmap": "noobutil_biomes.refmap.json",
+  "refmap": "traverse.refmap.json",
   "mixins": [
     "MixinSlimeEntity",
     "MixinBiomeLayer",
