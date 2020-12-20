@@ -86,13 +86,11 @@ public class WeightedLakesFeature extends Feature<WeightedBlockStateFeatureConfi
             for (int i4 = 0; i4 < 8; ++i4) {
               if (aboolean[(l1 * 16 + i3) * 8 + i4]) {
                 reader.setBlockState(pos.add(l1, i4, i3), i4 >= 4 ? AIR : config.getBlockState(rand), 2);
-              }
-            }
-            int h = generator.getHeight(pos.getX() + l1, pos.getZ() + i3, Heightmap.Type.WORLD_SURFACE_WG);
-            int q = pos.getY() + 4;
-            if (h > q) {
-              for (int m1 = q; m1 < h+1; m1++) {
-                reader.setBlockState(pos.add(l1, m1, i3), AIR, 2);
+                if (i4 >= 4) {
+                  for (int i5 = i4; i5 < i4+14; i5++) {
+                    reader.setBlockState(pos.add(l1, i5, i3), AIR, 2);
+                  }
+                }
               }
             }
           }
