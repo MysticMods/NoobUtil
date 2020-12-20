@@ -72,7 +72,7 @@ public class WeightedLakesFeature extends Feature<WeightedBlockStateFeatureConfi
                   return false;
                 }
 
-                if (k < 4 && !material.isSolid() && config.containsState(reader.getBlockState(pos.add(k1, k, l2)))) {
+                if (k < 4 && !material.isSolid() && !config.containsState(reader.getBlockState(pos.add(k1, k, l2)))) {
                   return false;
                 }
               }
