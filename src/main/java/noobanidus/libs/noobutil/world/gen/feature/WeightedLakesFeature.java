@@ -10,6 +10,7 @@ import net.minecraft.world.ISeedReader;
 import net.minecraft.world.LightType;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.gen.ChunkGenerator;
+import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.structure.Structure;
 import noobanidus.libs.noobutil.world.gen.config.WeightedBlockStateFeatureConfig;
@@ -85,6 +86,13 @@ public class WeightedLakesFeature extends Feature<WeightedBlockStateFeatureConfi
             for (int i4 = 0; i4 < 8; ++i4) {
               if (aboolean[(l1 * 16 + i3) * 8 + i4]) {
                 reader.setBlockState(pos.add(l1, i4, i3), i4 >= 4 ? AIR : config.getBlockState(rand), 2);
+              }
+            }
+            int h = generator.getHeight(pos.getX() + l1, pos.getZ() + i3, Heightmap.Type.WORLD_SURFACE_WG);
+            int q = pos.getY() + 4;
+            if (h > q) {
+              for (int m1 = q; m1 < h+1; m1++) {
+                reader.setBlockState(pos.add(l1, m1, i3), AIR, 2);
               }
             }
           }
