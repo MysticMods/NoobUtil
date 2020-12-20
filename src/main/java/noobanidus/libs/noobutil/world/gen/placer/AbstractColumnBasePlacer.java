@@ -51,7 +51,15 @@ public abstract class AbstractColumnBasePlacer extends BlockPlacer {
   protected abstract BlockPlacerType<?> getBlockPlacerType();
 
   public void place(IWorld world, BlockPos pos, BlockState state, Random random) {
-    int i = radius1 + random.nextInt(radius2);
+    BlockPos.Mutable blockpos$mutable = pos.toMutable();
+    int i = this.minSize + random.nextInt(random.nextInt(this.extraSize + 1) + 1);
+
+    for (int j = 0; j < i; ++j) {
+      world.setBlockState(blockpos$mutable, state, 2);
+      blockpos$mutable.move(Direction.UP);
+    }
+
+    i = radius1 + random.nextInt(radius2);
     for (int j = pos.getX() - i; j <= pos.getX() + i; ++j) {
       for (int k = pos.getZ() - i; k <= pos.getZ() + i; ++k) {
         int l = j - pos.getX();
@@ -63,13 +71,25 @@ public abstract class AbstractColumnBasePlacer extends BlockPlacer {
 
           for (LazyStateSupplier blockstate : replace) {
             if (blockstate.get().isIn(block)) {
+
               world.setBlockState(blockpos, state, 2);
               if (random.nextInt(peak) == 0) {
-                world.setBlockState(blockpos.up(), state, 2);
-                if (random.nextInt(Math.max(1, peak / 2)) == 0) {
-                  world.setBlockState(blockpos.up().up(), state, 2);
-                  if (random.nextInt(Math.max(1, (peak / 3))) == 0) {
-                    world.setBlockState(blockpos.up().up().up(), state, 2);
+                boolean skip = false;
+                outer: for (int x = -1; x <= 1; x++) {
+                  for (int z = -1; z <= 1; z++) {
+                    if (world.getBlockState(blockpos.add(x, 1, z)).isSolid()) {
+                      skip = true;
+                      break outer;
+                    }
+                  }
+                }
+                if (!skip) {
+                  world.setBlockState(blockpos.up(), state, 2);
+                  if (random.nextInt(Math.max(1, peak / 2)) == 0) {
+                    world.setBlockState(blockpos.up().up(), state, 2);
+                    if (random.nextInt(Math.max(1, (peak / 3))) == 0) {
+                      world.setBlockState(blockpos.up().up().up(), state, 2);
+                    }
                   }
                 }
               }
@@ -78,16 +98,6 @@ public abstract class AbstractColumnBasePlacer extends BlockPlacer {
           }
         }
       }
-    }
-
-    BlockPos.Mutable blockpos$mutable = pos.toMutable();
-    i = this.minSize + random.nextInt(random.nextInt(this.extraSize + 1) + 1);
-
-    for (
-        int j = 0;
-        j < i; ++j) {
-      world.setBlockState(blockpos$mutable, state, 2);
-      blockpos$mutable.move(Direction.UP);
     }
   }
 }
