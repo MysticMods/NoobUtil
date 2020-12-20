@@ -85,9 +85,9 @@ public abstract class AbstractColumnBasePlacer extends BlockPlacer {
                 }
                 if (!skip) {
                   world.setBlockState(blockpos.up(), state, 2);
-                  if (random.nextInt(Math.max(1, peak / 2)) == 0) {
+                  if (random.nextInt(3) == 0) {
                     world.setBlockState(blockpos.up().up(), state, 2);
-                    if (random.nextInt(Math.max(1, (peak / 3))) == 0) {
+                    if (random.nextInt(4) == 0) {
                       world.setBlockState(blockpos.up().up().up(), state, 2);
                     }
                   }
