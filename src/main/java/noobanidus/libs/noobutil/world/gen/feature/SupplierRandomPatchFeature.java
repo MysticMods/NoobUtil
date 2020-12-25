@@ -17,6 +17,7 @@ public class SupplierRandomPatchFeature extends Feature<SupplierBlockClusterFeat
     super(codec);
   }
 
+  @Override
   public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, SupplierBlockClusterFeatureConfig config) {
     BlockState blockstate = config.stateProvider.getBlockState(rand, pos);
     BlockPos blockpos;

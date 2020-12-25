@@ -16,6 +16,7 @@ public class SupplierSphereReplaceFeature extends Feature<SupplierSphereReplaceC
     super(codec);
   }
 
+  @Override
   public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, SupplierSphereReplaceConfig config) {
     boolean flag = false;
     int i = config.radius.func_242259_a(rand);

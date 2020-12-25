@@ -25,6 +25,7 @@ public class BeachSurfaceBuilder extends SurfaceBuilder<SurfaceBuilderConfig> {
     this.sand = sand;
   }
 
+  @Override
   public void buildSurface(Random rand, IChunk chunk, Biome biome, int x, int z, int height, double noiseVal, BlockState var9, BlockState var10, int var11, long seed, SurfaceBuilderConfig config) {
     int localX = x & 15;
     int localZ = z & 15;

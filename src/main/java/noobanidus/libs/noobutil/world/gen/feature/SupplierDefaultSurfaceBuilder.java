@@ -16,6 +16,7 @@ public class SupplierDefaultSurfaceBuilder extends SurfaceBuilder<SupplierSurfac
     super(p_i232124_1_);
   }
 
+  @Override
   public void buildSurface(Random random, IChunk chunkIn, Biome biomeIn, int x, int z, int startHeight, double noise, BlockState defaultBlock, BlockState defaultFluid, int seaLevel, long seed, SupplierSurfaceBuilderConfig config) {
     this.buildSurface(random, chunkIn, biomeIn, x, z, startHeight, noise, defaultBlock, defaultFluid, config.getTop(), config.getUnder(), config.getUnderWaterMaterial(), seaLevel);
   }

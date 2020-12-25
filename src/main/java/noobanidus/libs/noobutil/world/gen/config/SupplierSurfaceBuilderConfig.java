@@ -25,10 +25,12 @@ public class SupplierSurfaceBuilderConfig implements ISurfaceBuilderConfig {
     this.underWaterMaterial = underWaterMaterial;
   }
 
+  @Override
   public BlockState getTop() {
     return this.topMaterial.get();
   }
 
+  @Override
   public BlockState getUnder() {
     return this.underMaterial.get();
   }

@@ -48,8 +48,10 @@ public abstract class AbstractColumnBasePlacer extends BlockPlacer {
     this.peak = peak;
   }
 
+  @Override
   protected abstract BlockPlacerType<?> getBlockPlacerType();
 
+  @Override
   public void place(IWorld world, BlockPos pos, BlockState state, Random random) {
     BlockPos.Mutable blockpos$mutable = pos.toMutable();
     int i = this.minSize + random.nextInt(random.nextInt(this.extraSize + 1) + 1);

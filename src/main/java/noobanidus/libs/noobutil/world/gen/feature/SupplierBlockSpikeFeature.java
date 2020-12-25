@@ -18,6 +18,7 @@ public class SupplierBlockSpikeFeature extends Feature<SupplierBlockStateFeature
     super(p_i231962_1_);
   }
 
+  @Override
   public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, SupplierBlockStateFeatureConfig config) {
     while (reader.isAirBlock(pos) && pos.getY() > 2) {
       pos = pos.down();
