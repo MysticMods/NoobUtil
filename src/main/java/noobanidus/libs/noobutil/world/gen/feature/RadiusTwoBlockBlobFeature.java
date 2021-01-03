@@ -6,17 +6,17 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.feature.Feature;
-import noobanidus.libs.noobutil.world.gen.config.BlockStateRadiusFeatureConfig;
+import noobanidus.libs.noobutil.world.gen.config.TwoBlockStateRadiusFeatureConfig;
 
 import java.util.Random;
 
-public class RadiusBlockBlobFeature extends Feature<BlockStateRadiusFeatureConfig> {
-  public RadiusBlockBlobFeature(Codec<BlockStateRadiusFeatureConfig> codec) {
+public class RadiusTwoBlockBlobFeature extends Feature<TwoBlockStateRadiusFeatureConfig> {
+  public RadiusTwoBlockBlobFeature(Codec<TwoBlockStateRadiusFeatureConfig> codec) {
     super(codec);
   }
 
   @Override
-  public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateRadiusFeatureConfig config) {
+  public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, TwoBlockStateRadiusFeatureConfig config) {
     while (true) {
       if (pos.getY() > 3) {
         if (reader.isAirBlock(pos.down())) {
@@ -43,10 +43,13 @@ public class RadiusBlockBlobFeature extends Feature<BlockStateRadiusFeatureConfi
         int l = i1 + rand.nextInt(2);
         float f = (float) (j + k + l) * 0.333F + 0.5F;
         double f2 = (double) (f * f);
+        double f3 = ((f / 2.0) * (f / 2.0));
 
         for (BlockPos blockpos : BlockPos.getAllInBoxMutable(pos.add(-j, -k, -l), pos.add(j, k, l))) {
-          if (blockpos.distanceSq(pos) <= f2) {
-            reader.setBlockState(blockpos, config.provider.getBlockState(rand, blockpos), 4);
+          if (blockpos.distanceSq(pos) <= f3) {
+            reader.setBlockState(blockpos, config.provider2.getBlockState(rand, blockpos), 4);
+          } else if (blockpos.distanceSq(pos) <= f2) {
+            reader.setBlockState(blockpos, config.provider1.getBlockState(rand, blockpos), 4);
           }
         }
 

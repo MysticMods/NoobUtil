@@ -3,15 +3,16 @@ package noobanidus.libs.noobutil.world.gen.config;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.BlockState;
+import net.minecraft.world.gen.blockstateprovider.BlockStateProvider;
 import net.minecraft.world.gen.feature.IFeatureConfig;
 
 public class BlockStateRadiusFeatureConfig implements IFeatureConfig {
-  public static final Codec<BlockStateRadiusFeatureConfig> CODEC = RecordCodecBuilder.create((instance) -> instance.group(BlockState.CODEC.fieldOf("state").forGetter((s) -> s.state), Codec.INT.fieldOf("startRadius").forGetter((s) -> s.startRadius)).apply(instance, BlockStateRadiusFeatureConfig::new));
-  public final BlockState state;
+  public static final Codec<BlockStateRadiusFeatureConfig> CODEC = RecordCodecBuilder.create((instance) -> instance.group(BlockStateProvider.CODEC.fieldOf("provider1").forGetter((s) -> s.provider), Codec.INT.fieldOf("startRadius").forGetter((s) -> s.startRadius)).apply(instance, BlockStateRadiusFeatureConfig::new));
+  public final BlockStateProvider provider;
   public final int startRadius;
 
-  public BlockStateRadiusFeatureConfig(BlockState p_i225831_1_, int startRadius) {
-    this.state = p_i225831_1_;
+  public BlockStateRadiusFeatureConfig(BlockStateProvider provider, int startRadius) {
+    this.provider = provider;
     this.startRadius = startRadius;
   }
 }
