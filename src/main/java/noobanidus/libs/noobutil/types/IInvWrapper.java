@@ -12,6 +12,10 @@ public class IInvWrapper implements IInventory {
     this.handler = handler;
   }
 
+  public IItemHandler getHandler() {
+    return handler;
+  }
+
   @Override
   public int getSizeInventory() {
     return handler.getSlots();
