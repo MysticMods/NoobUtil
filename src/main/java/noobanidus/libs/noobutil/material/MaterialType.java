@@ -13,12 +13,14 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
+import noobanidus.libs.noobutil.config.IArmorConfig;
 import noobanidus.libs.noobutil.item.WeaponType;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import java.util.function.Function;
 import java.util.function.Supplier;
 
 public class MaterialType {
@@ -62,6 +64,8 @@ public class MaterialType {
 
   private ArmorMaterial armorMaterial = new ArmorMaterial();
   private ItemMaterial itemMaterial = new ItemMaterial();
+
+  private Function<String, IArmorConfig> configProvider = null;
 
   public MaterialType(String name) {
     this.name = name;
@@ -115,6 +119,11 @@ public class MaterialType {
 
   public MaterialType setArmorMaterial(IArmorMaterial material) {
     this.material = material;
+    return this;
+  }
+
+  public MaterialType setConfigProvider(Function<String, IArmorConfig> configProvider) {
+    this.configProvider = configProvider;
     return this;
   }
 
@@ -283,6 +292,20 @@ public class MaterialType {
 
     @Override
     public int getDamageReductionAmount(EquipmentSlotType slotIn) {
+      if (configProvider != null) {
+        IArmorConfig config = configProvider.apply(name);
+        if (config != null) {
+          if (slotIn == EquipmentSlotType.HEAD) {
+            return config.getHead();
+          } else if (slotIn == EquipmentSlotType.FEET) {
+            return config.getFeet();
+          } else if (slotIn == EquipmentSlotType.CHEST) {
+            return config.getChest();
+          } else if (slotIn == EquipmentSlotType.LEGS) {
+            return config.getLegs();
+          }
+        }
+      }
       return material == null ? damageReductionAmountArray[slotIn.getIndex()] : material.getDamageReductionAmount(slotIn);
     }
 
@@ -293,6 +316,12 @@ public class MaterialType {
 
     @Override
     public float getToughness() {
+      if (configProvider != null) {
+        IArmorConfig config = configProvider.apply(name);
+        if (config != null) {
+          return config.getToughness();
+        }
+      }
       return material == null ? toughness : material.getToughness();
     }
 
