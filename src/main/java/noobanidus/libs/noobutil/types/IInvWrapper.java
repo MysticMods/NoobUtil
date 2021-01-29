@@ -5,14 +5,14 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
-public class IInvWrapper implements IInventory {
-  private final IItemHandler handler;
+public class IInvWrapper<T extends IItemHandler> implements IInventory {
+  private final T handler;
 
-  public IInvWrapper(IItemHandler handler) {
+  public IInvWrapper(T handler) {
     this.handler = handler;
   }
 
-  public IItemHandler getHandler() {
+  public T getHandler() {
     return handler;
   }
 
