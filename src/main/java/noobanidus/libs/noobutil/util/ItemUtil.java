@@ -2,6 +2,7 @@ package noobanidus.libs.noobutil.util;
 
 import net.minecraft.entity.item.ItemEntity;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -25,6 +26,14 @@ public class ItemUtil {
     } else {
       return (item1.getTag() == null || item1.getTag().equals(item2.getTag())) && item1.areCapsCompatible(item2);
     }
+  }
+
+  public static NonNullList<ItemStack> copyItemList(NonNullList<ItemStack> reference) {
+    NonNullList<ItemStack> contents = NonNullList.withSize(reference.size(), ItemStack.EMPTY);
+    for (int i = 0; i < reference.size(); i++) {
+      contents.set(i, reference.get(i).copy());
+    }
+    return contents;
   }
 
   public static boolean equalWithoutDamage(ItemStack stack1, ItemStack stack2) {
