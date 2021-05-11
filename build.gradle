@@ -16,13 +16,11 @@ buildscript {
     }
     dependencies {
         classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.0.+', changing: true
-        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'maven-publish'
 apply plugin: 'eclipse'
-apply plugin: 'org.spongepowered.mixin'
 
 version = "${minecraft_version}-${mod_version}"
 group = "noobanidus.libs"
@@ -109,9 +107,6 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 
     compile fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
-
-    compile 'org.spongepowered:mixin:0.8'
-    annotationProcessor 'org.spongepowered:mixin:0.8:processor'
 }
 
 jar {
