@@ -90,7 +90,6 @@ minecraft {
 }
 
 repositories {
-    mavenLocal()
     maven {
         url "http://maven.tterrag.com/"
     }
