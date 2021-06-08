@@ -1,4 +1,4 @@
-package noobanidus.libs.noobutil.types;
+package noobanidus.libs.noobutil.world.gen.provider;
 
 import com.mojang.serialization.Codec;
 import net.minecraft.block.Block;
