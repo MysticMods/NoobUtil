@@ -249,7 +249,7 @@ public class MaterialType {
   }
 
   public Block.Properties getOreBlockProperties (Block.Properties props) {
-    return props.hardnessAndResistance(3.0f, 3.0f).harvestTool(ToolType.PICKAXE).harvestLevel(getHarvestLevel() - 1);
+    return props.hardnessAndResistance(3.0f, 3.0f).setRequiresTool().harvestTool(ToolType.PICKAXE).harvestLevel(getHarvestLevel() - 1);
   }
 
   public Supplier<Block.Properties> getOreBlockProperties() {
