@@ -81,8 +81,7 @@ minecraft {
                 }
             }
 
-            args '--mod', 'testmod', '--all', '--output', '"' + rootProject.file('src/generated/resources/') + '"',
-                    '--existing', '"' + rootProject.file('src/main/resources') + '"'
+            args '--mod', 'testmod', '--all', '--output', '"' + rootProject.file('src/generated/resources/') + '"', '--existing', '"' + rootProject.file('src/main/resources') + '"'
 //, '--existing', '"' + rootProject.file('src/generated/resources') + '"'
 
         }
