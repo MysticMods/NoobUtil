@@ -84,7 +84,7 @@ public class BaseBlocks {
     }
   }
 
-  public static class NarrowPostBlock extends Block {
+  public static class NarrowPostBlock extends WaterloggedBlock {
     public static VoxelShape SHAPE = Block.makeCuboidShape(6, 0, 6, 10, 16, 10);
 
     public NarrowPostBlock(Properties properties) {
@@ -97,7 +97,7 @@ public class BaseBlocks {
     }
   }
 
-  public static class WidePostBlock extends Block {
+  public static class WidePostBlock extends WaterloggedBlock {
     public static VoxelShape SHAPE = Block.makeCuboidShape(4, 0, 4, 12, 16, 12);
 
     public WidePostBlock(Properties properties) {
