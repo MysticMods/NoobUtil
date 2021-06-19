@@ -16,8 +16,8 @@ public class CenteredLavaPlacement extends Placement<ChanceConfig> {
 
   public Stream<BlockPos> getPositions(WorldDecoratingHelper helper, Random rand, ChanceConfig config, BlockPos pos) {
     if (rand.nextInt(config.chance / 10) == 0) {
-      int i = pos.getX() - 8;
-      int j = pos.getZ() - 8;
+      int i = pos.getX();
+      int j = pos.getZ();
       int k = rand.nextInt(rand.nextInt(helper.func_242891_a() - 8) + 8);
       if (k < helper.func_242895_b() || rand.nextInt(config.chance / 8) == 0) {
         return Stream.of(new BlockPos(i, k, j));

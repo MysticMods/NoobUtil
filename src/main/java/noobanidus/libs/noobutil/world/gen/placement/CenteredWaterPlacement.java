@@ -16,8 +16,8 @@ public class CenteredWaterPlacement extends Placement<ChanceConfig> {
 
   public Stream<BlockPos> getPositions(WorldDecoratingHelper helper, Random rand, ChanceConfig config, BlockPos pos) {
     if (rand.nextInt(config.chance) == 0) {
-      int i = pos.getX() - 8;
-      int j = pos.getZ() - 8;
+      int i = pos.getX();
+      int j = pos.getZ();
       int k = rand.nextInt(helper.func_242891_a());
       return Stream.of(new BlockPos(i, k, j));
     } else {
