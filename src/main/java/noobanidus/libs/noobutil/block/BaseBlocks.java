@@ -89,6 +89,7 @@ public class BaseBlocks {
 
     public NarrowPostBlock(Properties properties) {
       super(properties);
+      this.setDefaultState(this.getDefaultState().with(WATERLOGGED, false));
     }
 
     @Override
@@ -102,6 +103,7 @@ public class BaseBlocks {
 
     public WidePostBlock(Properties properties) {
       super(properties);
+      this.setDefaultState(this.getDefaultState().with(WATERLOGGED, false));
     }
 
     @SuppressWarnings("deprecation")
