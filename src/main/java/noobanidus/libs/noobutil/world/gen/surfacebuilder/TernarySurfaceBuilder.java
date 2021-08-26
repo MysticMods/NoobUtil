@@ -11,7 +11,9 @@ import java.util.Random;
 
 @SuppressWarnings("NullableProblems")
 public class TernarySurfaceBuilder extends SurfaceBuilder<SurfaceBuilderConfig> {
-  private SurfaceBuilderConfig one, two, three;
+  private final SurfaceBuilderConfig one;
+  private final SurfaceBuilderConfig two;
+  private final SurfaceBuilderConfig three;
 
   public TernarySurfaceBuilder(Codec<SurfaceBuilderConfig> codec, SurfaceBuilderConfig one, SurfaceBuilderConfig two, SurfaceBuilderConfig three) {
     super(codec);

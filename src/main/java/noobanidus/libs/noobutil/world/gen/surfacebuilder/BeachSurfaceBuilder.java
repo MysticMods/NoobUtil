@@ -6,19 +6,20 @@ import net.minecraft.block.Blocks;
 import net.minecraft.util.math.BlockPos.Mutable;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.IChunk;
+import net.minecraft.world.gen.surfacebuilders.ISurfaceBuilderConfig;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
 import net.minecraft.world.gen.surfacebuilders.SurfaceBuilderConfig;
 
 import java.util.Random;
 import java.util.function.DoubleFunction;
 
-public class BeachSurfaceBuilder extends SurfaceBuilder<SurfaceBuilderConfig> {
+public class BeachSurfaceBuilder extends SurfaceBuilder<ISurfaceWithUnderwaterBuilderConfig> {
   private static final BlockState STONE = Blocks.STONE.getDefaultState();
   private final BlockState WATER;
-  private int seaLevel;
-  private DoubleFunction<BlockState> sand;
+  private final int seaLevel;
+  private final DoubleFunction<BlockState> sand;
 
-  public BeachSurfaceBuilder(Codec<SurfaceBuilderConfig> codec, int seaLevel, DoubleFunction<BlockState> sand) {
+  public BeachSurfaceBuilder(Codec<ISurfaceWithUnderwaterBuilderConfig> codec, int seaLevel, DoubleFunction<BlockState> sand) {
     super(codec);
     this.WATER = Blocks.WATER.getDefaultState();
     this.seaLevel = seaLevel;
@@ -26,7 +27,7 @@ public class BeachSurfaceBuilder extends SurfaceBuilder<SurfaceBuilderConfig> {
   }
 
   @Override
-  public void buildSurface(Random rand, IChunk chunk, Biome biome, int x, int z, int height, double noiseVal, BlockState var9, BlockState var10, int var11, long seed, SurfaceBuilderConfig config) {
+  public void buildSurface(Random rand, IChunk chunk, Biome biome, int x, int z, int height, double noiseVal, BlockState var9, BlockState var10, int var11, long seed, ISurfaceWithUnderwaterBuilderConfig config) {
     int localX = x & 15;
     int localZ = z & 15;
     BlockState chosenSand = this.sand.apply(noiseVal);
