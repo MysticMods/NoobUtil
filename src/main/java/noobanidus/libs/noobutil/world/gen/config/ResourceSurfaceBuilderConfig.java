@@ -1,11 +1,10 @@
-package noobanidus.libs.noobutil.world.gen.surfacebuilder;
+package noobanidus.libs.noobutil.world.gen.config;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.gen.surfacebuilders.ISurfaceBuilderConfig;
 import net.minecraftforge.registries.ForgeRegistries;
 
 public class ResourceSurfaceBuilderConfig implements ISurfaceWithUnderwaterBuilderConfig {

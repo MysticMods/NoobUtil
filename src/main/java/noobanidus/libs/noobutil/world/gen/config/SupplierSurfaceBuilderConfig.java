@@ -14,9 +14,11 @@ public class SupplierSurfaceBuilderConfig implements ISurfaceBuilderConfig {
   private final LazyStateSupplier underWaterMaterial;
 
   public SupplierSurfaceBuilderConfig (ResourceLocation surface) {
-    this.topMaterial = new LazyStateSupplier(surface);
-    this.underMaterial = new LazyStateSupplier(surface);
-    this.underWaterMaterial = new LazyStateSupplier(surface);
+    this(surface, surface, surface);
+  }
+
+  public SupplierSurfaceBuilderConfig (ResourceLocation top, ResourceLocation under, ResourceLocation underWater) {
+    this(new LazyStateSupplier(top), new LazyStateSupplier(under), new LazyStateSupplier(underWater));
   }
 
   public SupplierSurfaceBuilderConfig(LazyStateSupplier topMaterial, LazyStateSupplier underMaterial, LazyStateSupplier underWaterMaterial) {
