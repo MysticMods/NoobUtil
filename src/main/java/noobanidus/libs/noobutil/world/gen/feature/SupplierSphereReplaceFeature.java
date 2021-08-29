@@ -32,7 +32,7 @@ public class SupplierSphereReplaceFeature extends Feature<SupplierSphereReplaceC
 
             for (LazyStateSupplier blockstate : config.targets) {
               if (blockstate.get().isIn(block)) {
-                reader.setBlockState(blockpos, config.state, 2);
+                reader.setBlockState(blockpos, config.state.get(), 2);
                 flag = true;
                 break;
               }
