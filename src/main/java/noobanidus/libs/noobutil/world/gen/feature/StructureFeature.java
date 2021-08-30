@@ -12,9 +12,9 @@ import net.minecraft.world.ISeedReader;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.NoFeatureConfig;
 import net.minecraft.world.gen.feature.template.*;
 import noobanidus.libs.noobutil.types.IntPair;
+import noobanidus.libs.noobutil.world.gen.config.StructureFeatureConfig;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -23,20 +23,19 @@ import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-public class StructureFeature extends Feature<NoFeatureConfig> {
+public class StructureFeature extends Feature<StructureFeatureConfig> {
   private final WeightedList<ResourceLocation> structures;
   private final List<StructureProcessor> processors = new ArrayList<>();
-  private int offset = 0;
 
-  public StructureFeature(Codec<NoFeatureConfig> codec, ResourceLocation structure) {
+  public StructureFeature(Codec<StructureFeatureConfig> codec, ResourceLocation structure) {
     this(codec, 1, structure);
   }
 
-  public StructureFeature(Codec<NoFeatureConfig> codec, ResourceLocation ... structures) {
+  public StructureFeature(Codec<StructureFeatureConfig> codec, ResourceLocation ... structures) {
     this(codec, Stream.of(structures).map(o -> new IntPair<>(1, o)).collect(Collectors.toList()));
   }
 
-  public StructureFeature(Codec<NoFeatureConfig> codec, int weight, ResourceLocation structure) {
+  public StructureFeature(Codec<StructureFeatureConfig> codec, int weight, ResourceLocation structure) {
     this(codec, new IntPair<>(weight, structure));
   }
 
@@ -45,17 +44,12 @@ public class StructureFeature extends Feature<NoFeatureConfig> {
     return this;
   }
 
-  public StructureFeature setOffset (int offset) {
-    this.offset = offset;
-    return this;
-  }
-
   @SafeVarargs
-  public StructureFeature(Codec<NoFeatureConfig> codec, IntPair<ResourceLocation>... structures) {
+  public StructureFeature(Codec<StructureFeatureConfig> codec, IntPair<ResourceLocation>... structures) {
     this(codec, Arrays.asList(structures));
   }
 
-  public StructureFeature(Codec<NoFeatureConfig> codec, List<IntPair<ResourceLocation>> structures) {
+  public StructureFeature(Codec<StructureFeatureConfig> codec, List<IntPair<ResourceLocation>> structures) {
     super(codec);
     this.structures = new WeightedList<>();
     for (IntPair<ResourceLocation> structure : structures) {
@@ -64,7 +58,7 @@ public class StructureFeature extends Feature<NoFeatureConfig> {
   }
 
   @Override
-  public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+  public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, StructureFeatureConfig config) {
     Rotation rotation = Rotation.randomRotation(rand);
 
     ResourceLocation structure = this.structures.func_226318_b_(rand);
@@ -88,7 +82,7 @@ public class StructureFeature extends Feature<NoFeatureConfig> {
       }
     }
 
-    BlockPos pos2 = new BlockPos(pos.getX() + j, l - (1 + offset), pos.getZ() + k);
+    BlockPos pos2 = new BlockPos(pos.getX() + j, l - (1 + config.getOffset()), pos.getZ() + k);
     BlockPos blockpos1 = template.getZeroPositionWithTransform(pos2, Mirror.NONE, rotation);
     placementsettings.clearProcessors();
     for (StructureProcessor proc : processors) {
