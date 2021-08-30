@@ -17,8 +17,11 @@ import net.minecraft.world.gen.feature.template.*;
 import noobanidus.libs.noobutil.types.IntPair;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class StructureFeature extends Feature<NoFeatureConfig> {
   private final WeightedList<ResourceLocation> structures;
@@ -26,6 +29,10 @@ public class StructureFeature extends Feature<NoFeatureConfig> {
 
   public StructureFeature(Codec<NoFeatureConfig> codec, ResourceLocation structure) {
     this(codec, 1, structure);
+  }
+
+  public StructureFeature(Codec<NoFeatureConfig> codec, ResourceLocation ... structures) {
+    this(codec, Stream.of(structures).map(o -> new IntPair<>(1, o)).collect(Collectors.toList()));
   }
 
   public StructureFeature(Codec<NoFeatureConfig> codec, int weight, ResourceLocation structure) {
@@ -38,6 +45,10 @@ public class StructureFeature extends Feature<NoFeatureConfig> {
 
   @SafeVarargs
   public StructureFeature(Codec<NoFeatureConfig> codec, IntPair<ResourceLocation>... structures) {
+    this(codec, Arrays.asList(structures));
+  }
+
+  public StructureFeature(Codec<NoFeatureConfig> codec, List<IntPair<ResourceLocation>> structures) {
     super(codec);
     this.structures = new WeightedList<>();
     for (IntPair<ResourceLocation> structure : structures) {
