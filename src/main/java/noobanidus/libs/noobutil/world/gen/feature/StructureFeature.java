@@ -82,7 +82,9 @@ public class StructureFeature extends Feature<StructureFeatureConfig> {
       }
     }
 
-    BlockPos pos2 = new BlockPos(pos.getX() + j, l - (1 - config.getOffset()), pos.getZ() + k);
+    int offset = config.getOffset() == 0 ? -1 : config.getOffset();
+
+    BlockPos pos2 = new BlockPos(pos.getX() + j, l + offset, pos.getZ() + k);
     BlockPos blockpos1 = template.getZeroPositionWithTransform(pos2, Mirror.NONE, rotation);
     placementsettings.clearProcessors();
     for (StructureProcessor proc : processors) {
