@@ -92,14 +92,17 @@ public class StructureFeature extends Feature<StructureFeatureConfig> {
     for (StructureProcessor proc : processors) {
       placementsettings.getProcessors().add(proc);
     }
-    if (shouldContinue(reader, blockpos1, blockpos1, placementsettings, rand, 4)) {
-      return template.func_237146_a_(reader, blockpos1, blockpos1, placementsettings, rand, 4);
-    }
-
-    return false;
+    prePlaceCallback(reader, blockpos1, blockpos1, placementsettings, rand, 4);
+    boolean result = template.func_237146_a_(reader, blockpos1, blockpos1, placementsettings, rand, 4);
+    postPlaceCallback(reader, blockpos1, blockpos1, placementsettings, rand, 4);
+    return result;
   }
 
-  protected boolean shouldContinue (IServerWorld world, BlockPos pos1, BlockPos pos2, PlacementSettings placement, Random random, int props) {
-    return true;
+  protected void prePlaceCallback (IServerWorld p_237146_1_, BlockPos p_237146_2_, BlockPos p_237146_3_, PlacementSettings p_237146_4_, Random p_237146_5_, int p_237146_6_) {
+
+  }
+
+  protected void postPlaceCallback (IServerWorld p_237146_1_, BlockPos p_237146_2_, BlockPos p_237146_3_, PlacementSettings p_237146_4_, Random p_237146_5_, int p_237146_6_) {
+
   }
 }
