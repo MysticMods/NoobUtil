@@ -1,6 +1,7 @@
 package noobanidus.libs.noobutil.world.gen.feature;
 
 import com.mojang.serialization.Codec;
+import net.minecraft.block.BlockState;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
@@ -9,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MutableBoundingBox;
 import net.minecraft.world.ISeedReader;
+import net.minecraft.world.IServerWorld;
 import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
@@ -90,6 +92,14 @@ public class StructureFeature extends Feature<StructureFeatureConfig> {
     for (StructureProcessor proc : processors) {
       placementsettings.getProcessors().add(proc);
     }
-    return template.func_237146_a_(reader, blockpos1, blockpos1, placementsettings, rand, 4);
+    if (shouldContinue(reader, blockpos1, blockpos1, placementsettings, rand, 4)) {
+      return template.func_237146_a_(reader, blockpos1, blockpos1, placementsettings, rand, 4);
+    }
+
+    return false;
+  }
+
+  protected boolean shouldContinue (IServerWorld world, BlockPos pos1, BlockPos pos2, PlacementSettings placement, Random random, int props) {
+    return true;
   }
 }
