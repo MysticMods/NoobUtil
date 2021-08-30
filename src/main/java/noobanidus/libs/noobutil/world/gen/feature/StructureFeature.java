@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 public class StructureFeature extends Feature<NoFeatureConfig> {
   private final WeightedList<ResourceLocation> structures;
   private final List<StructureProcessor> processors = new ArrayList<>();
+  private int offset = 0;
 
   public StructureFeature(Codec<NoFeatureConfig> codec, ResourceLocation structure) {
     this(codec, 1, structure);
@@ -39,8 +40,14 @@ public class StructureFeature extends Feature<NoFeatureConfig> {
     this(codec, new IntPair<>(weight, structure));
   }
 
-  protected void addProcessor (StructureProcessor processor) {
+  public StructureFeature addProcessor (StructureProcessor processor) {
     this.processors.add(processor);
+    return this;
+  }
+
+  public StructureFeature setOffset (int offset) {
+    this.offset = offset;
+    return this;
   }
 
   @SafeVarargs
@@ -81,7 +88,7 @@ public class StructureFeature extends Feature<NoFeatureConfig> {
       }
     }
 
-    BlockPos pos2 = new BlockPos(pos.getX() + j, l - 1, pos.getZ() + k);
+    BlockPos pos2 = new BlockPos(pos.getX() + j, l - (1 + offset), pos.getZ() + k);
     BlockPos blockpos1 = template.getZeroPositionWithTransform(pos2, Mirror.NONE, rotation);
     placementsettings.clearProcessors();
     for (StructureProcessor proc : processors) {
