@@ -85,7 +85,7 @@ public class LazyStateSupplier extends LazySupplier<BlockState> {
     return this;
   }
 
-  protected static class PropertyPair {
+  public static class PropertyPair {
     private final String propertyName;
     private final String value;
     private final String type;
