@@ -19,7 +19,7 @@ public class SupplierRandomPatchFeature extends Feature<SupplierBlockClusterFeat
 
   @Override
   public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, SupplierBlockClusterFeatureConfig config) {
-    BlockState blockstate = config.stateProvider.getBlockState(rand, pos);
+    BlockState blockstate = config.stateProvider.get();
     BlockPos blockpos;
     if (config.project) {
       blockpos = reader.getHeight(Heightmap.Type.WORLD_SURFACE_WG, pos);
