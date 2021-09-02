@@ -19,6 +19,10 @@ public class BiggerMushroomFeatureConfig extends BigMushroomFeatureConfig {
   private final int a;
   private final int b;
 
+  public BiggerMushroomFeatureConfig(BlockStateProvider state1, BlockStateProvider state2, int radius) {
+    this(state1, state2, radius, 4, 2);
+  }
+
   public BiggerMushroomFeatureConfig(BlockStateProvider p_i225832_1_, BlockStateProvider p_i225832_2_, int p_i225832_3_, int a, int b) {
     super(p_i225832_1_, p_i225832_2_, p_i225832_3_);
     this.a = a;

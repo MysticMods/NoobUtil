@@ -6,6 +6,13 @@ import net.minecraft.world.gen.feature.BigRedMushroomFeature;
 
 import java.util.Random;
 
+@Deprecated
+/**
+ * Use ConfigurableHeightBigMushroomFeature.
+ *
+ * Default BiggerMushroomFeatureConfig uses the same values as this but allows for configuration.
+ *
+ */
 public class TallRedMushroomFeature extends BigRedMushroomFeature {
   public TallRedMushroomFeature(Codec<BigMushroomFeatureConfig> codec) {
     super(codec);
