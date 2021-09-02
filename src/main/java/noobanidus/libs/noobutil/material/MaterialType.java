@@ -9,6 +9,7 @@ import net.minecraft.item.IArmorMaterial;
 import net.minecraft.item.IItemTier;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
@@ -100,12 +101,18 @@ public class MaterialType {
     return this;
   }
 
-  public MaterialType itemMaterial(int maxUses, float efficiency, float attackDamage, int harvestLevel, int enchantability, Supplier<Ingredient> repairMaterial) {
+  public MaterialType itemMaterial(int maxUses, float efficiency, float attackDamage, int harvestLevel, int enchantability, Supplier<ITag.INamedTag<Item>> repairTag) {
+    itemMaterial(maxUses, efficiency, attackDamage, harvestLevel, enchantability);
+    this.repairMaterial = new LazyIngredient(() -> Ingredient.fromTag(repairTag.get()));
+    return this;
+  }
+
+  public MaterialType itemMaterial(int maxUses, float efficiency, float attackDamage, int harvestLevel, int enchantability, Ingredient repairMaterial) {
     itemMaterial(maxUses, efficiency, attackDamage, harvestLevel, enchantability);
     if (repairMaterial instanceof LazyIngredient) {
       this.repairMaterial = (LazyIngredient) repairMaterial;
     } else {
-      this.repairMaterial = new LazyIngredient(repairMaterial);
+      this.repairMaterial = new LazyIngredient(() -> repairMaterial);
     }
     return this;
   }
