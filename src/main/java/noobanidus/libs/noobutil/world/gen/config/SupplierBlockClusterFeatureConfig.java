@@ -18,9 +18,9 @@ import noobanidus.libs.noobutil.types.LazyStateSupplier;
 import noobanidus.libs.noobutil.types.LazySupplier;
 
 public class SupplierBlockClusterFeatureConfig implements IFeatureConfig {
-  public static final Codec<SupplierBlockClusterFeatureConfig> CODEC = RecordCodecBuilder.create((instance) -> instance.group(BlockStateProvider.CODEC.fieldOf("state_provider").forGetter((o) -> o.stateProvider), BlockPlacer.CODEC.fieldOf("block_placer").forGetter((o) -> o.blockPlacer), LazyStateSupplier.CODEC.listOf().fieldOf("whitelist").forGetter((o) -> ImmutableList.copyOf(o.whitelist)), LazyStateSupplier.CODEC.listOf().fieldOf("blacklist").forGetter((o) -> ImmutableList.copyOf(o.blacklist)), Codec.INT.fieldOf("tries").orElse(128).forGetter((o) -> o.tryCount), Codec.INT.fieldOf("xspread").orElse(7).forGetter((o) -> o.xSpread), Codec.INT.fieldOf("yspread").orElse(3).forGetter((o) -> o.ySpread), Codec.INT.fieldOf("zspread").orElse(7).forGetter((o) -> o.zSpread), Codec.BOOL.fieldOf("can_replace").orElse(false).forGetter((o) -> o.isReplaceable), Codec.BOOL.fieldOf("project").orElse(true).forGetter((o) -> o.project), Codec.BOOL.fieldOf("need_water").orElse(false).forGetter((o) -> o.requiresWater)).apply(instance, SupplierBlockClusterFeatureConfig::new));
+  public static final Codec<SupplierBlockClusterFeatureConfig> CODEC = RecordCodecBuilder.create((instance) -> instance.group(SupplierBlockStateProvider.CODEC.fieldOf("state_provider").forGetter((o) -> o.stateProvider), BlockPlacer.CODEC.fieldOf("block_placer").forGetter((o) -> o.blockPlacer), LazyStateSupplier.CODEC.listOf().fieldOf("whitelist").forGetter((o) -> ImmutableList.copyOf(o.whitelist)), LazyStateSupplier.CODEC.listOf().fieldOf("blacklist").forGetter((o) -> ImmutableList.copyOf(o.blacklist)), Codec.INT.fieldOf("tries").orElse(128).forGetter((o) -> o.tryCount), Codec.INT.fieldOf("xspread").orElse(7).forGetter((o) -> o.xSpread), Codec.INT.fieldOf("yspread").orElse(3).forGetter((o) -> o.ySpread), Codec.INT.fieldOf("zspread").orElse(7).forGetter((o) -> o.zSpread), Codec.BOOL.fieldOf("can_replace").orElse(false).forGetter((o) -> o.isReplaceable), Codec.BOOL.fieldOf("project").orElse(true).forGetter((o) -> o.project), Codec.BOOL.fieldOf("need_water").orElse(false).forGetter((o) -> o.requiresWater)).apply(instance, SupplierBlockClusterFeatureConfig::new));
 
-  public final BlockStateProvider stateProvider;
+  public final SupplierBlockStateProvider stateProvider;
   public final BlockPlacer blockPlacer;
   public final Set<LazyStateSupplier> whitelist;
   public final Set<LazyStateSupplier> blacklist;
@@ -34,11 +34,11 @@ public class SupplierBlockClusterFeatureConfig implements IFeatureConfig {
   public final boolean project;
   public final boolean requiresWater;
 
-  private SupplierBlockClusterFeatureConfig(BlockStateProvider stateProvider, BlockPlacer blockPlacer, List<LazyStateSupplier> whitelist, List<LazyStateSupplier> blacklist, int tries, int xSpread, int ySpread, int zSpread, boolean isReplaceable, boolean project, boolean requiresWater) {
+  private SupplierBlockClusterFeatureConfig(SupplierBlockStateProvider stateProvider, BlockPlacer blockPlacer, List<LazyStateSupplier> whitelist, List<LazyStateSupplier> blacklist, int tries, int xSpread, int ySpread, int zSpread, boolean isReplaceable, boolean project, boolean requiresWater) {
     this(stateProvider, blockPlacer, ImmutableSet.copyOf(whitelist), ImmutableSet.copyOf(blacklist), tries, xSpread, ySpread, zSpread, isReplaceable, project, requiresWater);
   }
 
-  private SupplierBlockClusterFeatureConfig(BlockStateProvider stateProvider, BlockPlacer blockPlacer, Set<LazyStateSupplier> whitelist, Set<LazyStateSupplier> blacklist, int tries, int xSpread, int ySpread, int zSpread, boolean isReplaceable, boolean project, boolean requiresWater) {
+  private SupplierBlockClusterFeatureConfig(SupplierBlockStateProvider stateProvider, BlockPlacer blockPlacer, Set<LazyStateSupplier> whitelist, Set<LazyStateSupplier> blacklist, int tries, int xSpread, int ySpread, int zSpread, boolean isReplaceable, boolean project, boolean requiresWater) {
     this.stateProvider = stateProvider;
     this.blockPlacer = blockPlacer;
     this.whitelist = whitelist;
@@ -67,7 +67,7 @@ public class SupplierBlockClusterFeatureConfig implements IFeatureConfig {
   }
 
   public static class Builder {
-    private final BlockStateProvider stateProvider;
+    private final SupplierBlockStateProvider stateProvider;
     private final BlockPlacer blockPlacer;
     private Set<LazyStateSupplier> whitelist = ImmutableSet.of();
     private Set<LazyStateSupplier> blacklist = ImmutableSet.of();
@@ -79,7 +79,7 @@ public class SupplierBlockClusterFeatureConfig implements IFeatureConfig {
     private boolean project = true;
     private boolean requiresWater = false;
 
-    public Builder(BlockStateProvider stateProvider, BlockPlacer blockPlacer) {
+    public Builder(SupplierBlockStateProvider stateProvider, BlockPlacer blockPlacer) {
       this.stateProvider = stateProvider;
       this.blockPlacer = blockPlacer;
     }
