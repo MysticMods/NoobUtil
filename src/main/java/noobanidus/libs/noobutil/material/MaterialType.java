@@ -15,6 +15,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 import noobanidus.libs.noobutil.config.IArmorConfig;
 import noobanidus.libs.noobutil.item.WeaponType;
+import noobanidus.libs.noobutil.types.LazyIngredient;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -39,7 +40,7 @@ public class MaterialType {
   private int harvestLevel;
   private int enchantability;
   private float knockbackResistance;
-  private Supplier<Ingredient> repairMaterial;
+  private LazyIngredient repairMaterial;
 
   private int maxDamageFactor;
   private int[] damageReductionAmountArray;
@@ -95,12 +96,18 @@ public class MaterialType {
     this.attackDamage = attackDamage;
     this.harvestLevel = harvestLevel;
     this.enchantability = enchantability;
-    this.repairMaterial = () -> Ingredient.fromItems(item.get().get());
+    this.repairMaterial = new LazyIngredient(() -> Ingredient.fromItems(item.get().get()));
     return this;
   }
 
   public MaterialType itemMaterial(int maxUses, float efficiency, float attackDamage, int harvestLevel, int enchantability, Supplier<Ingredient> repairMaterial) {
-    return itemMaterial(maxUses, efficiency, attackDamage, harvestLevel, enchantability);
+    itemMaterial(maxUses, efficiency, attackDamage, harvestLevel, enchantability);
+    if (repairMaterial instanceof LazyIngredient) {
+      this.repairMaterial = (LazyIngredient) repairMaterial;
+    } else {
+      this.repairMaterial = new LazyIngredient(repairMaterial);
+    }
+    return this;
   }
 
   public MaterialType armorMaterial(int maxDamageFactor, int[] damageReductionAmountArray, SoundEvent soundEvent, float toughness, float knockbackResistance) {
@@ -333,7 +340,7 @@ public class MaterialType {
     @Override
     @Nonnull
     public Ingredient getRepairMaterial() {
-      return tier == null ? repairMaterial.get() : tier.getRepairMaterial();
+      return tier == null ? repairMaterial : tier.getRepairMaterial();
     }
 
     @Override
@@ -377,7 +384,7 @@ public class MaterialType {
     @Override
     @Nonnull
     public Ingredient getRepairMaterial() {
-      return tier == null ? repairMaterial.get() : tier.getRepairMaterial();
+      return tier == null ? repairMaterial : tier.getRepairMaterial();
     }
   }
 }
