@@ -18,33 +18,32 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
-public abstract class AbstractSupplierBlockStateProvider extends BlockStateProvider {
-  public static <T extends AbstractSupplierBlockStateProvider> Codec<T> codecBuilder(BiFunction<ResourceLocation, List<LazyStateSupplier.PropertyPair>, T> builder) {
-    return RecordCodecBuilder.create(instance -> instance.group(
+public class SupplierBlockStateProvider extends BlockStateProvider {
+  public static Codec<SupplierBlockStateProvider> CODEC = RecordCodecBuilder.create(instance -> instance.group(
         ResourceLocation.CODEC.fieldOf("key").forGetter(o -> o.key),
-        LazyStateSupplier.PropertyPair.CODEC.listOf().fieldOf("properties").forGetter(o -> o.properties)).apply(instance, builder));
-  }
+        LazyStateSupplier.PropertyPair.CODEC.listOf().fieldOf("properties").forGetter(o -> o.properties)).apply(instance, SupplierBlockStateProvider::new));
+
+  public static BlockStateProviderType<?> type = null;
 
   protected final ResourceLocation key;
   protected BlockState state = null;
 
   protected final List<LazyStateSupplier.PropertyPair> properties = new ArrayList<>();
 
-  public AbstractSupplierBlockStateProvider(String namespace, String path) {
+  public SupplierBlockStateProvider(String namespace, String path) {
     this(new ResourceLocation(namespace, path));
   }
 
-  public AbstractSupplierBlockStateProvider(String namespace, String path, @Nullable List<LazyStateSupplier.PropertyPair> pairs) {
+  public SupplierBlockStateProvider(String namespace, String path, @Nullable List<LazyStateSupplier.PropertyPair> pairs) {
     this(new ResourceLocation(namespace, path), pairs);
   }
 
-  public AbstractSupplierBlockStateProvider(ResourceLocation key) {
+  public SupplierBlockStateProvider(ResourceLocation key) {
     this(key, null);
   }
 
-  public AbstractSupplierBlockStateProvider(ResourceLocation key, @Nullable List<LazyStateSupplier.PropertyPair> pairs) {
+  public SupplierBlockStateProvider(ResourceLocation key, @Nullable List<LazyStateSupplier.PropertyPair> pairs) {
     this.key = key;
     if (pairs != null) {
       this.properties.addAll(pairs);
@@ -52,7 +51,13 @@ public abstract class AbstractSupplierBlockStateProvider extends BlockStateProvi
   }
 
   @Override
-  protected abstract BlockStateProviderType<?> getProviderType();
+  protected BlockStateProviderType<?> getProviderType() {
+    if (type == null) {
+      throw new IllegalArgumentException("SupplierBlockStateProvider hasn't been properly registered");
+    }
+
+    return type;
+  }
 
   @Override
   public BlockState getBlockState(Random randomIn, BlockPos blockPosIn) {
@@ -76,12 +81,12 @@ public abstract class AbstractSupplierBlockStateProvider extends BlockStateProvi
     return state;
   }
 
-  public AbstractSupplierBlockStateProvider addPair(String name, boolean value) {
+  public SupplierBlockStateProvider addPair(String name, boolean value) {
     this.properties.add(new LazyStateSupplier.PropertyPair(name, value ? "true" : "false", "boolean"));
     return this;
   }
 
-  public AbstractSupplierBlockStateProvider addPair(String name, int value) {
+  public SupplierBlockStateProvider addPair(String name, int value) {
     this.properties.add(new LazyStateSupplier.PropertyPair(name, String.valueOf(value), "integer"));
     return this;
   }
