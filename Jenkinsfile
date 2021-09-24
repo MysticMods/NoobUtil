@@ -9,6 +9,7 @@ pipeline {
         stage('Clean') {
             steps {
                 echo 'Cleaning Project'
+                sh 'gradle wrapper'
                 sh 'chmod +x gradlew'
                 sh './gradlew clean'
             }
