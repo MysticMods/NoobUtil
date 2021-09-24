@@ -9,7 +9,8 @@ pipeline {
         stage('Clean') {
             steps {
                 echo 'Cleaning Project'
-                sh 'gradle wrapper'
+                sh 'git submodule init'
+                sh 'git submodule update'
                 sh 'chmod +x gradlew'
                 sh './gradlew clean'
             }
