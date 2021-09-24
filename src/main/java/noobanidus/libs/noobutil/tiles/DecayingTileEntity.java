@@ -13,7 +13,7 @@ public class DecayingTileEntity extends TileEntity implements ITickableTileEntit
   private LazyStateSupplier state;
 
   public DecayingTileEntity(TileEntityType<?> type) {
-    this(type, new LazyStateSupplier(Blocks.AIR.getDefaultState()), 35);
+    this(type, new LazyStateSupplier(Blocks.AIR.defaultBlockState()), 35);
   }
 
   public DecayingTileEntity(TileEntityType<?> type, LazyStateSupplier block, int decay) {
@@ -24,21 +24,21 @@ public class DecayingTileEntity extends TileEntity implements ITickableTileEntit
 
   @Override
   public void tick() {
-    if (world != null && !world.isRemote && decay-- <= 0) {
-      world.setBlockState(pos, state.get());
+    if (level != null && !level.isClientSide && decay-- <= 0) {
+      level.setBlockAndUpdate(worldPosition, state.get());
     }
   }
 
   @Override
-  public void read(BlockState p_230337_1_, CompoundNBT p_230337_2_) {
+  public void load(BlockState p_230337_1_, CompoundNBT p_230337_2_) {
     this.decay = p_230337_2_.getInt("decay");
     this.state = LazyStateSupplier.fromNBT(p_230337_2_.getCompound("state"));
-    super.read(p_230337_1_, p_230337_2_);
+    super.load(p_230337_1_, p_230337_2_);
   }
 
   @Override
-  public CompoundNBT write(CompoundNBT p_189515_1_) {
-    CompoundNBT result = super.write(p_189515_1_);
+  public CompoundNBT save(CompoundNBT pCompound) {
+    CompoundNBT result = super.save(pCompound);
     result.putInt("decay", this.decay);
     result.put("state", this.state.serializeNBT());
     return result;

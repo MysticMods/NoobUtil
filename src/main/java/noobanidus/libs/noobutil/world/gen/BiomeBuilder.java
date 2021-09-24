@@ -95,10 +95,10 @@ public final class BiomeBuilder implements Cloneable {
 
   public static BiomeAmbience.Builder createDefaultBiomeAmbience() {
     return new BiomeAmbience.Builder()
-        .setWaterColor(0x3F76E4)
-        .setWaterFogColor(0x50533)
-        .withSkyColor(ColorConstants.getSkyColor(0.2F))
-        .setFogColor(0xC0D8FF);
+        .waterColor(0x3F76E4)
+        .waterFogColor(0x50533)
+        .skyColor(ColorConstants.getSkyColor(0.2F))
+        .fogColor(0xC0D8FF);
   }
 
   @SuppressWarnings("unchecked")
@@ -108,25 +108,25 @@ public final class BiomeBuilder implements Cloneable {
     }
 
     Biome.Builder builder = new Biome.Builder();
-    builder.category(this.category);
+    builder.biomeCategory(this.category);
     builder.depth(this.depth);
     builder.scale(this.scale);
     builder.downfall(this.downfall);
     builder.precipitation(this.precipitation);
     builder.temperature(this.temperature);
 
-    this.effects.withSkyColor(ColorConstants.getSkyColor(this.temperature));
-    builder.setEffects(this.effects.build());
+    this.effects.skyColor(ColorConstants.getSkyColor(this.temperature));
+    builder.specialEffects(this.effects.build());
 
-    BiomeGenerationSettings.Builder generationSettings = new BiomeGenerationSettings.Builder().withSurfaceBuilder(this.surfaceBuilder);
+    BiomeGenerationSettings.Builder generationSettings = new BiomeGenerationSettings.Builder().surfaceBuilder(this.surfaceBuilder);
 
     MobSpawnInfo.Builder spawnSettings = new MobSpawnInfo.Builder();
     if (this.spawnChance != -1.0F) {
-      spawnSettings.withCreatureSpawnProbability(this.spawnChance);
+      spawnSettings.creatureGenerationProbability(this.spawnChance);
     }
 
     for (MobSpawnInfo.Spawners spawnEntry : spawnEntries) {
-      spawnSettings.withSpawner(spawnEntry.type.getClassification(), spawnEntry);
+      spawnSettings.addSpawn(spawnEntry.type.getCategory(), spawnEntry);
     }
 
     for (Consumer<MobSpawnInfo.Builder> mobFunction : spawnFunctions) {
@@ -134,11 +134,11 @@ public final class BiomeBuilder implements Cloneable {
     }
 
     if (playerSpawnFriendly) {
-      spawnSettings.isValidSpawnBiomeForPlayer();
+      spawnSettings.setPlayerCanSpawn();
     }
 
     for (StructureFeature<? extends IFeatureConfig, ? extends Structure<? extends IFeatureConfig>> structure : structureFeatures) {
-      generationSettings.withStructure(structure);
+      generationSettings.addStructureStart(structure);
     }
 
     for (Consumer<BiomeGenerationSettings.Builder> featureFunction : defaultFeatureFunctions) {
@@ -146,11 +146,11 @@ public final class BiomeBuilder implements Cloneable {
     }
 
     for (Pair<GenerationStage.Decoration, ConfiguredFeature<?, ?>> feature : features) {
-      generationSettings.withFeature(feature.getFirst(), feature.getSecond());
+      generationSettings.addFeature(feature.getFirst(), feature.getSecond());
     }
 
-    builder.withGenerationSettings(generationSettings.build());
-    builder.withMobSpawnSettings(spawnSettings.copy());
+    builder.generationSettings(generationSettings.build());
+    builder.mobSpawnSettings(spawnSettings.build());
     return builder.build();
   }
 

@@ -97,13 +97,13 @@ public class MaterialType {
     this.attackDamage = attackDamage;
     this.harvestLevel = harvestLevel;
     this.enchantability = enchantability;
-    this.repairMaterial = new LazyIngredient(() -> Ingredient.fromItems(item.get().get()));
+    this.repairMaterial = new LazyIngredient(() -> Ingredient.of(item.get().get()));
     return this;
   }
 
   public MaterialType itemMaterial(int maxUses, float efficiency, float attackDamage, int harvestLevel, int enchantability, Supplier<ITag.INamedTag<Item>> repairTag) {
     itemMaterial(maxUses, efficiency, attackDamage, harvestLevel, enchantability);
-    this.repairMaterial = new LazyIngredient(() -> Ingredient.fromTag(repairTag.get()));
+    this.repairMaterial = new LazyIngredient(() -> Ingredient.of(repairTag.get()));
     return this;
   }
 
@@ -255,23 +255,23 @@ public class MaterialType {
   }
 
   public Block.Properties getBlockProps (Block.Properties props) {
-    return props.hardnessAndResistance(5.0F, 6.0F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(1);
+    return props.strength(5.0F, 6.0F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(1);
   }
 
   public Supplier<Block.Properties> getBlockProps() {
-    return () -> getBlockProps(Block.Properties.create(Material.IRON));
+    return () -> getBlockProps(Block.Properties.of(Material.METAL));
   }
 
   public Block.Properties getOreBlockProperties (Block.Properties props) {
-    return props.hardnessAndResistance(3.0f, 3.0f).setRequiresTool().harvestTool(ToolType.PICKAXE).harvestLevel(getHarvestLevel() - 1);
+    return props.strength(3.0f, 3.0f).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(getHarvestLevel() - 1);
   }
 
   public Supplier<Block.Properties> getOreBlockProperties() {
-    return () -> getOreBlockProperties(Block.Properties.create(Material.ROCK));
+    return () -> getOreBlockProperties(Block.Properties.of(Material.STONE));
   }
 
   public int getHarvestLevel() {
-    return tier == null ? harvestLevel : tier.getHarvestLevel();
+    return tier == null ? harvestLevel : tier.getLevel();
   }
 
   public String gemName() {
@@ -300,12 +300,12 @@ public class MaterialType {
 
   public class ArmorMaterial implements IArmorMaterial {
     @Override
-    public int getDurability(EquipmentSlotType slotIn) {
-      return material == null ? MAX_DAMAGE_ARRAY[slotIn.getIndex()] * maxDamageFactor : material.getDurability(slotIn);
+    public int getDurabilityForSlot(EquipmentSlotType slotIn) {
+      return material == null ? MAX_DAMAGE_ARRAY[slotIn.getIndex()] * maxDamageFactor : material.getDurabilityForSlot(slotIn);
     }
 
     @Override
-    public int getDamageReductionAmount(EquipmentSlotType slotIn) {
+    public int getDefenseForSlot(EquipmentSlotType slotIn) {
       if (configProvider != null) {
         IArmorConfig config = configProvider.apply(name);
         if (config != null) {
@@ -320,12 +320,12 @@ public class MaterialType {
           }
         }
       }
-      return material == null ? damageReductionAmountArray[slotIn.getIndex()] : material.getDamageReductionAmount(slotIn);
+      return material == null ? damageReductionAmountArray[slotIn.getIndex()] : material.getDefenseForSlot(slotIn);
     }
 
     @Override
-    public SoundEvent getSoundEvent() {
-      return material == null ? soundEvent : material.getSoundEvent();
+    public SoundEvent getEquipSound() {
+      return material == null ? soundEvent : material.getEquipSound();
     }
 
     @Override
@@ -346,13 +346,13 @@ public class MaterialType {
 
     @Override
     @Nonnull
-    public Ingredient getRepairMaterial() {
-      return tier == null ? repairMaterial : tier.getRepairMaterial();
+    public Ingredient getRepairIngredient() {
+      return tier == null ? repairMaterial : tier.getRepairIngredient();
     }
 
     @Override
-    public int getEnchantability() {
-      return tier == null ? enchantability : tier.getEnchantability();
+    public int getEnchantmentValue() {
+      return tier == null ? enchantability : tier.getEnchantmentValue();
     }
 
     @Override
@@ -364,34 +364,34 @@ public class MaterialType {
 
   public class ItemMaterial implements IItemTier {
     @Override
-    public int getMaxUses() {
-      return tier == null ? maxUses : tier.getMaxUses();
+    public int getUses() {
+      return tier == null ? maxUses : tier.getUses();
     }
 
     @Override
-    public float getEfficiency() {
-      return tier == null ? efficiency : tier.getEfficiency();
+    public float getSpeed() {
+      return tier == null ? efficiency : tier.getSpeed();
     }
 
     @Override
-    public float getAttackDamage() {
-      return tier == null ? attackDamage : tier.getAttackDamage();
+    public float getAttackDamageBonus() {
+      return tier == null ? attackDamage : tier.getAttackDamageBonus();
     }
 
     @Override
-    public int getHarvestLevel() {
+    public int getLevel() {
       return MaterialType.this.getHarvestLevel();
     }
 
     @Override
-    public int getEnchantability() {
-      return tier == null ? enchantability : tier.getEnchantability();
+    public int getEnchantmentValue() {
+      return tier == null ? enchantability : tier.getEnchantmentValue();
     }
 
     @Override
     @Nonnull
-    public Ingredient getRepairMaterial() {
-      return tier == null ? repairMaterial : tier.getRepairMaterial();
+    public Ingredient getRepairIngredient() {
+      return tier == null ? repairMaterial : tier.getRepairIngredient();
     }
   }
 }

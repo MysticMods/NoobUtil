@@ -17,8 +17,8 @@ public class SupplierDefaultSurfaceBuilder extends SurfaceBuilder<SupplierSurfac
   }
 
   @Override
-  public void buildSurface(Random random, IChunk chunkIn, Biome biomeIn, int x, int z, int startHeight, double noise, BlockState defaultBlock, BlockState defaultFluid, int seaLevel, long seed, SupplierSurfaceBuilderConfig config) {
-    this.buildSurface(random, chunkIn, biomeIn, x, z, startHeight, noise, defaultBlock, defaultFluid, config.getTop(), config.getUnder(), config.getUnderWaterMaterial(), seaLevel);
+  public void apply(Random random, IChunk chunkIn, Biome biomeIn, int x, int z, int startHeight, double noise, BlockState defaultBlock, BlockState defaultFluid, int seaLevel, long seed, SupplierSurfaceBuilderConfig config) {
+    this.buildSurface(random, chunkIn, biomeIn, x, z, startHeight, noise, defaultBlock, defaultFluid, config.getTopMaterial(), config.getUnderMaterial(), config.getUnderWaterMaterial(), seaLevel);
   }
 
   protected void buildSurface(Random random, IChunk chunkIn, Biome biomeIn, int x, int z, int startHeight, double noise, BlockState defaultBlock, BlockState defaultFluid, BlockState top, BlockState middle, BlockState bottom, int sealevel) {
@@ -31,14 +31,14 @@ public class SupplierDefaultSurfaceBuilder extends SurfaceBuilder<SupplierSurfac
     int l = z & 15;
 
     for (int i1 = startHeight; i1 >= 0; --i1) {
-      blockpos$mutable.setPos(k, i1, l);
+      blockpos$mutable.set(k, i1, l);
       BlockState blockstate2 = chunkIn.getBlockState(blockpos$mutable);
       if (blockstate2.isAir()) {
         i = -1;
-      } else if (blockstate2.isIn(defaultBlock.getBlock())) {
+      } else if (blockstate2.is(defaultBlock.getBlock())) {
         if (i == -1) {
           if (j <= 0) {
-            blockstate = Blocks.AIR.getDefaultState();
+            blockstate = Blocks.AIR.defaultBlockState();
             blockstate1 = defaultBlock;
           } else if (i1 >= sealevel - 4 && i1 <= sealevel + 1) {
             blockstate = top;
@@ -46,20 +46,20 @@ public class SupplierDefaultSurfaceBuilder extends SurfaceBuilder<SupplierSurfac
           }
 
           if (i1 < sealevel && (blockstate == null || blockstate.isAir())) {
-            if (biomeIn.getTemperature(blockpos$mutable.setPos(x, i1, z)) < 0.15F) {
-              blockstate = Blocks.ICE.getDefaultState();
+            if (biomeIn.getTemperature(blockpos$mutable.set(x, i1, z)) < 0.15F) {
+              blockstate = Blocks.ICE.defaultBlockState();
             } else {
               blockstate = defaultFluid;
             }
 
-            blockpos$mutable.setPos(k, i1, l);
+            blockpos$mutable.set(k, i1, l);
           }
 
           i = j;
           if (i1 >= sealevel - 1) {
             chunkIn.setBlockState(blockpos$mutable, blockstate, false);
           } else if (i1 < sealevel - 7 - j) {
-            blockstate = Blocks.AIR.getDefaultState();
+            blockstate = Blocks.AIR.defaultBlockState();
             blockstate1 = defaultBlock;
             chunkIn.setBlockState(blockpos$mutable, bottom, false);
           } else {
@@ -68,9 +68,9 @@ public class SupplierDefaultSurfaceBuilder extends SurfaceBuilder<SupplierSurfac
         } else if (i > 0) {
           --i;
           chunkIn.setBlockState(blockpos$mutable, blockstate1, false);
-          if (i == 0 && blockstate1.isIn(Blocks.SAND) && j > 1) {
+          if (i == 0 && blockstate1.is(Blocks.SAND) && j > 1) {
             i = random.nextInt(4) + Math.max(0, i1 - 63);
-            blockstate1 = blockstate1.isIn(Blocks.RED_SAND) ? Blocks.RED_SANDSTONE.getDefaultState() : Blocks.SANDSTONE.getDefaultState();
+            blockstate1 = blockstate1.is(Blocks.RED_SAND) ? Blocks.RED_SANDSTONE.defaultBlockState() : Blocks.SANDSTONE.defaultBlockState();
           }
         }
       }

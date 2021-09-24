@@ -10,11 +10,11 @@ import java.util.Random;
 
 public class EmptyFeature extends Feature<NoFeatureConfig> {
   public EmptyFeature() {
-    super(NoFeatureConfig.field_236558_a_);
+    super(NoFeatureConfig.CODEC);
   }
 
   @Override
-  public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
+  public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, NoFeatureConfig config) {
     return true;
   }
 }

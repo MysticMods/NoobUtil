@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.minecraft.advancements.ICriterionTrigger.Listener;
+
 public class GenericTrigger<T> implements ICriterionTrigger<GenericTrigger.Instance<T>> {
   private final ResourceLocation id;
   private final Map<PlayerAdvancements, Listeners<T>> listeners = Maps.newHashMap();
@@ -39,7 +41,7 @@ public class GenericTrigger<T> implements ICriterionTrigger<GenericTrigger.Insta
   }
 
   @Override
-  public void addListener(@Nonnull PlayerAdvancements advancementsIn, @Nonnull Listener<Instance<T>> listener) {
+  public void addPlayerListener(@Nonnull PlayerAdvancements advancementsIn, @Nonnull Listener<Instance<T>> listener) {
     Listeners<T> list = listeners.get(advancementsIn);
 
     if (list == null) {
@@ -51,7 +53,7 @@ public class GenericTrigger<T> implements ICriterionTrigger<GenericTrigger.Insta
   }
 
   @Override
-  public void removeListener(@Nonnull PlayerAdvancements advancementsIn, @Nonnull Listener<Instance<T>> listener) {
+  public void removePlayerListener(@Nonnull PlayerAdvancements advancementsIn, @Nonnull Listener<Instance<T>> listener) {
     Listeners<T> list = listeners.get(advancementsIn);
 
     if (list != null) {
@@ -64,12 +66,12 @@ public class GenericTrigger<T> implements ICriterionTrigger<GenericTrigger.Insta
   }
 
   @Override
-  public void removeAllListeners(@Nonnull PlayerAdvancements advancementsIn) {
+  public void removePlayerListeners(@Nonnull PlayerAdvancements advancementsIn) {
     listeners.remove(advancementsIn);
   }
 
   @Override
-  public Instance<T> deserialize(JsonObject jsonObject, ConditionArrayParser conditionArrayParser) {
+  public Instance<T> createInstance(JsonObject jsonObject, ConditionArrayParser conditionArrayParser) {
     return new Instance<>(getId(), predicate.deserialize(jsonObject));
   }
 
@@ -85,7 +87,7 @@ public class GenericTrigger<T> implements ICriterionTrigger<GenericTrigger.Insta
     IGenericPredicate<T> predicate;
 
     Instance(ResourceLocation location, IGenericPredicate<T> predicate) {
-      super(location, EntityPredicate.AndPredicate.ANY_AND);
+      super(location, EntityPredicate.AndPredicate.ANY);
 
       this.predicate = predicate;
     }
@@ -119,14 +121,14 @@ public class GenericTrigger<T> implements ICriterionTrigger<GenericTrigger.Insta
       List<Listener<Instance<T>>> list = Lists.newArrayList();
 
       for (Listener<Instance<T>> listener : listeners) {
-        if (listener.getCriterionInstance().test(player, condition)) {
+        if (listener.getTriggerInstance().test(player, condition)) {
           list.add(listener);
         }
       }
 
       if (list.size() != 0) {
         for (Listener<Instance<T>> listener : list) {
-          listener.grantCriterion(advancements);
+          listener.run(advancements);
         }
       }
     }

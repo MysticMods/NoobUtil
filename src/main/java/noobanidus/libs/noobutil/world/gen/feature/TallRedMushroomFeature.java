@@ -19,7 +19,7 @@ public class TallRedMushroomFeature extends BigRedMushroomFeature {
   }
 
   @Override
-  protected int func_227211_a_(Random p_227211_1_) {
-    return ((p_227211_1_.nextInt(3) + 4) * 2) - (2 + p_227211_1_.nextInt(2));
+  protected int getTreeHeight(Random pRandom) {
+    return ((pRandom.nextInt(3) + 4) * 2) - (2 + pRandom.nextInt(2));
   }
 }

@@ -51,9 +51,9 @@ public class LazyStateSupplier extends LazySupplier<BlockState> implements INBTS
     this.supplier = () -> {
       Block block = ForgeRegistries.BLOCKS.getValue(location);
       if (block != null) {
-        return this.apply(block.getDefaultState());
+        return this.apply(block.defaultBlockState());
       }
-      return Blocks.AIR.getDefaultState();
+      return Blocks.AIR.defaultBlockState();
     };
     this.location = location;
     this.state = Optional.empty();
@@ -69,7 +69,7 @@ public class LazyStateSupplier extends LazySupplier<BlockState> implements INBTS
     if (pairs != null) {
       this.properties.addAll(pairs);
     }
-    this.supplier = () -> this.apply(this.state.orElse(Blocks.AIR.getDefaultState()));
+    this.supplier = () -> this.apply(this.state.orElse(Blocks.AIR.defaultBlockState()));
     this.location = stateIn.getBlock().getRegistryName();
   }
 
@@ -125,7 +125,7 @@ public class LazyStateSupplier extends LazySupplier<BlockState> implements INBTS
 
     @Nullable
     protected Property<?> getProperty(Block block) {
-      BlockState state = block.getDefaultState();
+      BlockState state = block.defaultBlockState();
       Collection<Property<?>> props = state.getProperties();
       for (Property<?> prop : props) {
         if (prop.getName().equals(propertyName)) {
@@ -143,9 +143,9 @@ public class LazyStateSupplier extends LazySupplier<BlockState> implements INBTS
 
       switch (this.type) {
         case "boolean":
-          return state.with((BooleanProperty) prop, Boolean.valueOf(this.value));
+          return state.setValue((BooleanProperty) prop, Boolean.valueOf(this.value));
         case "int":
-          return state.with((IntegerProperty) prop, Integer.valueOf(this.value));
+          return state.setValue((IntegerProperty) prop, Integer.valueOf(this.value));
         default:
         case "enum":
           throw new NotImplementedException("enum isn't serialized soz");

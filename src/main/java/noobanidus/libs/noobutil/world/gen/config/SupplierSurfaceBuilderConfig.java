@@ -28,12 +28,12 @@ public class SupplierSurfaceBuilderConfig implements ISurfaceBuilderConfig {
   }
 
   @Override
-  public BlockState getTop() {
+  public BlockState getTopMaterial() {
     return this.topMaterial.get();
   }
 
   @Override
-  public BlockState getUnder() {
+  public BlockState getUnderMaterial() {
     return this.underMaterial.get();
   }
 

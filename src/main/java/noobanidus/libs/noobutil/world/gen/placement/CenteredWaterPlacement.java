@@ -18,7 +18,7 @@ public class CenteredWaterPlacement extends Placement<ChanceConfig> {
     if (rand.nextInt(config.chance) == 0) {
       int i = pos.getX();
       int j = pos.getZ();
-      int k = rand.nextInt(helper.func_242891_a());
+      int k = rand.nextInt(helper.getGenDepth());
       return Stream.of(new BlockPos(i, k, j));
     } else {
       return Stream.empty();

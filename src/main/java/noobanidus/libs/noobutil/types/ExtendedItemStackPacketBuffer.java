@@ -29,7 +29,7 @@ public class ExtendedItemStackPacketBuffer extends PacketBuffer {
     if (stack.isEmpty()) {
       writeInt(-1);
     } else {
-      writeInt(Item.getIdFromItem(stack.getItem()));
+      writeInt(Item.getId(stack.getItem()));
       writeInt(stack.getCount());
       CompoundNBT nbttagcompound = null;
 
@@ -60,7 +60,7 @@ public class ExtendedItemStackPacketBuffer extends PacketBuffer {
       return ItemStack.EMPTY;
     } else {
       int j = readInt();
-      ItemStack itemstack = new ItemStack(Item.getItemById(i), j);
+      ItemStack itemstack = new ItemStack(Item.byId(i), j);
       itemstack.setTag(readNBT());
       return itemstack;
     }

@@ -19,8 +19,8 @@ public class LazyIngredient extends Ingredient {
   }
 
   @Override
-  public ItemStack[] getMatchingStacks() {
-    return ingredient.get().getMatchingStacks();
+  public ItemStack[] getItems() {
+    return ingredient.get().getItems();
   }
 
   @Override
@@ -29,18 +29,18 @@ public class LazyIngredient extends Ingredient {
   }
 
   @Override
-  public IntList getValidItemStacksPacked() {
-    return ingredient.get().getValidItemStacksPacked();
+  public IntList getStackingIds() {
+    return ingredient.get().getStackingIds();
   }
 
   @Override
-  public JsonElement serialize() {
-    return ingredient.get().serialize();
+  public JsonElement toJson() {
+    return ingredient.get().toJson();
   }
 
   @Override
-  public boolean hasNoMatchingItems() {
-    return ingredient.get().hasNoMatchingItems();
+  public boolean isEmpty() {
+    return ingredient.get().isEmpty();
   }
 
   @Override

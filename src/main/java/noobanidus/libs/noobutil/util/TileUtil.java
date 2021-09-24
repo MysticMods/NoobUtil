@@ -6,12 +6,12 @@ import net.minecraft.world.World;
 
 public class TileUtil {
   public static <T extends TileEntity> void updateViaState(T tile) {
-    World world = tile.getWorld();
-    if (world == null || world.isRemote()) {
+    World world = tile.getLevel();
+    if (world == null || world.isClientSide()) {
       return;
     }
 
-    BlockState state = world.getBlockState(tile.getPos());
-    world.notifyBlockUpdate(tile.getPos(), state, state, 8);
+    BlockState state = world.getBlockState(tile.getBlockPos());
+    world.sendBlockUpdated(tile.getBlockPos(), state, state, 8);
   }
 }

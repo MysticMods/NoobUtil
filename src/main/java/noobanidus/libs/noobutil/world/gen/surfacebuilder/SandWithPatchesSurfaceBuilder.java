@@ -19,11 +19,11 @@ public class SandWithPatchesSurfaceBuilder extends SurfaceBuilder<SurfaceBuilder
   }
 
   @Override
-  public void buildSurface(Random random, IChunk chunk, Biome biome, int int_1, int int_2, int int_3, double noise, BlockState blockState_1, BlockState blockState_2, int int_4, long long_1, SurfaceBuilderConfig config) {
+  public void apply(Random random, IChunk chunk, Biome biome, int int_1, int int_2, int int_3, double noise, BlockState blockState_1, BlockState blockState_2, int int_4, long long_1, SurfaceBuilderConfig config) {
     if (noise > threshold) {
-      SurfaceBuilder.DEFAULT.buildSurface(random, chunk, biome, int_1, int_2, int_3, noise, blockState_1, blockState_2, int_4, long_1, config);
+      SurfaceBuilder.DEFAULT.apply(random, chunk, biome, int_1, int_2, int_3, noise, blockState_1, blockState_2, int_4, long_1, config);
     } else {
-      SurfaceBuilder.DEFAULT.buildSurface(random, chunk, biome, int_1, int_2, int_3, noise, blockState_1, blockState_2, int_4, long_1, SurfaceBuilder.SAND_CONFIG);
+      SurfaceBuilder.DEFAULT.apply(random, chunk, biome, int_1, int_2, int_3, noise, blockState_1, blockState_2, int_4, long_1, SurfaceBuilder.CONFIG_FULL_SAND);
     }
   }
 }

@@ -10,7 +10,7 @@ import noobanidus.libs.noobutil.types.LazyStateSupplier;
 import java.util.List;
 
 public class SupplierSphereReplaceConfig implements IFeatureConfig {
-   public static final Codec<SupplierSphereReplaceConfig> CODEC = RecordCodecBuilder.create((p_236518_0_) -> p_236518_0_.group(LazyStateSupplier.CODEC.fieldOf("state").forGetter((p_236521_0_) -> p_236521_0_.state), FeatureSpread.func_242254_a(0, 4, 4).fieldOf("radius").forGetter((p_236520_0_) -> p_236520_0_.radius), Codec.intRange(0, 4).fieldOf("half_height").forGetter((p_236519_0_) -> p_236519_0_.half_height), LazyStateSupplier.CODEC.listOf().fieldOf("targets").forGetter((p_236517_0_) -> p_236517_0_.targets)).apply(p_236518_0_, SupplierSphereReplaceConfig::new));
+   public static final Codec<SupplierSphereReplaceConfig> CODEC = RecordCodecBuilder.create((p_236518_0_) -> p_236518_0_.group(LazyStateSupplier.CODEC.fieldOf("state").forGetter((p_236521_0_) -> p_236521_0_.state), FeatureSpread.codec(0, 4, 4).fieldOf("radius").forGetter((p_236520_0_) -> p_236520_0_.radius), Codec.intRange(0, 4).fieldOf("half_height").forGetter((p_236519_0_) -> p_236519_0_.half_height), LazyStateSupplier.CODEC.listOf().fieldOf("targets").forGetter((p_236517_0_) -> p_236517_0_.targets)).apply(p_236518_0_, SupplierSphereReplaceConfig::new));
    public final LazyStateSupplier state;
    public final FeatureSpread radius;
    public final int half_height;

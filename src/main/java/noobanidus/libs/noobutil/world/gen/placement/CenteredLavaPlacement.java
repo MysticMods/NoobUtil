@@ -18,8 +18,8 @@ public class CenteredLavaPlacement extends Placement<ChanceConfig> {
     if (rand.nextInt(config.chance / 10) == 0) {
       int i = pos.getX();
       int j = pos.getZ();
-      int k = rand.nextInt(rand.nextInt(helper.func_242891_a() - 8) + 8);
-      if (k < helper.func_242895_b() || rand.nextInt(config.chance / 8) == 0) {
+      int k = rand.nextInt(rand.nextInt(helper.getGenDepth() - 8) + 8);
+      if (k < helper.getSeaLevel() || rand.nextInt(config.chance / 8) == 0) {
         return Stream.of(new BlockPos(i, k, j));
       }
     }

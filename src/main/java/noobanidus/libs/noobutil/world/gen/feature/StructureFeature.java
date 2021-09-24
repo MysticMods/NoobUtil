@@ -55,25 +55,25 @@ public class StructureFeature extends Feature<StructureFeatureConfig> {
     super(codec);
     this.structures = new WeightedList<>();
     for (IntPair<ResourceLocation> structure : structures) {
-      this.structures.func_226313_a_(structure.getValue(), structure.getInt());
+      this.structures.add(structure.getValue(), structure.getInt());
     }
   }
 
   @Override
-  public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, StructureFeatureConfig config) {
-    Rotation rotation = Rotation.randomRotation(rand);
+  public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, StructureFeatureConfig config) {
+    Rotation rotation = Rotation.getRandom(rand);
 
-    ResourceLocation structure = this.structures.func_226318_b_(rand);
-    TemplateManager manager = reader.getWorld().getServer().getTemplateManager();
-    Template template = manager.getTemplate(structure);
+    ResourceLocation structure = this.structures.getOne(rand);
+    TemplateManager manager = reader.getLevel().getServer().getStructureManager();
+    Template template = manager.get(structure);
     if (template == null) {
       throw new IllegalArgumentException("Invalid structure: " + structure);
     }
     ChunkPos chunkpos = new ChunkPos(pos);
 
-    MutableBoundingBox mutableboundingbox = new MutableBoundingBox(chunkpos.getXStart(), 0, chunkpos.getZStart(), chunkpos.getXEnd(), 256, chunkpos.getZEnd());
-    PlacementSettings placementsettings = (new PlacementSettings()).setRotation(rotation).setBoundingBox(mutableboundingbox).setRandom(rand).addProcessor(BlockIgnoreStructureProcessor.AIR_AND_STRUCTURE_BLOCK);
-    BlockPos blockpos = template.transformedSize(rotation);
+    MutableBoundingBox mutableboundingbox = new MutableBoundingBox(chunkpos.getMinBlockX(), 0, chunkpos.getMinBlockZ(), chunkpos.getMaxBlockX(), 256, chunkpos.getMaxBlockZ());
+    PlacementSettings placementsettings = (new PlacementSettings()).setRotation(rotation).setBoundingBox(mutableboundingbox).setRandom(rand).addProcessor(BlockIgnoreStructureProcessor.STRUCTURE_AND_AIR);
+    BlockPos blockpos = template.getSize(rotation);
     int j = rand.nextInt(16 - blockpos.getX());
     int k = rand.nextInt(16 - blockpos.getZ());
     int l = 256;
@@ -93,16 +93,16 @@ public class StructureFeature extends Feature<StructureFeatureConfig> {
       placementsettings.getProcessors().add(proc);
     }
     prePlaceCallback(reader, blockpos1, blockpos1, placementsettings, rand, 4);
-    boolean result = template.func_237146_a_(reader, blockpos1, blockpos1, placementsettings, rand, 4);
+    boolean result = template.placeInWorld(reader, blockpos1, blockpos1, placementsettings, rand, 4);
     postPlaceCallback(reader, blockpos1, blockpos1, placementsettings, rand, 4);
     return result;
   }
 
-  protected void prePlaceCallback (IServerWorld p_237146_1_, BlockPos p_237146_2_, BlockPos p_237146_3_, PlacementSettings p_237146_4_, Random p_237146_5_, int p_237146_6_) {
+  protected void prePlaceCallback (IServerWorld pServerLevel, BlockPos p_237146_2_, BlockPos p_237146_3_, PlacementSettings pSettings, Random pRandom, int pFlags) {
 
   }
 
-  protected void postPlaceCallback (IServerWorld p_237146_1_, BlockPos p_237146_2_, BlockPos p_237146_3_, PlacementSettings p_237146_4_, Random p_237146_5_, int p_237146_6_) {
+  protected void postPlaceCallback (IServerWorld pServerLevel, BlockPos p_237146_2_, BlockPos p_237146_3_, PlacementSettings pSettings, Random pRandom, int pFlags) {
 
   }
 }

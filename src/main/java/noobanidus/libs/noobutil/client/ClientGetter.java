@@ -19,14 +19,14 @@ public class ClientGetter implements Getter {
 
   @Nullable
   public World getterGetWorld() {
-    return Minecraft.getInstance().world;
+    return Minecraft.getInstance().level;
   }
 
   @Nullable
   public Container getterGetContainer() {
     PlayerEntity player = getterGetPlayer();
     if (player != null) {
-      return player.openContainer;
+      return player.containerMenu;
     }
     return null;
   }
@@ -34,6 +34,6 @@ public class ClientGetter implements Getter {
   @Nullable
   @Override
   public MinecraftServer getterGetServer() {
-    return Minecraft.getInstance().getIntegratedServer();
+    return Minecraft.getInstance().getSingleplayerServer();
   }
 }

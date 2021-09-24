@@ -18,11 +18,11 @@ public class WeightedBlockStateFeatureConfig implements IFeatureConfig {
 
   public WeightedBlockStateFeatureConfig(WeightedBlockStateProvider states) {
     this.states = states;
-    this.states.weightedStates.field_220658_a.forEach(o -> containedStates.add(o.func_220647_b()));
+    this.states.weightedList.entries.forEach(o -> containedStates.add(o.getData()));
   }
 
   public BlockState getBlockState (Random random) {
-    return this.states.getBlockState(random, BlockPos.ZERO);
+    return this.states.getState(random, BlockPos.ZERO);
   }
 
   public boolean containsState (BlockState state) {

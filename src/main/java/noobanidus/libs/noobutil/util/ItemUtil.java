@@ -37,7 +37,7 @@ public class ItemUtil {
   }
 
   public static boolean equalWithoutDamage(ItemStack stack1, ItemStack stack2) {
-    return ItemStack.areItemsEqual(stack1, stack2) && ItemStack.areItemStackTagsEqual(stack1, stack2);
+    return ItemStack.isSame(stack1, stack2) && ItemStack.tagMatches(stack1, stack2);
   }
 
   public static class Spawn {
@@ -69,17 +69,17 @@ public class ItemUtil {
       }
       ItemEntity item = new ItemEntity(world, x, y, z, stack);
       if (ticks != -1) {
-        item.setPickupDelay(ticks);
+        item.setPickUpDelay(ticks);
       }
       if (hoverStart != -1) {
-        item.hoverStart = hoverStart;
+        item.bobOffs = hoverStart;
       }
       return spawnItem(world, item);
     }
 
     public static ItemEntity spawnItem(World world, ItemEntity item) {
-      item.setMotion(0, 0, 0);
-      world.addEntity(item);
+      item.setDeltaMovement(0, 0, 0);
+      world.addFreshEntity(item);
       return item;
     }
   }

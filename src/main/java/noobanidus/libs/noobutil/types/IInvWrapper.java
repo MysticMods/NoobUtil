@@ -18,7 +18,7 @@ public class IInvWrapper<T extends IItemHandler> implements IInventory, IIInvWra
   }
 
   @Override
-  public int getSizeInventory() {
+  public int getContainerSize() {
     return handler.getSlots();
   }
 
@@ -34,37 +34,37 @@ public class IInvWrapper<T extends IItemHandler> implements IInventory, IIInvWra
   }
 
   @Override
-  public ItemStack getStackInSlot(int index) {
+  public ItemStack getItem(int index) {
     return handler.getStackInSlot(index);
   }
 
   @Override
-  public ItemStack decrStackSize(int index, int count) {
+  public ItemStack removeItem(int index, int count) {
     return handler.extractItem(index, count, false);
   }
 
   @Override
-  public ItemStack removeStackFromSlot(int index) {
+  public ItemStack removeItemNoUpdate(int index) {
     return handler.extractItem(index, handler.getSlotLimit(index), false);
   }
 
   @Override
-  public void setInventorySlotContents(int index, ItemStack stack) {
+  public void setItem(int index, ItemStack stack) {
     handler.extractItem(index, handler.getSlotLimit(index), false);
     handler.insertItem(index, stack, false);
   }
 
   @Override
-  public void markDirty() {
+  public void setChanged() {
   }
 
   @Override
-  public boolean isUsableByPlayer(PlayerEntity player) {
+  public boolean stillValid(PlayerEntity player) {
     return true;
   }
 
   @Override
-  public void clear() {
+  public void clearContent() {
     for (int i = 0; i < handler.getSlots(); i++) {
       handler.extractItem(i, handler.getSlotLimit(i), false);
     }

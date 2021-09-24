@@ -49,15 +49,15 @@ public abstract class AbstractColumnBasePlacer extends BlockPlacer {
   }
 
   @Override
-  protected abstract BlockPlacerType<?> getBlockPlacerType();
+  protected abstract BlockPlacerType<?> type();
 
   @Override
   public void place(IWorld world, BlockPos pos, BlockState state, Random random) {
-    BlockPos.Mutable blockpos$mutable = pos.toMutable();
+    BlockPos.Mutable blockpos$mutable = pos.mutable();
     int i = this.minSize + random.nextInt(random.nextInt(this.extraSize + 1) + 1);
 
     for (int j = 0; j < i; ++j) {
-      world.setBlockState(blockpos$mutable, state, 2);
+      world.setBlock(blockpos$mutable, state, 2);
       blockpos$mutable.move(Direction.UP);
     }
 
@@ -72,25 +72,25 @@ public abstract class AbstractColumnBasePlacer extends BlockPlacer {
           Block block = world.getBlockState(blockpos).getBlock();
 
           for (LazyStateSupplier blockstate : replace) {
-            if (blockstate.get().isIn(block)) {
+            if (blockstate.get().is(block)) {
 
-              world.setBlockState(blockpos, state, 2);
+              world.setBlock(blockpos, state, 2);
               if (random.nextInt(peak) == 0) {
                 boolean skip = false;
                 outer: for (int x = -1; x <= 1; x++) {
                   for (int z = -1; z <= 1; z++) {
-                    if (world.getBlockState(blockpos.add(x, 1, z)).isSolid()) {
+                    if (world.getBlockState(blockpos.offset(x, 1, z)).canOcclude()) {
                       skip = true;
                       break outer;
                     }
                   }
                 }
                 if (!skip) {
-                  world.setBlockState(blockpos.up(), state, 2);
+                  world.setBlock(blockpos.above(), state, 2);
                   if (random.nextInt(3) == 0) {
-                    world.setBlockState(blockpos.up().up(), state, 2);
+                    world.setBlock(blockpos.above().above(), state, 2);
                     if (random.nextInt(4) == 0) {
-                      world.setBlockState(blockpos.up().up().up(), state, 2);
+                      world.setBlock(blockpos.above().above().above(), state, 2);
                     }
                   }
                 }

@@ -9,6 +9,8 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 
 import java.util.Set;
 
+import net.minecraft.item.Item.Properties;
+
 public class BaseItems {
   public static class BowlItem extends MultiReturnItem {
     public BowlItem(Properties properties) {
@@ -16,7 +18,7 @@ public class BaseItems {
     }
 
     @Override
-    public UseAction getUseAction(ItemStack stack) {
+    public UseAction getUseAnimation(ItemStack stack) {
       return UseAction.EAT;
     }
 
@@ -33,7 +35,7 @@ public class BaseItems {
     }
 
     @Override
-    public UseAction getUseAction(ItemStack stack) {
+    public UseAction getUseAnimation(ItemStack stack) {
       return UseAction.DRINK;
     }
 
@@ -51,7 +53,7 @@ public class BaseItems {
 
     @OnlyIn(Dist.CLIENT)
     @Override
-    public boolean hasEffect(ItemStack stack) {
+    public boolean isFoil(ItemStack stack) {
       return true;
     }
   }
@@ -63,8 +65,8 @@ public class BaseItems {
 
     @Override
     public int getUseDuration(ItemStack stack) {
-      if (stack.getItem().isFood()) {
-        return this.getFood().isFastEating() ? 6 : 32;
+      if (stack.getItem().isEdible()) {
+        return this.getFoodProperties().isFastFood() ? 6 : 32;
       } else {
         return 0;
       }

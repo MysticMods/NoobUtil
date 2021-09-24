@@ -4,6 +4,8 @@ import net.minecraft.block.WallSignBlock;
 import net.minecraft.block.WoodType;
 import net.minecraft.util.ResourceLocation;
 
+import net.minecraft.block.AbstractBlock.Properties;
+
 public class ModdedWallSignBlock extends WallSignBlock implements IModdedSign {
   private final ResourceLocation texture;
 

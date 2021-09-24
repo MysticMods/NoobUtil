@@ -28,24 +28,24 @@ public class ResourceSurfaceBuilderConfig implements ISurfaceWithUnderwaterBuild
       if (block == null) {
          throw new IllegalArgumentException("Invalid block specified for top material: " + topMaterial);
       }
-      topMaterialState = block.getDefaultState();
+      topMaterialState = block.defaultBlockState();
       block = ForgeRegistries.BLOCKS.getValue(underMaterial);
       if (block == null) {
          throw new IllegalArgumentException("Invalid block specified for under material: " + underMaterial);
       }
-      underMaterialState = block.getDefaultState();
+      underMaterialState = block.defaultBlockState();
       block = ForgeRegistries.BLOCKS.getValue(underWaterMaterial);
       if (block == null) {
          throw new IllegalArgumentException("Invalid block specified for underwater material: " + underWaterMaterial);
       }
-      underWaterMaterialState = block.getDefaultState();
+      underWaterMaterialState = block.defaultBlockState();
    }
 
-   public BlockState getTop() {
+   public BlockState getTopMaterial() {
       return this.topMaterialState;
    }
 
-   public BlockState getUnder() {
+   public BlockState getUnderMaterial() {
       return this.underMaterialState;
    }
 

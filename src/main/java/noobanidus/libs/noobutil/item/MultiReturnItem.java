@@ -8,26 +8,28 @@ import net.minecraft.item.UseAction;
 import net.minecraft.world.World;
 import noobanidus.libs.noobutil.util.ItemUtil;
 
+import net.minecraft.item.Item.Properties;
+
 public abstract class MultiReturnItem extends Item {
   public MultiReturnItem(Properties properties) {
     super(properties);
   }
 
   @Override
-  public abstract UseAction getUseAction(ItemStack stack);
+  public abstract UseAction getUseAnimation(ItemStack stack);
 
   protected abstract Item getReturnItem(ItemStack stack);
 
   @Override
-  public ItemStack onItemUseFinish(ItemStack stack, World world, LivingEntity entity) {
+  public ItemStack finishUsingItem(ItemStack stack, World world, LivingEntity entity) {
     ItemStack returned = new ItemStack(getReturnItem(stack));
-    ItemStack result = super.onItemUseFinish(stack, world, entity);
+    ItemStack result = super.finishUsingItem(stack, world, entity);
     if (result.isEmpty()) {
       return returned;
     } else if (entity instanceof PlayerEntity) {
       PlayerEntity player = (PlayerEntity) entity;
-      if (!player.addItemStackToInventory(returned)) {
-        ItemUtil.Spawn.spawnItem(world, player.getPosition(), returned);
+      if (!player.addItem(returned)) {
+        ItemUtil.Spawn.spawnItem(world, player.blockPosition(), returned);
       }
     }
     return result;

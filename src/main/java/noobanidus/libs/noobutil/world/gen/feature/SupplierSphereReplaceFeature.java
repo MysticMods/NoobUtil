@@ -17,9 +17,9 @@ public class SupplierSphereReplaceFeature extends Feature<SupplierSphereReplaceC
   }
 
   @Override
-  public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, SupplierSphereReplaceConfig config) {
+  public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, SupplierSphereReplaceConfig config) {
     boolean flag = false;
-    int i = config.radius.func_242259_a(rand);
+    int i = config.radius.sample(rand);
 
     for (int j = pos.getX() - i; j <= pos.getX() + i; ++j) {
       for (int k = pos.getZ() - i; k <= pos.getZ() + i; ++k) {
@@ -31,8 +31,8 @@ public class SupplierSphereReplaceFeature extends Feature<SupplierSphereReplaceC
             Block block = reader.getBlockState(blockpos).getBlock();
 
             for (LazyStateSupplier blockstate : config.targets) {
-              if (blockstate.get().isIn(block)) {
-                reader.setBlockState(blockpos, config.state.get(), 2);
+              if (blockstate.get().is(block)) {
+                reader.setBlock(blockpos, config.state.get(), 2);
                 flag = true;
                 break;
               }

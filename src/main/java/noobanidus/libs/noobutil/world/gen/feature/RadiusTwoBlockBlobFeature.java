@@ -16,17 +16,17 @@ public class RadiusTwoBlockBlobFeature extends Feature<TwoBlockStateRadiusFeatur
   }
 
   @Override
-  public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, TwoBlockStateRadiusFeatureConfig config) {
+  public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, TwoBlockStateRadiusFeatureConfig config) {
     while (true) {
       if (pos.getY() > 3) {
-        if (reader.isAirBlock(pos.down())) {
-          pos = pos.down();
+        if (reader.isEmptyBlock(pos.below())) {
+          pos = pos.below();
           continue;
         }
 
-        Block block = reader.getBlockState(pos.down()).getBlock();
+        Block block = reader.getBlockState(pos.below()).getBlock();
         if (!isDirt(block) && !isStone(block)) {
-          pos = pos.down();
+          pos = pos.below();
           continue;
         }
       }
@@ -45,15 +45,15 @@ public class RadiusTwoBlockBlobFeature extends Feature<TwoBlockStateRadiusFeatur
         double f2 = (double) (f * f);
         double f3 = ((f / 2.0) * (f / 2.0));
 
-        for (BlockPos blockpos : BlockPos.getAllInBoxMutable(pos.add(-j, -k, -l), pos.add(j, k, l))) {
-          if (blockpos.distanceSq(pos) <= f3) {
-            reader.setBlockState(blockpos, config.provider2.getBlockState(rand, blockpos), 4);
-          } else if (blockpos.distanceSq(pos) <= f2) {
-            reader.setBlockState(blockpos, config.provider1.getBlockState(rand, blockpos), 4);
+        for (BlockPos blockpos : BlockPos.betweenClosed(pos.offset(-j, -k, -l), pos.offset(j, k, l))) {
+          if (blockpos.distSqr(pos) <= f3) {
+            reader.setBlock(blockpos, config.provider2.getState(rand, blockpos), 4);
+          } else if (blockpos.distSqr(pos) <= f2) {
+            reader.setBlock(blockpos, config.provider1.getState(rand, blockpos), 4);
           }
         }
 
-        pos = pos.add(-(i1 + 1) + rand.nextInt(2 + i1 * 2), 0 - rand.nextInt(2), -(i1 + 1) + rand.nextInt(2 + i1 * 2));
+        pos = pos.offset(-(i1 + 1) + rand.nextInt(2 + i1 * 2), 0 - rand.nextInt(2), -(i1 + 1) + rand.nextInt(2 + i1 * 2));
       }
 
       return true;

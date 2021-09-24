@@ -12,6 +12,9 @@ import net.minecraft.world.IBlockReader;
 import javax.annotation.Nonnull;
 import java.util.Random;
 
+import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.block.PressurePlateBlock.Sensitivity;
+
 @SuppressWarnings("deprecation")
 public class BaseBlocks {
   public static class CropsBlock extends net.minecraft.block.CropsBlock {
@@ -22,7 +25,7 @@ public class BaseBlocks {
     @Override
     @Nonnull
     public VoxelShape getShape(BlockState state, IBlockReader blockReader, BlockPos pos, ISelectionContext selectionContext) {
-      return Block.makeCuboidShape(0, 0, 0, 16.0D, 2.0D * (state.get(AGE) + 1), 16.0D);
+      return Block.box(0, 0, 0, 16.0D, 2.0D * (state.getValue(AGE) + 1), 16.0D);
     }
   }
 
@@ -43,7 +46,7 @@ public class BaseBlocks {
     }
 
     @Override
-    protected int getExperience(Random rand) {
+    protected int xpOnDrop(Random rand) {
       return MathHelper.nextInt(rand, minXP, maxXP);
     }
   }
@@ -85,11 +88,11 @@ public class BaseBlocks {
   }
 
   public static class NarrowPostBlock extends WaterloggedBlock {
-    public static VoxelShape SHAPE = Block.makeCuboidShape(6, 0, 6, 10, 16, 10);
+    public static VoxelShape SHAPE = Block.box(6, 0, 6, 10, 16, 10);
 
     public NarrowPostBlock(Properties properties) {
       super(properties);
-      this.setDefaultState(this.getDefaultState().with(WATERLOGGED, false));
+      this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, false));
     }
 
     @Override
@@ -99,11 +102,11 @@ public class BaseBlocks {
   }
 
   public static class WidePostBlock extends WaterloggedBlock {
-    public static VoxelShape SHAPE = Block.makeCuboidShape(4, 0, 4, 12, 16, 12);
+    public static VoxelShape SHAPE = Block.box(4, 0, 4, 12, 16, 12);
 
     public WidePostBlock(Properties properties) {
       super(properties);
-      this.setDefaultState(this.getDefaultState().with(WATERLOGGED, false));
+      this.registerDefaultState(this.defaultBlockState().setValue(WATERLOGGED, false));
     }
 
     @SuppressWarnings("deprecation")

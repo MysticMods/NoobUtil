@@ -17,6 +17,8 @@ import net.minecraft.world.gen.feature.structure.StructureStart;
 import net.minecraft.world.gen.feature.structure.VillageConfig;
 import net.minecraft.world.gen.feature.template.TemplateManager;
 
+import net.minecraft.world.gen.feature.structure.Structure.IStartFactory;
+
 @SuppressWarnings("NullableProblems")
 public abstract class SimpleStructure extends Structure<NoFeatureConfig> {
   public SimpleStructure(Codec<NoFeatureConfig> codec) {
@@ -27,7 +29,7 @@ public abstract class SimpleStructure extends Structure<NoFeatureConfig> {
   public abstract IStartFactory<NoFeatureConfig> getStartFactory();
 
   @Override
-  public GenerationStage.Decoration getDecorationStage() {
+  public GenerationStage.Decoration step() {
     return GenerationStage.Decoration.SURFACE_STRUCTURES;
   }
 
@@ -44,25 +46,25 @@ public abstract class SimpleStructure extends Structure<NoFeatureConfig> {
     protected abstract void modifyStructure (DynamicRegistries dynamicRegistryManager, ChunkGenerator chunkGenerator, TemplateManager templateManagerIn, Biome biomeIn, NoFeatureConfig config, BlockPos pos);
 
     @Override
-    public void func_230364_a_(DynamicRegistries dynamicRegistryManager, ChunkGenerator chunkGenerator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig config) {
+    public void generatePieces(DynamicRegistries dynamicRegistryManager, ChunkGenerator chunkGenerator, TemplateManager templateManagerIn, int chunkX, int chunkZ, Biome biomeIn, NoFeatureConfig config) {
       BlockPos blockpos = new BlockPos((chunkX << 4) + 7, 0, (chunkZ << 4) + 7);
 
-      JigsawManager.func_242837_a(
+      JigsawManager.addPieces(
           dynamicRegistryManager,
-          new VillageConfig(() -> dynamicRegistryManager.getRegistry(Registry.JIGSAW_POOL_KEY)
-              .getOrDefault(getPoolLocation()),
+          new VillageConfig(() -> dynamicRegistryManager.registryOrThrow(Registry.TEMPLATE_POOL_REGISTRY)
+              .get(getPoolLocation()),
               getPoolSize()),
           AbstractVillagePiece::new,
           chunkGenerator,
           templateManagerIn,
           blockpos,
-          this.components,
-          this.rand,
+          this.pieces,
+          this.random,
           true,
           true);
 
       this.modifyStructure(dynamicRegistryManager, chunkGenerator, templateManagerIn, biomeIn, config, blockpos);
-      this.recalculateStructureSize();
+      this.calculateBoundingBox();
     }
   }
 }

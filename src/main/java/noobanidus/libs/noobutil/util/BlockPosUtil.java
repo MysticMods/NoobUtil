@@ -17,7 +17,7 @@ public class BlockPosUtil {
    * @return A *mutable* iterable consisting of each block position within `box`.
    */
   public static Iterable<BlockPos> getAllInBoxMutable (AxisAlignedBB box) {
-    return BlockPos.getAllInBoxMutable((int)box.maxX, (int)box.maxY, (int)box.maxZ, (int)box.minX, (int)box.minY, (int)box.minZ);
+    return BlockPos.betweenClosed((int)box.maxX, (int)box.maxY, (int)box.maxZ, (int)box.minX, (int)box.minY, (int)box.minZ);
   }
 
   /**
@@ -27,6 +27,6 @@ public class BlockPosUtil {
    * @return A stream of BlockPos (non-mutable) consisting of each block position within `box`
    */
   public static Stream<BlockPos> getAllInBox (AxisAlignedBB box) {
-    return BlockPos.getAllInBox((int)box.maxX, (int)box.maxY, (int)box.maxZ, (int)box.minX, (int)box.minY, (int)box.minZ);
+    return BlockPos.betweenClosedStream((int)box.maxX, (int)box.maxY, (int)box.maxZ, (int)box.minX, (int)box.minY, (int)box.minZ);
   }
 }

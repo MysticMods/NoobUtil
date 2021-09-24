@@ -64,7 +64,7 @@ public class VoxelUtil {
    */
   @SuppressWarnings("WeakerAccess")
   public static VoxelShape makeCube(double... p) {
-    return VoxelShapes.create(p[0] / 16.0D, p[1] / 16.0D, p[2] / 16.0D, p[3] / 16.0D, p[4] / 16.0D, p[5] / 16.0D);
+    return VoxelShapes.box(p[0] / 16.0D, p[1] / 16.0D, p[2] / 16.0D, p[3] / 16.0D, p[4] / 16.0D, p[5] / 16.0D);
   }
 
   public static void print(double x1, double y1, double z1, double x2, double y2, double z2) {
@@ -77,7 +77,7 @@ public class VoxelUtil {
    */
   public static void printSimplified(String name, VoxelShape shape) {
     NoobUtil.logger.info("Simplified: " + name);
-    shape.simplify().toBoundingBoxList().forEach(box -> print(box.minX * 16, box.minY * 16, box.minZ * 16, box.maxX * 16, box.maxY * 16, box.maxZ * 16));
+    shape.optimize().toAabbs().forEach(box -> print(box.minX * 16, box.minY * 16, box.minZ * 16, box.maxX * 16, box.maxY * 16, box.maxZ * 16));
   }
 
   /**
@@ -191,11 +191,11 @@ public class VoxelUtil {
   public static VoxelShape rotate(VoxelShape shape, UnaryOperator<AxisAlignedBB> rotateFunction) {
     List<VoxelShape> rotatedPieces = new ArrayList<>();
     // Explode the voxel shape into bounding boxes
-    List<AxisAlignedBB> sourceBoundingBoxes = shape.toBoundingBoxList();
+    List<AxisAlignedBB> sourceBoundingBoxes = shape.toAabbs();
     // Rotate them and convert them each back into a voxel shape
     for (AxisAlignedBB sourceBoundingBox : sourceBoundingBoxes) {
       // Make the bounding box be centered around the middle, and then move it back after rotating
-      rotatedPieces.add(VoxelShapes.create(rotateFunction.apply(sourceBoundingBox.offset(fromOrigin.x, fromOrigin.y, fromOrigin.z)).offset(-fromOrigin.x, -fromOrigin.z, -fromOrigin.z)));
+      rotatedPieces.add(VoxelShapes.create(rotateFunction.apply(sourceBoundingBox.move(fromOrigin.x, fromOrigin.y, fromOrigin.z)).move(-fromOrigin.x, -fromOrigin.z, -fromOrigin.z)));
     }
     return combine(rotatedPieces);
   }
@@ -231,7 +231,7 @@ public class VoxelUtil {
    * @return A {@link VoxelShape} including everything that is not part of any of the input shapes.
    */
   public static VoxelShape exclude(VoxelShape... shapes) {
-    return batchCombine(VoxelShapes.fullCube(), IBooleanFunction.ONLY_FIRST, true, shapes);
+    return batchCombine(VoxelShapes.block(), IBooleanFunction.ONLY_FIRST, true, shapes);
   }
 
   /**
@@ -248,9 +248,9 @@ public class VoxelUtil {
   public static VoxelShape batchCombine(VoxelShape initial, IBooleanFunction function, boolean simplify, Collection<VoxelShape> shapes) {
     VoxelShape combinedShape = initial;
     for (VoxelShape shape : shapes) {
-      combinedShape = VoxelShapes.combine(combinedShape, shape, function);
+      combinedShape = VoxelShapes.joinUnoptimized(combinedShape, shape, function);
     }
-    return simplify ? combinedShape.simplify() : combinedShape;
+    return simplify ? combinedShape.optimize() : combinedShape;
   }
 
   /**
@@ -267,9 +267,9 @@ public class VoxelUtil {
   public static VoxelShape batchCombine(VoxelShape initial, IBooleanFunction function, boolean simplify, VoxelShape... shapes) {
     VoxelShape combinedShape = initial;
     for (VoxelShape shape : shapes) {
-      combinedShape = VoxelShapes.combine(combinedShape, shape, function);
+      combinedShape = VoxelShapes.joinUnoptimized(combinedShape, shape, function);
     }
-    return simplify ? combinedShape.simplify() : combinedShape;
+    return simplify ? combinedShape.optimize() : combinedShape;
   }
 
   /**

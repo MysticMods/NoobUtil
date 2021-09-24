@@ -22,7 +22,7 @@ public class ServerGetter implements Getter {
   public World getterGetWorld() {
     MinecraftServer server = getterGetServer();
     if (server != null) {
-      return server.getWorld(World.OVERWORLD);
+      return server.getLevel(World.OVERWORLD);
     }
     return null;
   }

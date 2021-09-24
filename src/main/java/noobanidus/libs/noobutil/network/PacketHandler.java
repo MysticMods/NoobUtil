@@ -36,7 +36,7 @@ public abstract class PacketHandler {
 
   public void sendToInternal(Object msg, ServerPlayerEntity player) {
     if (!(player instanceof FakePlayer))
-      HANDLER.sendTo(msg, player.connection.netManager, NetworkDirection.PLAY_TO_CLIENT);
+      HANDLER.sendTo(msg, player.connection.connection, NetworkDirection.PLAY_TO_CLIENT);
   }
 
   public void sendToServerInternal(Object msg) {

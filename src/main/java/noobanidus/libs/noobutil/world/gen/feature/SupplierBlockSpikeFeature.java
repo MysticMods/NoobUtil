@@ -19,19 +19,19 @@ public class SupplierBlockSpikeFeature extends Feature<SupplierBlockStateFeature
   }
 
   @Override
-  public boolean generate(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, SupplierBlockStateFeatureConfig config) {
-    while (reader.isAirBlock(pos) && pos.getY() > 2) {
-      pos = pos.down();
+  public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, SupplierBlockStateFeatureConfig config) {
+    while (reader.isEmptyBlock(pos) && pos.getY() > 2) {
+      pos = pos.below();
     }
 
-    if (!reader.getBlockState(pos).isIn(BlockTags.BASE_STONE_OVERWORLD)) {
+    if (!reader.getBlockState(pos).is(BlockTags.BASE_STONE_OVERWORLD)) {
       return false;
     } else {
-      pos = pos.up(rand.nextInt(4));
+      pos = pos.above(rand.nextInt(4));
       int i = rand.nextInt(4) + 7;
       int j = i / 4 + rand.nextInt(2);
       if (j > 1 && rand.nextInt(60) == 0) {
-        pos = pos.up(10 + rand.nextInt(30));
+        pos = pos.above(10 + rand.nextInt(30));
       }
 
       for (int k = 0; k < i; ++k) {
@@ -44,17 +44,17 @@ public class SupplierBlockSpikeFeature extends Feature<SupplierBlockStateFeature
           for (int j1 = -l; j1 <= l; ++j1) {
             float f2 = (float) MathHelper.abs(j1) - 0.25F;
             if ((i1 == 0 && j1 == 0 || !(f1 * f1 + f2 * f2 > f * f)) && (i1 != -l && i1 != l && j1 != -l && j1 != l || !(rand.nextFloat() > 0.75F))) {
-              BlockState blockstate = reader.getBlockState(pos.add(i1, k, j1));
+              BlockState blockstate = reader.getBlockState(pos.offset(i1, k, j1));
               Block block = blockstate.getBlock();
-              if (blockstate.isAir(reader, pos.add(i1, k, j1)) || isStone(block)) {
-                this.setBlockState(reader, pos.add(i1, k, j1), config.get());
+              if (blockstate.isAir(reader, pos.offset(i1, k, j1)) || isStone(block)) {
+                this.setBlock(reader, pos.offset(i1, k, j1), config.get());
               }
 
               if (k != 0 && l > 1) {
-                blockstate = reader.getBlockState(pos.add(i1, -k, j1));
+                blockstate = reader.getBlockState(pos.offset(i1, -k, j1));
                 block = blockstate.getBlock();
-                if (blockstate.isAir(reader, pos.add(i1, -k, j1)) || isStone(block)) {
-                  this.setBlockState(reader, pos.add(i1, -k, j1), config.get());
+                if (blockstate.isAir(reader, pos.offset(i1, -k, j1)) || isStone(block)) {
+                  this.setBlock(reader, pos.offset(i1, -k, j1), config.get());
                 }
               }
             }
@@ -71,7 +71,7 @@ public class SupplierBlockSpikeFeature extends Feature<SupplierBlockStateFeature
 
       for (int l1 = -k1; l1 <= k1; ++l1) {
         for (int i2 = -k1; i2 <= k1; ++i2) {
-          BlockPos blockpos = pos.add(l1, -1, i2);
+          BlockPos blockpos = pos.offset(l1, -1, i2);
           int j2 = 50;
           if (Math.abs(l1) == 1 && Math.abs(i2) == 1) {
             j2 = rand.nextInt(5);
@@ -84,11 +84,11 @@ public class SupplierBlockSpikeFeature extends Feature<SupplierBlockStateFeature
               break;
             }
 
-            this.setBlockState(reader, blockpos, config.get());
-            blockpos = blockpos.down();
+            this.setBlock(reader, blockpos, config.get());
+            blockpos = blockpos.below();
             --j2;
             if (j2 <= 0) {
-              blockpos = blockpos.down(rand.nextInt(5) + 1);
+              blockpos = blockpos.below(rand.nextInt(5) + 1);
               j2 = rand.nextInt(5);
             }
           }

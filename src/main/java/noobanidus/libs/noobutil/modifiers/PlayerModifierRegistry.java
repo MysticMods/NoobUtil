@@ -30,14 +30,14 @@ public class PlayerModifierRegistry {
       return;
     }
 
-    AttributeModifierMap player = GlobalEntityTypeAttributes.getAttributesForEntity(EntityType.PLAYER);
-    Map<Attribute, ModifiableAttributeInstance> map = new HashMap<>(player.attributeMap);
+    AttributeModifierMap player = GlobalEntityTypeAttributes.getSupplier(EntityType.PLAYER);
+    Map<Attribute, ModifiableAttributeInstance> map = new HashMap<>(player.instances);
     for (Supplier<? extends Attribute> modifier : attributes) {
       Attribute attr = modifier.get();
       map.put(attr, new ModifiableAttributeInstance(attr, (instance) -> {
       }));
     }
-    player.attributeMap = map;
+    player.instances = map;
     NoobUtil.logger.info("Added " + attributes.size() + " additional attributes to PlayerEntity.");
     activated = true;
   }

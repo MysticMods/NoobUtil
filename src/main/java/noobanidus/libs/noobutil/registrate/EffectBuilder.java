@@ -24,10 +24,10 @@ public class EffectBuilder<T extends Effect, P> extends AbstractBuilder<Effect, 
   }
 
   public EffectBuilder<T, P> defaultLang() {
-    return this.lang(Effect::getName);
+    return this.lang(Effect::getDescriptionId);
   }
 
   public EffectBuilder<T, P> lang(String name) {
-    return this.lang(Effect::getName, name);
+    return this.lang(Effect::getDescriptionId, name);
   }
 }
