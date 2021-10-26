@@ -1,7 +1,6 @@
 package noobanidus.libs.noobutil.data;
 
 import com.tterrag.registrate.util.nullness.NonNullFunction;
-import net.minecraft.block.AbstractBlock;
 import net.minecraft.block.Block;
 import noobanidus.libs.noobutil.block.BaseBlocks;
 import noobanidus.libs.noobutil.material.MaterialType;
