@@ -3,6 +3,7 @@ package noobanidus.libs.noobutil.block;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.trees.Tree;
+import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.shapes.ISelectionContext;
@@ -11,9 +12,7 @@ import net.minecraft.world.IBlockReader;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
-
-import net.minecraft.block.AbstractBlock.Properties;
-import net.minecraft.block.PressurePlateBlock.Sensitivity;
+import java.util.function.Supplier;
 
 @SuppressWarnings("deprecation")
 public class BaseBlocks {
@@ -26,6 +25,20 @@ public class BaseBlocks {
     @Nonnull
     public VoxelShape getShape(BlockState state, IBlockReader blockReader, BlockPos pos, ISelectionContext selectionContext) {
       return Block.box(0, 0, 0, 16.0D, 2.0D * (state.getValue(AGE) + 1), 16.0D);
+    }
+  }
+
+  public static class SeededCropsBlock extends CropsBlock {
+    private final Supplier<? extends IItemProvider> seedProvider;
+
+    public SeededCropsBlock(Properties builder, Supplier<? extends IItemProvider> seedProvider) {
+      super(builder);
+      this.seedProvider = seedProvider;
+    }
+
+    @Override
+    protected IItemProvider getBaseSeedId() {
+      return seedProvider.get();
     }
   }
 
