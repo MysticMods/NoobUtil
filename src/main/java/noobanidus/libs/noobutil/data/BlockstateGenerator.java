@@ -8,6 +8,7 @@ import net.minecraft.block.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
+import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import noobanidus.libs.noobutil.block.BaseBlocks;
 
@@ -171,4 +172,81 @@ public class BlockstateGenerator {
                             .getExistingFile(new ResourceLocation(MODID, "narrow_post")))
                     .texture("wall", p.blockTexture(parent.get()))));
   }
+
+  public static <T extends AbstractButtonBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> button(Supplier<? extends Block> parent) {
+    return (ctx, p) -> {
+      ModelFile button = p.models().singleTexture(name(ctx.getEntry()) + "_button", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/button"), p.blockTexture(parent.get()));
+      ModelFile buttonPressed = p.models().singleTexture(name(ctx.getEntry()) + "_button_pressed", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/button_pressed"), p.blockTexture(parent.get()));
+      p.models().singleTexture(name(ctx.getEntry()) + "_button_inventory", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/button_inventory"), p.blockTexture(parent.get()));
+      p.getVariantBuilder(ctx.getEntry())
+          .forAllStates(state -> {
+            int x = 0;
+            int y = 0;
+            switch (state.getValue(AbstractButtonBlock.FACE)) {
+              case CEILING:
+                switch (state.getValue(AbstractButtonBlock.FACING)) {
+                  case EAST:
+                    y = 270;
+                    x = 180;
+                    break;
+                  case NORTH:
+                    y = 180;
+                    x = 180;
+                    break;
+                  case SOUTH:
+                    x = 180;
+                    break;
+                  case WEST:
+                    y = 90;
+                    x = 180;
+                    break;
+                }
+                break;
+              case FLOOR:
+                switch (state.getValue(AbstractButtonBlock.FACING)) {
+                  case EAST:
+                    y = 90;
+                    break;
+                  case NORTH:
+                    break;
+                  case SOUTH:
+                    y = 180;
+                    break;
+                  case WEST:
+                    y = 270;
+                    break;
+                }
+                break;
+              case WALL:
+                switch (state.getValue(AbstractButtonBlock.FACING)) {
+                  case EAST:
+                    y = 90;
+                    x = 90;
+                    break;
+                  case NORTH:
+                    x = 90;
+                    break;
+                  case SOUTH:
+                    y = 180;
+                    x = 90;
+                    break;
+                  case WEST:
+                    y = 270;
+                    x = 90;
+                    break;
+                }
+                break;
+            }
+            ConfiguredModel.Builder<?> builder = ConfiguredModel.builder().modelFile(state.getValue(AbstractButtonBlock.POWERED) ? buttonPressed : button);
+            if (y != 0) {
+              builder.rotationY(y);
+            }
+            if (x != 0) {
+              builder.rotationX(x);
+            }
+            return builder.build();
+          });
+    };
+  }
 }
+
