@@ -4,6 +4,7 @@ import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateBlockstateProvider;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
+import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import net.minecraft.block.*;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
@@ -76,55 +77,33 @@ public class BlockstateGenerator {
     return (ctx, p) -> p.stairsBlock(ctx.getEntry(), p.blockTexture(parent.get()));
   }
 
-  public static <T extends SlabBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> slab(RegistryEntry<? extends T> parent) {
-    return (ctx, p) -> p.slabBlock(ctx.getEntry(), p.blockTexture(parent.get()), p.blockTexture(parent.get()));
-  }
-
-  public static <T extends SlabBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> slab(RegistryEntry<? extends Block> parent, Supplier<Block> visual) {
+  public static <T extends SlabBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> slab(NonNullSupplier<? extends Block> parent, NonNullSupplier<Block> visual) {
     return (ctx, p) -> p.slabBlock(ctx.getEntry(), p.blockTexture(parent.get()), p.blockTexture(visual.get()));
   }
 
-  public static <T extends SlabBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> slab(Supplier<? extends Block> parent) {
+  public static <T extends SlabBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> slab(NonNullSupplier<? extends Block> parent) {
     return (ctx, p) -> p.slabBlock(ctx.getEntry(), p.blockTexture(parent.get()), p.blockTexture(parent.get()));
   }
 
-  public static <T extends FenceBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> fence(RegistryEntry<? extends Block> parent) {
+  public static <T extends FenceBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> fence(NonNullSupplier<? extends Block> parent) {
     return (ctx, p) -> {
       p.fenceBlock(ctx.getEntry(), p.blockTexture(parent.get()));
       p.models().fenceInventory(name(ctx.getEntry()) + "_inventory", p.blockTexture(parent.get()));
     };
   }
 
-  public static <T extends FenceBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> fence(Supplier<? extends Block> parent) {
-    return (ctx, p) -> {
-      p.fenceBlock(ctx.getEntry(), p.blockTexture(parent.get()));
-      p.models().fenceInventory(name(ctx.getEntry()) + "_inventory", p.blockTexture(parent.get()));
-    };
-  }
-
-  public static <T extends WallBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> wall(RegistryEntry<? extends Block> parent) {
+  public static <T extends WallBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> wall(NonNullSupplier<? extends Block> parent) {
     return (ctx, p) -> {
       p.wallBlock(ctx.getEntry(), p.blockTexture(parent.get()));
       p.models().wallInventory(name(ctx.getEntry()) + "_inventory", p.blockTexture(parent.get()));
     };
   }
 
-  public static <T extends WallBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> wall(Supplier<? extends Block> parent) {
-    return (ctx, p) -> {
-      p.wallBlock(ctx.getEntry(), p.blockTexture(parent.get()));
-      p.models().wallInventory(name(ctx.getEntry()) + "_inventory", p.blockTexture(parent.get()));
-    };
-  }
-
-  public static <T extends FenceGateBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> gate(RegistryEntry<? extends Block> parent) {
+  public static <T extends FenceGateBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> gate(NonNullSupplier<? extends Block> parent) {
     return (ctx, p) -> p.fenceGateBlock(ctx.getEntry(), p.blockTexture(parent.get()));
   }
 
-  public static <T extends FenceGateBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> gate(Supplier<? extends Block> parent) {
-    return (ctx, p) -> p.fenceGateBlock(ctx.getEntry(), p.blockTexture(parent.get()));
-  }
-
-  public static <T extends BaseBlocks.WidePostBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> widePost(RegistryEntry<? extends Block> parent) {
+  public static <T extends BaseBlocks.WidePostBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> widePost(NonNullSupplier<? extends Block> parent) {
     return (ctx, p) -> p.getVariantBuilder(ctx.getEntry())
         .partialState()
         .addModels(new ConfiguredModel(
@@ -136,31 +115,7 @@ public class BlockstateGenerator {
                 .texture("wall", p.blockTexture(parent.get()))));
   }
 
-  public static <T extends BaseBlocks.WidePostBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> widePost(Supplier<? extends Block> parent) {
-    return (ctx, p) -> p.getVariantBuilder(ctx.getEntry())
-        .partialState()
-        .addModels(new ConfiguredModel(
-            p.models()
-                .getBuilder(name(ctx.getEntry()))
-                .parent(
-                    p.models()
-                        .getExistingFile(new ResourceLocation(MODID, "wide_post")))
-                .texture("wall", p.blockTexture(parent.get()))));
-  }
-
-  public static <T extends BaseBlocks.NarrowPostBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> narrowPost(RegistryEntry<? extends Block> parent) {
-    return (ctx, p) -> p.getVariantBuilder(ctx.getEntry())
-        .partialState()
-        .addModels(new ConfiguredModel(
-            p.models()
-                .getBuilder(name(ctx.getEntry()))
-                .parent(
-                    p.models()
-                        .getExistingFile(new ResourceLocation(MODID, "narrow_post")))
-                .texture("wall", p.blockTexture(parent.get()))));
-  }
-
-  public static <T extends BaseBlocks.NarrowPostBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> narrowPost(Supplier<? extends Block> parent) {
+  public static <T extends BaseBlocks.NarrowPostBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> narrowPost(NonNullSupplier<? extends Block> parent) {
     return (ctx, p) ->
         p.getVariantBuilder(ctx.getEntry())
             .partialState()
@@ -173,7 +128,7 @@ public class BlockstateGenerator {
                     .texture("wall", p.blockTexture(parent.get()))));
   }
 
-  public static <T extends AbstractButtonBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> button(Supplier<? extends Block> parent) {
+  public static <T extends AbstractButtonBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> button(NonNullSupplier<? extends Block> parent) {
     return (ctx, p) -> {
       ModelFile button = p.models().singleTexture(name(ctx.getEntry()) + "_button", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/button"), p.blockTexture(parent.get()));
       ModelFile buttonPressed = p.models().singleTexture(name(ctx.getEntry()) + "_button_pressed", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/button_pressed"), p.blockTexture(parent.get()));
@@ -246,6 +201,14 @@ public class BlockstateGenerator {
             }
             return builder.build();
           });
+    };
+  }
+
+  public static <T extends AbstractButtonBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> pressurePlate(NonNullSupplier<? extends Block> parent) {
+    return (ctx, p) -> {
+      ModelFile plate = p.models().singleTexture(name(ctx.getEntry()) + "_pressure_plate", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/pressure_plate"), p.blockTexture(parent.get()));
+      ModelFile platePowered = p.models().singleTexture(name(ctx.getEntry()) + "_pressure_plate_down", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/pressure_plate_down"), p.blockTexture(parent.get()));
+      p.getVariantBuilder(ctx.getEntry()).forAllStates(state -> ConfiguredModel.builder().modelFile(state.getValue(PressurePlateBlock.POWERED) ? platePowered : plate).build());
     };
   }
 }
