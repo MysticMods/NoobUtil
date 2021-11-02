@@ -130,9 +130,9 @@ public class BlockstateGenerator {
 
   public static <T extends AbstractButtonBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> button(NonNullSupplier<? extends Block> parent) {
     return (ctx, p) -> {
-      ModelFile button = p.models().singleTexture(name(ctx.getEntry()) + "_button", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/button"), p.blockTexture(parent.get()));
-      ModelFile buttonPressed = p.models().singleTexture(name(ctx.getEntry()) + "_button_pressed", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/button_pressed"), p.blockTexture(parent.get()));
-      p.models().singleTexture(name(ctx.getEntry()) + "_button_inventory", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/button_inventory"), p.blockTexture(parent.get()));
+      ModelFile button = p.models().singleTexture(name(ctx.getEntry()), new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/button"), p.blockTexture(parent.get()));
+      ModelFile buttonPressed = p.models().singleTexture(name(ctx.getEntry()) + "_pressed", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/button_pressed"), p.blockTexture(parent.get()));
+      p.models().singleTexture(name(ctx.getEntry()) + "_inventory", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/button_inventory"), p.blockTexture(parent.get()));
       p.getVariantBuilder(ctx.getEntry())
           .forAllStates(state -> {
             int x = 0;
@@ -206,8 +206,8 @@ public class BlockstateGenerator {
 
   public static <T extends AbstractPressurePlateBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> pressurePlate(NonNullSupplier<? extends Block> parent) {
     return (ctx, p) -> {
-      ModelFile plate = p.models().singleTexture(name(ctx.getEntry()) + "_pressure_plate", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/pressure_plate_up"), p.blockTexture(parent.get()));
-      ModelFile platePowered = p.models().singleTexture(name(ctx.getEntry()) + "_pressure_plate_down", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/pressure_plate_down"), p.blockTexture(parent.get()));
+      ModelFile plate = p.models().singleTexture(name(ctx.getEntry()), new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/pressure_plate_up"), p.blockTexture(parent.get()));
+      ModelFile platePowered = p.models().singleTexture(name(ctx.getEntry()) + "_down", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/pressure_plate_down"), p.blockTexture(parent.get()));
       p.getVariantBuilder(ctx.getEntry()).forAllStates(state -> ConfiguredModel.builder().modelFile(state.getValue(PressurePlateBlock.POWERED) ? platePowered : plate).build());
     };
   }
