@@ -212,7 +212,7 @@ public class BlockstateGenerator {
     };
   }
 
-  public static <T extends Block> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> pillarBlock (String sideName, String topName) {
+  public static <T extends Block> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> pillar(String sideName, String topName) {
     return (ctx, p) -> {
       ResourceLocation side = new ResourceLocation(MODID, sideName);
       ResourceLocation top = new ResourceLocation(MODID, topName);
