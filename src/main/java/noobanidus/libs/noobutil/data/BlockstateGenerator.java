@@ -211,5 +211,14 @@ public class BlockstateGenerator {
       p.getVariantBuilder(ctx.getEntry()).forAllStates(state -> ConfiguredModel.builder().modelFile(state.getValue(PressurePlateBlock.POWERED) ? platePowered : plate).build());
     };
   }
+
+  public static <T extends Block> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> pillarBlock (String sideName, String topName) {
+    return (ctx, p) -> {
+      ResourceLocation side = new ResourceLocation(MODID, sideName);
+      ResourceLocation top = new ResourceLocation(MODID, topName);
+      ModelFile pillar = p.models().cubeColumn(name(ctx.getEntry()), side, top);
+      p.getVariantBuilder(ctx.getEntry()).forAllStates(state -> ConfiguredModel.builder().modelFile(pillar).build());
+    };
+  }
 }
 
