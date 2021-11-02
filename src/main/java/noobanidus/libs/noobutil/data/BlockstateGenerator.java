@@ -111,7 +111,7 @@ public class BlockstateGenerator {
                 .getBuilder(name(ctx.getEntry()))
                 .parent(
                     p.models()
-                        .getExistingFile(new ResourceLocation("mysticalworld", "wide_post")))
+                        .getExistingFile(new ResourceLocation(MODID, "wide_post")))
                 .texture("wall", p.blockTexture(parent.get()))));
   }
 
@@ -124,7 +124,7 @@ public class BlockstateGenerator {
                     .getBuilder(name(ctx.getEntry()))
                     .parent(
                         p.models()
-                            .getExistingFile(new ResourceLocation("mysticalworld", "narrow_post")))
+                            .getExistingFile(new ResourceLocation(MODID, "narrow_post")))
                     .texture("wall", p.blockTexture(parent.get()))));
   }
 
