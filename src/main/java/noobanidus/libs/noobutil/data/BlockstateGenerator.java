@@ -204,7 +204,7 @@ public class BlockstateGenerator {
     };
   }
 
-  public static <T extends AbstractButtonBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> pressurePlate(NonNullSupplier<? extends Block> parent) {
+  public static <T extends AbstractPressurePlateBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> pressurePlate(NonNullSupplier<? extends Block> parent) {
     return (ctx, p) -> {
       ModelFile plate = p.models().singleTexture(name(ctx.getEntry()) + "_pressure_plate", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/pressure_plate"), p.blockTexture(parent.get()));
       ModelFile platePowered = p.models().singleTexture(name(ctx.getEntry()) + "_pressure_plate_down", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/pressure_plate_down"), p.blockTexture(parent.get()));
