@@ -29,16 +29,16 @@ public class BaseBlocks {
   }
 
   public static class SeededCropsBlock extends CropsBlock {
-    private final Supplier<? extends IItemProvider> seedProvider;
+    private final Supplier<Supplier<? extends IItemProvider>> seedProvider;
 
-    public SeededCropsBlock(Properties builder, Supplier<? extends IItemProvider> seedProvider) {
+    public SeededCropsBlock(Properties builder, Supplier<Supplier<? extends IItemProvider>> seedProvider) {
       super(builder);
       this.seedProvider = seedProvider;
     }
 
     @Override
     protected IItemProvider getBaseSeedId() {
-      return seedProvider.get();
+      return seedProvider.get().get();
     }
   }
 
