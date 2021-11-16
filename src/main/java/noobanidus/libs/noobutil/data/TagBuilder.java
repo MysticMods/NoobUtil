@@ -46,8 +46,8 @@ public class TagBuilder {
     }
   }
 
-  public static class Items extends Builder<Item, IItemProvider> {
-    public Items(RegistrateTagsProvider<Item> provider) {
+  public static class ItemsBuilder extends Builder<Item, IItemProvider> {
+    public ItemsBuilder(RegistrateTagsProvider<Item> provider) {
       super(provider);
     }
 
