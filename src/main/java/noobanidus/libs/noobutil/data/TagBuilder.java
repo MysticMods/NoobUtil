@@ -1,9 +1,11 @@
 package noobanidus.libs.noobutil.data;
 
+import com.tterrag.registrate.providers.RegistrateItemTagsProvider;
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
+import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import net.minecraftforge.common.Tags;
 
@@ -47,8 +49,11 @@ public class TagBuilder {
   }
 
   public static class ItemsBuilder extends Builder<Item, IItemProvider> {
+    private final RegistrateItemTagsProvider itemProvider;
+
     public ItemsBuilder(RegistrateTagsProvider<Item> provider) {
       super(provider);
+      this.itemProvider = (RegistrateItemTagsProvider) provider;
     }
 
     @Override
@@ -60,6 +65,14 @@ public class TagBuilder {
     @Override
     public Builder<Item, IItemProvider> add(Tags.IOptionalNamedTag<Item> tag, IItemProvider... items) {
       provider.tag(tag).add(Stream.of(items).map(IItemProvider::asItem).toArray(Item[]::new));
+      return this;
+    }
+
+    public Builder<Item, IItemProvider> addBlocks(ITag.INamedTag<Item> destination, ITag.INamedTag<Block> ... sources) {
+      for (ITag.INamedTag<Block> blockTag : sources) {
+        itemProvider.copy(blockTag, destination);
+      }
+
       return this;
     }
   }
