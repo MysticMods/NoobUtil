@@ -220,5 +220,13 @@ public class BlockstateGenerator {
       p.getVariantBuilder(ctx.getEntry()).forAllStates(state -> ConfiguredModel.builder().modelFile(pillar).build());
     };
   }
+
+  public static <T extends Block> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> existingNoRotation (String existingModel) {
+    return (ctx, p) -> {
+      ResourceLocation rl = p.modLoc(existingModel);
+      ModelFile existing = p.models().getExistingFile(rl);
+      p.getVariantBuilder(ctx.getEntry()).forAllStates(state -> ConfiguredModel.builder().modelFile(existing).build());
+    };
+  }
 }
 
