@@ -6,6 +6,8 @@ import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import net.minecraft.block.*;
+import net.minecraft.state.properties.BlockStateProperties;
+import net.minecraft.util.Direction;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -226,6 +228,34 @@ public class BlockstateGenerator {
       ResourceLocation rl = p.modLoc(existingModel);
       ModelFile existing = p.models().getExistingFile(rl);
       p.getVariantBuilder(ctx.getEntry()).forAllStates(state -> ConfiguredModel.builder().modelFile(existing).build());
+    };
+  }
+
+  public static <T extends Block> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> existingRotation (String existingModel) {
+    return (ctx, p) -> {
+      ResourceLocation rl = p.modLoc(existingModel);
+      ModelFile existing = p.models().getExistingFile(rl);
+      p.getVariantBuilder(ctx.getEntry()).forAllStates(state -> {
+        Direction dir;
+        int xRot = 0;
+        if (state.hasProperty(BlockStateProperties.HORIZONTAL_FACING)) {
+          dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
+        } else if (state.hasProperty(BlockStateProperties.FACING)) {
+          dir = state.getValue(BlockStateProperties.FACING);
+          if (dir == Direction.DOWN) {
+            xRot = 180;
+          } else if (dir.getAxis().isHorizontal()) {
+            xRot = 90;
+          }
+        } else {
+          dir = Direction.EAST;
+        }
+        return ConfiguredModel.builder()
+            .modelFile(existing)
+            .rotationX(xRot)
+            .rotationY(dir.getAxis().isVertical() ? 0 : (int) (dir.toYRot() % 360))
+            .build();
+      });
     };
   }
 }
