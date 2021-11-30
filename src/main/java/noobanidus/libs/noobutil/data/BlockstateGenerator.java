@@ -242,11 +242,13 @@ public class BlockstateGenerator {
           dir = state.getValue(BlockStateProperties.HORIZONTAL_FACING);
         } else if (state.hasProperty(BlockStateProperties.FACING)) {
           dir = state.getValue(BlockStateProperties.FACING);
-          if (dir == Direction.DOWN) {
+/*          if (dir == Direction.DOWN) {
             xRot = 180;
           } else if (dir.getAxis().isHorizontal()) {
             xRot = 90;
-          }
+          } else {
+            xRot = 0;
+          }*/
         } else {
           dir = Direction.EAST;
         }

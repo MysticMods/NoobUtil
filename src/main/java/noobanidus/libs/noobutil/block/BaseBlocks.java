@@ -135,7 +135,7 @@ public class BaseBlocks {
   }
 
   public static class HorizontalBlock extends net.minecraft.block.HorizontalBlock {
-    public static DirectionProperty FACING = BlockStateProperties.FACING;
+    public static DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     protected HorizontalBlock(Properties props) {
       super(props);
