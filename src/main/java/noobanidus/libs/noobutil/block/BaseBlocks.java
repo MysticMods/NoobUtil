@@ -6,6 +6,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.block.trees.Tree;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.StateContainer;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
@@ -143,6 +144,13 @@ public class BaseBlocks {
     @Override
     public BlockState getStateForPlacement(BlockItemUseContext pContext) {
       return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> pBuilder) {
+      super.createBlockStateDefinition(pBuilder);
+
+      pBuilder.add(FACING);
     }
   }
 }
