@@ -1,8 +1,12 @@
 package noobanidus.libs.noobutil.block;
 
+import net.minecraft.block.AbstractFurnaceBlock;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.trees.Tree;
+import net.minecraft.item.BlockItemUseContext;
+import net.minecraft.state.DirectionProperty;
+import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.util.IItemProvider;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -129,4 +133,16 @@ public class BaseBlocks {
     }
   }
 
+  public static class HorizontalBlock extends net.minecraft.block.HorizontalBlock {
+    public static DirectionProperty FACING = BlockStateProperties.FACING;
+
+    protected HorizontalBlock(Properties props) {
+      super(props);
+    }
+
+    @Override
+    public BlockState getStateForPlacement(BlockItemUseContext pContext) {
+      return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
+    }
+  }
 }
