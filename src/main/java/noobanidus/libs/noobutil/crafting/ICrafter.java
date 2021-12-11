@@ -16,7 +16,7 @@ import noobanidus.libs.noobutil.inventory.ILargeInventory;
 import java.util.List;
 import java.util.UUID;
 
-public interface ICrafter<H extends ILargeInventory<?>, C extends Container & IPartitionedPlayerContainer, T extends TileEntity & IReferentialBlockEntity> extends IInventory, IIInvWrapper<H> {
+public interface ICrafter<H extends ILargeInventory, C extends Container & IPartitionedPlayerContainer, T extends TileEntity & IReferentialBlockEntity> extends IInventory, IIInvWrapper<H> {
 
   C getContainer();
 

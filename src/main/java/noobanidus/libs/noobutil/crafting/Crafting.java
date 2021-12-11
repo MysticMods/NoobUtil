@@ -11,7 +11,7 @@ import noobanidus.libs.noobutil.inventory.ILargeInventory;
 
 import java.util.List;
 
-public abstract class Crafting<H extends ILargeInventory<?>, C extends Container & IPartitionedPlayerContainer, T extends TileEntity & IReferentialBlockEntity> extends IInvWrapper<H> implements ICrafter<H, C, T> {
+public abstract class Crafting<H extends ILargeInventory, C extends Container & IPartitionedPlayerContainer, T extends TileEntity & IReferentialBlockEntity> extends IInvWrapper<H> implements ICrafter<H, C, T> {
   private final C container;
   private final T blockentity;
 

@@ -4,7 +4,7 @@ import noobanidus.libs.noobutil.inventory.ILargeInventory;
 
 import javax.annotation.Nullable;
 
-public interface IInventoryBlockEntity<T extends ILargeInventory<?>> extends IReferentialBlockEntity {
+public interface IInventoryBlockEntity<T extends ILargeInventory> extends IReferentialBlockEntity {
   @Nullable
   T getBlockEntityInventory();
 

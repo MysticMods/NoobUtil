@@ -3,18 +3,19 @@ package noobanidus.libs.noobutil.data.server;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.world.storage.WorldSavedData;
 import noobanidus.libs.noobutil.inventory.ILargeInventory;
+import noobanidus.libs.noobutil.reference.ModData;
 
 import java.io.File;
 import java.util.UUID;
 import java.util.function.IntFunction;
 
-public class StoredInventoryData<T extends ILargeInventory<StoredInventoryData<?>>> extends WorldSavedData {
+public class StoredInventoryData<T extends ILargeInventory> extends WorldSavedData {
   private UUID id;
   private final T inventory;
   private int size;
 
   public static String ID(UUID id) {
-    return "-Inventory-" + id.toString();
+    return ModData.getModIdentifier() + "-Inventory-" + id.toString();
   }
 
   public StoredInventoryData(UUID id, int size, IntFunction<T> builder) {

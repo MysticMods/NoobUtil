@@ -6,7 +6,7 @@ import noobanidus.libs.noobutil.inventory.ILargeInventory;
 
 import javax.annotation.Nullable;
 
-public interface IBlockEntityContainer<V extends ILargeInventory<?>, T extends IInventoryBlockEntity<V>> {
+public interface IBlockEntityContainer<V extends ILargeInventory, T extends IInventoryBlockEntity<V>> {
   @Nullable
   T getBlockEntity();
 
@@ -21,7 +21,7 @@ public interface IBlockEntityContainer<V extends ILargeInventory<?>, T extends I
   @Nullable
   V getEmptyInventory();
 
-  void inventoryChanged(ILargeInventory<?> inventory, int slot);
+  void inventoryChanged(ILargeInventory inventory, int slot);
 
   default void inventoryChanged(IInventory inventory, int slot) {
 

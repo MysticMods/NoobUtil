@@ -6,7 +6,7 @@ import noobanidus.libs.noobutil.data.server.StoredInventoryData;
 
 import javax.annotation.Nullable;
 
-public interface ILargeInventory<T extends StoredInventoryData<?>> extends IItemHandlerModifiable {
+public interface ILargeInventory extends IItemHandlerModifiable {
   default int getSlots() {
     return this.size();
   }
@@ -21,16 +21,16 @@ public interface ILargeInventory<T extends StoredInventoryData<?>> extends IItem
 
   void deserialize(CompoundNBT result);
 
-  default void setInventoryData(T data) {
+  default void setInventoryData(StoredInventoryData<ILargeInventory> data) {
   }
 
   @Nullable
-  default T getInventoryData() {
+  default StoredInventoryData<ILargeInventory> getInventoryData() {
     return null;
   }
 
   default void markDirty() {
-    T data = getInventoryData();
+    StoredInventoryData<ILargeInventory> data = getInventoryData();
     if (data != null) {
       data.setDirty();
     }

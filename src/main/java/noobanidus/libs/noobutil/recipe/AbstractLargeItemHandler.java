@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class AbstractLargeItemHandler implements ILargeInventory<StoredInventoryData<?>> {
+public abstract class AbstractLargeItemHandler implements ILargeInventory {
   // TODO: THIS
   // TODO: Potentially separate slot info metadata from stacks
   protected NonNullList<ItemStackEntry> stacks;
