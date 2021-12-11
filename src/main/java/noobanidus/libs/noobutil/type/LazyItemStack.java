@@ -1,4 +1,4 @@
-package noobanidus.libs.noobutil.types;
+package noobanidus.libs.noobutil.type;
 
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

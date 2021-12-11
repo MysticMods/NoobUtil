@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.surfacebuilders.ISurfaceBuilderConfig;
-import noobanidus.libs.noobutil.types.LazyStateSupplier;
+import noobanidus.libs.noobutil.type.LazyStateSupplier;
 
 public class SupplierSurfaceBuilderConfig implements ISurfaceBuilderConfig {
   public static final Codec<SupplierSurfaceBuilderConfig> CODEC = RecordCodecBuilder.create((instance) -> instance.group(LazyStateSupplier.CODEC.fieldOf("top_material").forGetter((get) -> get.topMaterial), LazyStateSupplier.CODEC.fieldOf("under_material").forGetter((get) -> get.underMaterial), LazyStateSupplier.CODEC.fieldOf("underwater_material").forGetter((get) -> get.underWaterMaterial)).apply(instance, SupplierSurfaceBuilderConfig::new));

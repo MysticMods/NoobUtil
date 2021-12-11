@@ -1,9 +1,10 @@
-package noobanidus.libs.noobutil.types;
+package noobanidus.libs.noobutil.inventory;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
+import noobanidus.libs.noobutil.inventory.IIInvWrapper;
 
 public class IInvWrapper<T extends IItemHandler> implements IInventory, IIInvWrapper<T> {
   private final T handler;

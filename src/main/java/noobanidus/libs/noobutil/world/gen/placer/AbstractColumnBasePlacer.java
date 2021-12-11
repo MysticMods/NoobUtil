@@ -11,7 +11,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IWorld;
 import net.minecraft.world.gen.blockplacer.BlockPlacer;
 import net.minecraft.world.gen.blockplacer.BlockPlacerType;
-import noobanidus.libs.noobutil.types.LazyStateSupplier;
+import noobanidus.libs.noobutil.type.LazyStateSupplier;
 
 import java.util.List;
 import java.util.Random;

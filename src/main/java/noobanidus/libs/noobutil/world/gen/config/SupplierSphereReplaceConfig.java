@@ -5,7 +5,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.BlockState;
 import net.minecraft.world.gen.feature.FeatureSpread;
 import net.minecraft.world.gen.feature.IFeatureConfig;
-import noobanidus.libs.noobutil.types.LazyStateSupplier;
+import noobanidus.libs.noobutil.type.LazyStateSupplier;
 
 import java.util.List;
 

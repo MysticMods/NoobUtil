@@ -1,4 +1,4 @@
-package noobanidus.libs.noobutil.ingredients;
+package noobanidus.libs.noobutil.ingredient;
 
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;

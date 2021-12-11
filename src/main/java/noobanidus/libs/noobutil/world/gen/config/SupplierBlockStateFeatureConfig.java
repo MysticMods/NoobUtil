@@ -4,7 +4,7 @@ import com.mojang.serialization.Codec;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.gen.feature.IFeatureConfig;
-import noobanidus.libs.noobutil.types.LazyStateSupplier;
+import noobanidus.libs.noobutil.type.LazyStateSupplier;
 
 public class SupplierBlockStateFeatureConfig implements IFeatureConfig {
   public static final Codec<SupplierBlockStateFeatureConfig> CODEC = LazyStateSupplier.CODEC.fieldOf("state").xmap(SupplierBlockStateFeatureConfig::new, (o) -> o.state).codec();

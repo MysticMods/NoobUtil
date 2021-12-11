@@ -4,7 +4,7 @@ import net.minecraft.block.BlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 
-public class TileUtil {
+public class BlockEntityUtil {
   public static <T extends TileEntity> void updateViaState(T tile) {
     World world = tile.getLevel();
     if (world == null || world.isClientSide()) {

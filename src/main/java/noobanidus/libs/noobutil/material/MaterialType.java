@@ -16,7 +16,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
 import noobanidus.libs.noobutil.config.IArmorConfig;
 import noobanidus.libs.noobutil.item.WeaponType;
-import noobanidus.libs.noobutil.types.LazyIngredient;
+import noobanidus.libs.noobutil.ingredient.LazyIngredient;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;

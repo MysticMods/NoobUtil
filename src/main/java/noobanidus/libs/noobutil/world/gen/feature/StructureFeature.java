@@ -1,7 +1,6 @@
 package noobanidus.libs.noobutil.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
 import net.minecraft.util.Mirror;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
@@ -15,7 +14,7 @@ import net.minecraft.world.gen.ChunkGenerator;
 import net.minecraft.world.gen.Heightmap;
 import net.minecraft.world.gen.feature.Feature;
 import net.minecraft.world.gen.feature.template.*;
-import noobanidus.libs.noobutil.types.IntPair;
+import noobanidus.libs.noobutil.type.IntPair;
 import noobanidus.libs.noobutil.world.gen.config.StructureFeatureConfig;
 
 import java.util.ArrayList;

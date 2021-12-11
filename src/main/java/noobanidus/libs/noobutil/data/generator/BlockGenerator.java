@@ -1,4 +1,4 @@
-package noobanidus.libs.noobutil.data;
+package noobanidus.libs.noobutil.data.generator;
 
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import net.minecraft.block.Block;

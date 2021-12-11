@@ -1,4 +1,4 @@
-package noobanidus.libs.noobutil.types;
+package noobanidus.libs.noobutil.type;
 
 public class IntPair<T> {
   private final int integer;

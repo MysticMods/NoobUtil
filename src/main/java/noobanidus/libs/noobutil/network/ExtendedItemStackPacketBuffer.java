@@ -1,4 +1,4 @@
-package noobanidus.libs.noobutil.types;
+package noobanidus.libs.noobutil.network;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufInputStream;

@@ -1,4 +1,4 @@
-package noobanidus.libs.noobutil.types;
+package noobanidus.libs.noobutil.inventory;
 
 import net.minecraftforge.items.IItemHandler;
 

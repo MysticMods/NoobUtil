@@ -1,7 +1,6 @@
-package noobanidus.libs.noobutil.types;
+package noobanidus.libs.noobutil.type;
 
 import com.mojang.serialization.Codec;
-import com.mojang.serialization.JsonOps;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;

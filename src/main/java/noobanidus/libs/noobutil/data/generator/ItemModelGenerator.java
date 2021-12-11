@@ -1,4 +1,4 @@
-package noobanidus.libs.noobutil.data;
+package noobanidus.libs.noobutil.data.generator;
 
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateItemModelProvider;

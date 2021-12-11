@@ -11,14 +11,13 @@ import net.minecraft.world.gen.blockstateprovider.BlockStateProvider;
 import net.minecraft.world.gen.blockstateprovider.BlockStateProviderType;
 import net.minecraftforge.registries.ForgeRegistries;
 import noobanidus.libs.noobutil.NoobUtil;
-import noobanidus.libs.noobutil.types.LazyStateSupplier;
+import noobanidus.libs.noobutil.type.LazyStateSupplier;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public abstract class AbstractSupplierBlockStateProvider extends BlockStateProvider {
   public static <T extends AbstractSupplierBlockStateProvider> Codec<T> codecBuilder(BiFunction<ResourceLocation, List<LazyStateSupplier.PropertyPair>, T> builder) {

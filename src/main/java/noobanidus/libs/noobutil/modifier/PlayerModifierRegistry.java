@@ -1,4 +1,4 @@
-package noobanidus.libs.noobutil.modifiers;
+package noobanidus.libs.noobutil.modifier;
 
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.ai.attributes.Attribute;
