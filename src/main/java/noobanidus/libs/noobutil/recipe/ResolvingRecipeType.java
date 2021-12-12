@@ -19,11 +19,11 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public abstract class ResolvingRecipeType<C extends IInventory, T extends IRecipe<C>> extends JsonReloadListener {
-  private static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
-  private final Supplier<IRecipeType<T>> type;
-  private List<T> cache = null;
-  private final Comparator<? super T> comparator;
-  private final Object2IntOpenHashMap<ResourceLocation> reverseLookup = new Object2IntOpenHashMap<>();
+  protected static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().disableHtmlEscaping().create();
+  protected final Supplier<IRecipeType<T>> type;
+  protected List<T> cache = null;
+  protected final Comparator<? super T> comparator;
+  protected final Object2IntOpenHashMap<ResourceLocation> reverseLookup = new Object2IntOpenHashMap<>();
 
   public ResolvingRecipeType(Supplier<IRecipeType<T>> type, Comparator<? super T> comparator) {
     super(GSON, "recipes");

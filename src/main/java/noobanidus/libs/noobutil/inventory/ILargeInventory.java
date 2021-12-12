@@ -21,16 +21,16 @@ public interface ILargeInventory extends IItemHandlerModifiable {
 
   void deserialize(CompoundNBT result);
 
-  default void setInventoryData(StoredInventoryData<ILargeInventory> data) {
+  default <T extends ILargeInventory> void setInventoryData(StoredInventoryData<T> data) {
   }
 
   @Nullable
-  default StoredInventoryData<ILargeInventory> getInventoryData() {
+  default <T extends ILargeInventory> StoredInventoryData<T> getInventoryData() {
     return null;
   }
 
   default void markDirty() {
-    StoredInventoryData<ILargeInventory> data = getInventoryData();
+    StoredInventoryData<?> data = getInventoryData();
     if (data != null) {
       data.setDirty();
     }
