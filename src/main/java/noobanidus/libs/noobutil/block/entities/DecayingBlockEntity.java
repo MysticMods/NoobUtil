@@ -32,16 +32,16 @@ public class DecayingBlockEntity extends TileEntity implements ITickableTileEnti
 
   @Override
   public void load(BlockState state, CompoundNBT tag) {
-    this.decay = tag.getInt(NBTIdentifiers.DecayingBlockEntity.decay);
-    this.state = LazyStateSupplier.fromNBT(tag.getCompound(NBTIdentifiers.DecayingBlockEntity.state));
+    this.decay = tag.getInt(NBTIdentifiers.DecayingBlockEntity.Decay);
+    this.state = LazyStateSupplier.fromNBT(tag.getCompound(NBTIdentifiers.DecayingBlockEntity.State));
     super.load(state, tag);
   }
 
   @Override
   public CompoundNBT save(CompoundNBT pCompound) {
     CompoundNBT result = super.save(pCompound);
-    result.putInt(NBTIdentifiers.DecayingBlockEntity.decay, this.decay);
-    result.put(NBTIdentifiers.DecayingBlockEntity.state, this.state.serializeNBT());
+    result.putInt(NBTIdentifiers.DecayingBlockEntity.Decay, this.decay);
+    result.put(NBTIdentifiers.DecayingBlockEntity.State, this.state.serializeNBT());
     return result;
   }
 }
