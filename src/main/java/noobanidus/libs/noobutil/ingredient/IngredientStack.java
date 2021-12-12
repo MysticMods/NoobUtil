@@ -11,6 +11,7 @@ import net.minecraft.network.PacketBuffer;
 import net.minecraft.tags.ITag;
 import net.minecraft.util.IItemProvider;
 import noobanidus.libs.noobutil.NoobUtil;
+import noobanidus.libs.noobutil.reference.NBTIdentifiers;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -146,9 +147,9 @@ public class IngredientStack {
 
   public JsonObject serialize () {
     JsonObject result = new JsonObject();
-    result.add("ingredient", ingredient.toJson());
-    result.addProperty("count", this.count);
-    CompoundNBT.CODEC.encodeStart(JsonOps.INSTANCE, this.nbt).resultOrPartial(NoobUtil.logger::error).ifPresent((i) -> result.add("nbt", i));
+    result.add(NBTIdentifiers.Ingredient, ingredient.toJson());
+    result.addProperty(NBTIdentifiers.Count, this.count);
+    CompoundNBT.CODEC.encodeStart(JsonOps.INSTANCE, this.nbt).resultOrPartial(NoobUtil.logger::error).ifPresent((i) -> result.add(NBTIdentifiers.NBT, i));
     return result;
   }
 
@@ -158,9 +159,9 @@ public class IngredientStack {
       return EMPTY;
     }
 
-    Ingredient ing = Ingredient.fromJson(object.getAsJsonObject("ingredient"));
-    int count = object.get("count").getAsInt();
-    CompoundNBT tag = object.has("nbt") ? CompoundNBT.CODEC.parse(JsonOps.INSTANCE, object.getAsJsonObject("tag")).resultOrPartial(NoobUtil.logger::error).orElse(null) : null;
+    Ingredient ing = Ingredient.fromJson(object.getAsJsonObject(NBTIdentifiers.Ingredient));
+    int count = object.get(NBTIdentifiers.Count).getAsInt();
+    CompoundNBT tag = object.has(NBTIdentifiers.NBT) ? CompoundNBT.CODEC.parse(JsonOps.INSTANCE, object.getAsJsonObject(NBTIdentifiers.NBT)).resultOrPartial(NoobUtil.logger::error).orElse(null) : null;
     return new IngredientStack(ing, count, tag);
   }
 

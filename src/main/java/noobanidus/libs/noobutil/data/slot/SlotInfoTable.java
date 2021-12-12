@@ -3,6 +3,7 @@ package noobanidus.libs.noobutil.data.slot;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import net.minecraft.nbt.CompoundNBT;
+import noobanidus.libs.noobutil.reference.NBTIdentifiers;
 
 import javax.annotation.Nullable;
 import java.util.HashMap;
@@ -11,7 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SlotInfoTable {
-  public static Codec<SlotInfoTable> CODEC = RecordCodecBuilder.create((instance) -> instance.group(CompoundNBT.CODEC.listOf().fieldOf("info").forGetter(o -> o.info.values().stream().map(SlotInfoBase::getTag).collect(Collectors.toList()))).apply(instance, SlotInfoTable::new));
+  public static Codec<SlotInfoTable> CODEC = RecordCodecBuilder.create((instance) -> instance.group(CompoundNBT.CODEC.listOf().fieldOf(NBTIdentifiers.SlotInfoTable.InfoList).forGetter(o -> o.info.values().stream().map(SlotInfoBase::getTag).collect(Collectors.toList()))).apply(instance, SlotInfoTable::new));
 
   private final Map<String, SlotInfoBase<?>> info;
 
