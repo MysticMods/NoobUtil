@@ -53,14 +53,4 @@ public class StoredInventoryData<T extends ILargeInventory> extends WorldSavedDa
     }
     return compound;
   }
-
-  @Override
-  public void save(File fileIn) {
-    super.save(fileIn);
-  }
-
-  @Override
-  public void setDirty() {
-    super.setDirty();
-  }
 }
