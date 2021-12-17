@@ -3,7 +3,7 @@ package noobanidus.libs.noobutil.data.slot;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.nbt.INBT;
 import net.minecraftforge.common.util.Constants;
-import noobanidus.libs.noobutil.reference.NBTIdentifiers;
+import noobanidus.libs.noobutil.reference.NBTConstants;
 
 public abstract class SlotInfoBase<V> {
   protected final String key;
@@ -24,7 +24,7 @@ public abstract class SlotInfoBase<V> {
   protected CompoundNBT getBaseTag() {
     if (tag == null) {
       tag = new CompoundNBT();
-      tag.putString(NBTIdentifiers.Key, key);
+      tag.putString(NBTConstants.Key, key);
     }
     return tag;
   }
@@ -48,17 +48,17 @@ public abstract class SlotInfoBase<V> {
   public abstract V asObject();
 
   public static SlotInfoBase<?> fromNBT(CompoundNBT tag) {
-    String key = tag.getString(NBTIdentifiers.Key);
-    INBT value = tag.get(NBTIdentifiers.Value);
+    String key = tag.getString(NBTConstants.Key);
+    INBT value = tag.get(NBTConstants.Value);
     byte id = value.getId();
     if (id == Constants.NBT.TAG_STRING) {
-      return new StringDataEntry(key, tag.getString(NBTIdentifiers.Value));
+      return new StringDataEntry(key, tag.getString(NBTConstants.Value));
     } else if (id == Constants.NBT.TAG_INT) {
-      return new IntegerDataEntry(key, tag.getInt(NBTIdentifiers.Value));
+      return new IntegerDataEntry(key, tag.getInt(NBTConstants.Value));
     } else if (id == Constants.NBT.TAG_FLOAT) {
-      return new FloatDataEntry(key, tag.getFloat(NBTIdentifiers.Value));
+      return new FloatDataEntry(key, tag.getFloat(NBTConstants.Value));
     } else if (id == Constants.NBT.TAG_BYTE) {
-      return new BooleanDataEntry(key, tag.getBoolean(NBTIdentifiers.Value));
+      return new BooleanDataEntry(key, tag.getBoolean(NBTConstants.Value));
     } else {
       throw new RuntimeException("Invalid NBT tag stored in data entry: " + tag);
     }
@@ -81,7 +81,7 @@ public abstract class SlotInfoBase<V> {
     public CompoundNBT getTag() {
       if (tag == null) {
         tag = getBaseTag();
-        tag.putString(NBTIdentifiers.Value, value);
+        tag.putString(NBTConstants.Value, value);
       }
       return tag;
     }
@@ -114,7 +114,7 @@ public abstract class SlotInfoBase<V> {
     public CompoundNBT getTag() {
       if (tag == null) {
         tag = getBaseTag();
-        tag.putInt(NBTIdentifiers.Value, value);
+        tag.putInt(NBTConstants.Value, value);
       }
       return tag;
     }
@@ -147,7 +147,7 @@ public abstract class SlotInfoBase<V> {
     public CompoundNBT getTag() {
       if (tag == null) {
         tag = getBaseTag();
-        tag.putFloat(NBTIdentifiers.Value, value);
+        tag.putFloat(NBTConstants.Value, value);
       }
       return tag;
     }
@@ -180,7 +180,7 @@ public abstract class SlotInfoBase<V> {
     public CompoundNBT getTag() {
       if (tag == null) {
         tag = getBaseTag();
-        tag.putBoolean(NBTIdentifiers.Value, value);
+        tag.putBoolean(NBTConstants.Value, value);
       }
       return tag;
     }

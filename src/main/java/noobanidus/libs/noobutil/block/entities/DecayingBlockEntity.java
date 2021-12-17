@@ -6,7 +6,7 @@ import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
-import noobanidus.libs.noobutil.reference.NBTIdentifiers;
+import noobanidus.libs.noobutil.reference.NBTConstants;
 import noobanidus.libs.noobutil.type.LazyStateSupplier;
 
 public class DecayingBlockEntity extends TileEntity implements ITickableTileEntity {
@@ -32,16 +32,16 @@ public class DecayingBlockEntity extends TileEntity implements ITickableTileEnti
 
   @Override
   public void load(BlockState state, CompoundNBT tag) {
-    this.decay = tag.getInt(NBTIdentifiers.DecayingBlockEntity.Decay);
-    this.state = LazyStateSupplier.fromNBT(tag.getCompound(NBTIdentifiers.DecayingBlockEntity.State));
+    this.decay = tag.getInt(NBTConstants.DecayingBlockEntity.Decay);
+    this.state = LazyStateSupplier.fromNBT(tag.getCompound(NBTConstants.DecayingBlockEntity.State));
     super.load(state, tag);
   }
 
   @Override
   public CompoundNBT save(CompoundNBT pCompound) {
     CompoundNBT result = super.save(pCompound);
-    result.putInt(NBTIdentifiers.DecayingBlockEntity.Decay, this.decay);
-    result.put(NBTIdentifiers.DecayingBlockEntity.State, this.state.serializeNBT());
+    result.putInt(NBTConstants.DecayingBlockEntity.Decay, this.decay);
+    result.put(NBTConstants.DecayingBlockEntity.State, this.state.serializeNBT());
     return result;
   }
 }

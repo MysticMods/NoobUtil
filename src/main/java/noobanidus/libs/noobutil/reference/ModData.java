@@ -1,5 +1,7 @@
 package noobanidus.libs.noobutil.reference;
 
+import net.minecraft.util.ResourceLocation;
+
 public class ModData {
   private static String modid = null;
   private static String modIdentifier = null;
@@ -29,5 +31,9 @@ public class ModData {
   public static void setIdAndIdentifier (String modid, String modIdentifier) {
     setModid(modid);
     setModIdentifier(modIdentifier);
+  }
+
+  public static ResourceLocation getResourceLocation(String path) {
+    return new ResourceLocation(getModid(), path);
   }
 }

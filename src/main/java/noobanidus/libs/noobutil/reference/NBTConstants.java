@@ -1,6 +1,6 @@
 package noobanidus.libs.noobutil.reference;
 
-public interface NBTIdentifiers {
+public interface NBTConstants {
   String Value = "value";
   String Key = "key";
   String Ingredient = "ingredient";
