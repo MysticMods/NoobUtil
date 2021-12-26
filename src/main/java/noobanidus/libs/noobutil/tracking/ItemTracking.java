@@ -29,24 +29,24 @@ public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
   }
 
   @Nullable
-  public TrackingEntry trackingFor (ItemStack item) {
+  public TrackingEntry trackingFor(ItemStack item) {
     return trackingFor(item.getItem());
   }
 
   @Nullable
-  public TrackingEntry trackingFor (Item item) {
+  public TrackingEntry trackingFor(Item item) {
     return trackingMap.get(item);
   }
 
-  public void clear () {
+  public void clear() {
     trackingMap.clear();
   }
 
-  public void clear (ItemStack item) {
+  public void clear(ItemStack item) {
     clear(item.getItem());
   }
 
-  public void clear (Item item) {
+  public void clear(Item item) {
     TrackingEntry entry = trackingMap.get(item);
     if (entry != null) {
       entry.clear();
@@ -76,18 +76,18 @@ public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
       this.location = canonicalItem.getRegistryName();
     }
 
-    public void clear () {
+    public void clear() {
       base.clear();
       damageMap.clear();
       nbtMap.clear();
     }
 
-    public Iterator<ItemEntry> iterator () {
+    public Iterator<ItemEntry> iterator() {
       Queue<Iterator<ItemEntry>> queue = new ArrayDeque<>();
       queue.add(base.iterator());
       damageMap.values().forEach(o -> queue.add(o.iterator()));
       nbtMap.forEach(o -> queue.add(o.getEntries().iterator()));
-      return Iterators.concat(new AbstractIterator<Iterator<ItemEntry>> () {
+      return Iterators.concat(new AbstractIterator<Iterator<ItemEntry>>() {
         @Override
         protected Iterator<ItemEntry> computeNext() {
           return queue.isEmpty() ? endOfData() : queue.remove();
@@ -160,7 +160,7 @@ public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
       }
     }
 
-    public static TrackingEntry deserialize (PacketBuffer buffer) {
+    public static TrackingEntry deserialize(PacketBuffer buffer) {
       TrackingEntry entry = new TrackingEntry(Item.byId(buffer.readVarInt()));
       int baseCount = buffer.readVarInt();
       for (int i = 0; i < baseCount; i++) {
@@ -188,7 +188,7 @@ public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
       return entry;
     }
 
-    public void combine (TrackingEntry other) {
+    public void combine(TrackingEntry other) {
       this.base.addAll(other.base);
       for (Int2ObjectMap.Entry<Set<ItemEntry>> entry : other.damageMap.int2ObjectEntrySet()) {
         damageMap.computeIfAbsent(entry.getIntKey(), (k) -> new HashSet<>()).addAll(entry.getValue());
@@ -265,12 +265,11 @@ public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
       buffer.writeVarInt(getSlot());
     }
 
-    public static ItemEntry deserialize (PacketBuffer buffer, ItemStack canonicalStack) {
-      if (buffer.readBoolean()) {
-        return new ItemEntry(lastUUID, canonicalStack, buffer.readVarInt(), buffer.readVarInt());
-      } else {
-        return new ItemEntry(buffer.readUUID(), canonicalStack, buffer.readVarInt(), buffer.readVarInt());
+    public static ItemEntry deserialize(PacketBuffer buffer, ItemStack canonicalStack) {
+      if (!buffer.readBoolean()) {
+        lastUUID = buffer.readUUID();
       }
+      return new ItemEntry(lastUUID, canonicalStack, buffer.readVarInt(), buffer.readVarInt());
     }
   }
 
@@ -295,7 +294,7 @@ public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
       this.entries.add(entry);
     }
 
-    public void combine (NBTEntry entry) {
+    public void combine(NBTEntry entry) {
       if (ItemUtil.equalWithoutSize(getCanonicalStack(), entry.getCanonicalStack())) {
         this.entries.addAll(entry.getEntries());
       }
