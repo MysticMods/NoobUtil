@@ -15,6 +15,7 @@ import noobanidus.libs.noobutil.util.ItemUtil;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
   private static final Set<String> DAMAGE_SET = Sets.newHashSet("Damage");
@@ -139,20 +140,23 @@ public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
       buffer.writeVarInt(Item.getId(canonicalItem));
       buffer.writeVarInt(base.size());
       ItemEntry.lastUUID = null;
-      base.forEach(item -> item.serialize(buffer));
+      List<ItemEntry> sorted = base.stream().sorted(Comparator.comparing(ItemEntry::getIdentifier, UUID::compareTo)).collect(Collectors.toList());
+      sorted.forEach(item -> item.serialize(buffer));
       buffer.writeVarInt(damageMap.size());
       for (Int2ObjectMap.Entry<Set<ItemEntry>> entryMap : damageMap.int2ObjectEntrySet()) {
         buffer.writeVarInt(entryMap.getIntKey());
         buffer.writeVarInt(entryMap.getValue().size());
         ItemEntry.lastUUID = null;
-        entryMap.getValue().forEach(item -> item.serialize(buffer));
+        sorted = entryMap.getValue().stream().sorted(Comparator.comparing(ItemEntry::getIdentifier, UUID::compareTo)).collect(Collectors.toList());
+        sorted.forEach(item -> item.serialize(buffer));
       }
       buffer.writeVarInt(nbtMap.size());
       for (NBTEntry nbtEntry : nbtMap) {
         buffer.writeItem(nbtEntry.getCanonicalStack());
         buffer.writeVarInt(nbtEntry.getEntries().size());
         ItemEntry.lastUUID = null;
-        nbtEntry.getEntries().forEach(item -> item.serialize(buffer));
+        sorted = nbtEntry.getEntries().stream().sorted(Comparator.comparing(ItemEntry::getIdentifier, UUID::compareTo)).collect(Collectors.toList());
+        sorted.forEach(item -> item.serialize(buffer));
       }
     }
 
