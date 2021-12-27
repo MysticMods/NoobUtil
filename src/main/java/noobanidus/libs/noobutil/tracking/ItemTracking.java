@@ -61,6 +61,21 @@ public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
     }
   }
 
+  public static ItemTracking deserialize (PacketBuffer buffer) {
+    ItemTracking tracking = new ItemTracking();
+    int entryCount = buffer.readVarInt();
+    for (int i = 0; i < entryCount; i++){
+      TrackingEntry thisEntry = TrackingEntry.deserialize(buffer);
+      TrackingEntry existing = tracking.trackingMap.get(thisEntry.getCanonicalItem());
+      if (existing != null) {
+        existing.combine(thisEntry);
+      } else {
+        tracking.trackingMap.put(thisEntry.getCanonicalItem(), thisEntry);
+      }
+    }
+    return tracking;
+  }
+
   public static class TrackingEntry extends AbstractNetworkObject<PacketBuffer> implements Iterable<ItemEntry> {
     private final ResourceLocation location;
     private final Item canonicalItem;
