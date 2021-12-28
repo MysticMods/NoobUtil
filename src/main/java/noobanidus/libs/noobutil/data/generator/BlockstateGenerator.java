@@ -14,20 +14,13 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.ModelProvider;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import noobanidus.libs.noobutil.block.BaseBlocks;
+import noobanidus.libs.noobutil.reference.ModData;
 
 import java.util.Objects;
 import java.util.function.Supplier;
 
 @SuppressWarnings("unchecked")
 public class BlockstateGenerator {
-
-  // Helpers
-  protected static String MODID;
-
-  public static void setModid(String modid) {
-    MODID = modid;
-  }
-
   private static <T extends IForgeRegistryEntry<?>> String name(T block) {
     return Objects.requireNonNull(block.getRegistryName()).getPath();
   }
@@ -68,7 +61,7 @@ public class BlockstateGenerator {
   }
 
   public static <T extends Block> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> simpleBlockstate(String parent) {
-    return simpleBlockstate(new ResourceLocation(MODID, parent));
+    return simpleBlockstate(new ResourceLocation(ModData.getModid(), parent));
   }
 
   public static <T extends StairsBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> stairs(RegistryEntry<? extends Block> parent) {
@@ -113,7 +106,7 @@ public class BlockstateGenerator {
                 .getBuilder(name(ctx.getEntry()))
                 .parent(
                     p.models()
-                        .getExistingFile(new ResourceLocation(MODID, "wide_post")))
+                        .getExistingFile(new ResourceLocation(ModData.getModid(), "wide_post")))
                 .texture("wall", p.blockTexture(parent.get()))));
   }
 
@@ -126,7 +119,7 @@ public class BlockstateGenerator {
                     .getBuilder(name(ctx.getEntry()))
                     .parent(
                         p.models()
-                            .getExistingFile(new ResourceLocation(MODID, "narrow_post")))
+                            .getExistingFile(new ResourceLocation(ModData.getModid(), "narrow_post")))
                     .texture("wall", p.blockTexture(parent.get()))));
   }
 
@@ -216,8 +209,8 @@ public class BlockstateGenerator {
 
   public static <T extends Block> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> pillar(String sideName, String topName) {
     return (ctx, p) -> {
-      ResourceLocation side = new ResourceLocation(MODID, sideName);
-      ResourceLocation top = new ResourceLocation(MODID, topName);
+      ResourceLocation side = new ResourceLocation(ModData.getModid(), sideName);
+      ResourceLocation top = new ResourceLocation(ModData.getModid(), topName);
       ModelFile pillar = p.models().cubeColumn(name(ctx.getEntry()), side, top);
       p.getVariantBuilder(ctx.getEntry()).forAllStates(state -> ConfiguredModel.builder().modelFile(pillar).build());
     };
