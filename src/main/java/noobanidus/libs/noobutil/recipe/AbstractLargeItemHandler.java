@@ -59,8 +59,11 @@ public abstract class AbstractLargeItemHandler implements ILargeInventory {
   @Override
   public void setStackInSlot(int slot, @Nonnull ItemStack stack) {
     validateSlotIndex(slot);
-    this.stacks.set(slot, new ItemStackEntry(stack));
-    onContentsChanged(slot);
+    ItemStack inSlot = this.stacks.get(slot).getStackOriginal();
+    if (!ItemStack.isSame(inSlot, stack)) {
+      this.stacks.set(slot, new ItemStackEntry(stack));
+      onContentsChanged(slot);
+    }
   }
 
   @Nonnull
