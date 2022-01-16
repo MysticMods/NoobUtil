@@ -15,7 +15,7 @@ public interface ILargeInventory extends IItemHandlerModifiable {
 
   long getCountInSlot(int slot);
 
-  void enlarge(int size);
+  void resize(int size);
 
   CompoundNBT serialize();
 

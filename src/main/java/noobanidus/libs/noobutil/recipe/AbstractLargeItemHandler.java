@@ -4,7 +4,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundNBT;
 import net.minecraft.util.NonNullList;
 import net.minecraftforge.items.ItemHandlerHelper;
-import noobanidus.libs.noobutil.data.server.StoredInventoryData;
 import noobanidus.libs.noobutil.inventory.IInventoryListener;
 import noobanidus.libs.noobutil.inventory.ILargeInventory;
 import noobanidus.libs.noobutil.type.ItemStackEntry;
@@ -32,9 +31,9 @@ public abstract class AbstractLargeItemHandler implements ILargeInventory {
   }
 
   @Override
-  public void enlarge(int size) {
+  public void resize(int size) {
     if (size < stacks.size()) {
-      throw new RuntimeException("Cannot reduce the size of an ArcaneItemHandler, currently contains: " + stacks.size() + " slots, cannot reduce to " + size + " slots");
+      throw new RuntimeException("Cannot reduce the size of an AbstractLargeItemHandler, currently contains: " + stacks.size() + " slots, cannot reduce to " + size + " slots");
     } else if (size == stacks.size()) {
       return;
     } else {
@@ -203,7 +202,7 @@ public abstract class AbstractLargeItemHandler implements ILargeInventory {
   @Override
   public void deserialize(CompoundNBT result) {
     int size = result.getInt("slots");
-    enlarge(size);
+    resize(size);
     for (int i = 0; i < size; i++) {
       ItemStackEntry entry = ItemStackEntry.deserialize(result.get("" + i));
       stacks.set(i, entry);
