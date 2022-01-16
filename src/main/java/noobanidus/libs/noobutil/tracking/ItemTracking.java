@@ -76,6 +76,15 @@ public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
     return tracking;
   }
 
+  public ItemTracking combine (ItemTracking tracking) {
+    for (Map.Entry<Item, TrackingEntry> entry : tracking.trackingMap.entrySet()) {
+      TrackingEntry mine = this.trackingMap.computeIfAbsent(entry.getKey(), TrackingEntry::new);
+      mine.combine(entry.getValue());
+    }
+
+    return this;
+  }
+
   public static class TrackingEntry extends AbstractNetworkObject<PacketBuffer> implements Iterable<ItemEntry> {
     private final ResourceLocation location;
     private final Item canonicalItem;
