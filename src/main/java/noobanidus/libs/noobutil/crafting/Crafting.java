@@ -1,29 +1,21 @@
 package noobanidus.libs.noobutil.crafting;
 
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.items.IItemHandler;
 import noobanidus.libs.noobutil.block.entities.IReferentialBlockEntity;
-import noobanidus.libs.noobutil.container.IPartitionedPlayerContainer;
 import noobanidus.libs.noobutil.inventory.IInvWrapper;
-import noobanidus.libs.noobutil.inventory.ILargeInventory;
 
-import java.util.List;
+import javax.annotation.Nullable;
 
-public abstract class Crafting<H extends ILargeInventory, C extends Container & IPartitionedPlayerContainer, T extends TileEntity & IReferentialBlockEntity> extends IInvWrapper<H> implements ICrafter<H, C, T> {
-  private final C container;
-  private final T blockentity;
+public abstract class Crafting<H extends IItemHandler, T extends TileEntity & IReferentialBlockEntity> extends IInvWrapper<H> implements ICrafting<H, T> {
+  protected final T blockentity;
+  protected final PlayerEntity player;
 
-  public Crafting(C container, T blockentity, H handler) {
+  public Crafting(T blockentity, H handler, @Nullable PlayerEntity player) {
     super(handler);
-    this.container = container;
     this.blockentity = blockentity;
-  }
-
-  @Override
-  public C getContainer() {
-    return container;
+    this.player = player;
   }
 
   @Override
@@ -32,13 +24,9 @@ public abstract class Crafting<H extends ILargeInventory, C extends Container & 
   }
 
   @Override
+  @Nullable
   public PlayerEntity getPlayer() {
-    return container.getPlayer();
-  }
-
-  @Override
-  public List<Slot> getCombinedIngredientSlots() {
-    return container.getCombinedIngredientSlots();
+    return player;
   }
 
   @Override

@@ -2,7 +2,6 @@ package noobanidus.libs.noobutil.crafting;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.container.Container;
 import net.minecraft.inventory.container.Slot;
 import net.minecraft.item.ItemStack;
@@ -10,13 +9,11 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.NonNullList;
 import noobanidus.libs.noobutil.block.entities.IReferentialBlockEntity;
 import noobanidus.libs.noobutil.container.IPartitionedPlayerContainer;
-import noobanidus.libs.noobutil.inventory.IIInvWrapper;
 import noobanidus.libs.noobutil.inventory.ILargeInventory;
 
 import java.util.List;
-import java.util.UUID;
 
-public interface ICrafter<H extends ILargeInventory, C extends Container & IPartitionedPlayerContainer, T extends TileEntity & IReferentialBlockEntity> extends IInventory, IIInvWrapper<H> {
+public interface IContainerCrafting<H extends ILargeInventory, C extends Container & IPartitionedPlayerContainer, T extends TileEntity & IReferentialBlockEntity> extends ICrafting<H, T> {
 
   C getContainer();
 
