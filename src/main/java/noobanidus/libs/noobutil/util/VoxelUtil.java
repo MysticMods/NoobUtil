@@ -14,15 +14,13 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.UnaryOperator;
 
-/**
- * Functions for VoxelShape creation and manipulation
- */
+
 @SuppressWarnings({"unused", "Duplicates", "WeakerAccess"})
 public class VoxelUtil {
   private static final Vec3 fromOrigin = new Vec3(-0.5, -0.5, -0.5);
 
   /**
-   * @param base   The base voxel shape that all additional shapes will be {@link VoxelShapes ::or VoxelShapes::or'd} into.
+   * @param base   The base voxel shape that all additional shapes will be {@link VoxelShape ::or VoxelShape::or'd} into.
    * @param shapes Additional shapes to be combined into the main shape.
    * @return The combination of base and each item contained within `shapes`.
    */
@@ -38,7 +36,7 @@ public class VoxelUtil {
 
   /**
    * @param base   6 doubles defining the uppermost and lowermost points of a cube, that all additional shapes will
-   *               be {@link VoxelShapes ::or VoxelShapes::or'd} into.
+   *               be {@link VoxelShape ::or VoxelShape::or'd} into.
    * @param shapes Additional shapes defined as an array of 6 doubles, to be combined into the main shape.
    * @return The combination of the base and each subsequent shape.
    */
@@ -81,11 +79,11 @@ public class VoxelUtil {
   }
 
   /**
-   * Rotates an {@link AxisAlignedBB} to a specific side, similar to how the block states rotate models.
+   * Rotates an {@link AABB} to a specific side, similar to how the block states rotate models.
    *
-   * @param box  The {@link AxisAlignedBB} to rotate
+   * @param box  The {@link AABB} to rotate
    * @param side The side to rotate it to.
-   * @return The rotated {@link AxisAlignedBB}
+   * @return The rotated {@link AABB}
    */
   @SuppressWarnings("SuspiciousNameCombination")
   public static AABB rotate(AABB box, Direction side) {
@@ -107,11 +105,11 @@ public class VoxelUtil {
   }
 
   /**
-   * Rotates an {@link AxisAlignedBB} to a according to a specific rotation.
+   * Rotates an {@link AABB} to a according to a specific rotation.
    *
-   * @param box      The {@link AxisAlignedBB} to rotate
+   * @param box      The {@link AABB} to rotate
    * @param rotation The rotation we are performing.
-   * @return The rotated {@link AxisAlignedBB}
+   * @return The rotated {@link AABB}
    */
   public static AABB rotate(AABB box, Rotation rotation) {
     switch (rotation) {
@@ -128,11 +126,11 @@ public class VoxelUtil {
   }
 
   /**
-   * Rotates an {@link AxisAlignedBB} to a specific side horizontally. This is a default most common rotation setup as to {@link #rotate(AxisAlignedBB, Rotation)}
+   * Rotates an {@link AABB} to a specific side horizontally. This is a default most common rotation setup as to {@link #rotate(AABB, Rotation)}
    *
-   * @param box  The {@link AxisAlignedBB} to rotate
+   * @param box  The {@link AABB} to rotate
    * @param side The side to rotate it to.
-   * @return The rotated {@link AxisAlignedBB}
+   * @return The rotated {@link AABB}
    */
   public static AABB rotateHorizontal(AABB box, Direction side) {
     switch (side) {
@@ -182,10 +180,10 @@ public class VoxelUtil {
   }
 
   /**
-   * Rotates a {@link VoxelShape} using a specific transformation function for each {@link AxisAlignedBB} in the {@link VoxelShape}.
+   * Rotates a {@link VoxelShape} using a specific transformation function for each {@link AABB} in the {@link VoxelShape}.
    *
    * @param shape          The {@link VoxelShape} to rotate
-   * @param rotateFunction The transformation function to apply to each {@link AxisAlignedBB} in the {@link VoxelShape}.
+   * @param rotateFunction The transformation function to apply to each {@link AABB} in the {@link VoxelShape}.
    * @return The rotated {@link VoxelShape}
    */
   public static VoxelShape rotate(VoxelShape shape, UnaryOperator<AABB> rotateFunction) {
@@ -235,11 +233,11 @@ public class VoxelUtil {
   }
 
   /**
-   * Used for mass combining shapes using a specific {@link IBooleanFunction} and a given start shape.
+   * Used for mass combining shapes using a specific {@link BooleanOp} and a given start shape.
    *
    * @param initial  The {@link VoxelShape} to start with
-   * @param function The {@link IBooleanFunction} to perform
-   * @param simplify True if the returned shape should run {@link VoxelShape#simplify()}, False otherwise
+   * @param function The {@link BooleanOp} to perform
+   * @param simplify True if the returned shape should run {@link VoxelShape#optimize()}, False otherwise
    * @param shapes   The collection of {@link VoxelShape}s to include
    * @return A {@link VoxelShape} based on the input parameters.
    * @implNote We do not do any simplification until after combining all the shapes, and then only if the {@code simplify} is True. This is because there is a
@@ -254,11 +252,11 @@ public class VoxelUtil {
   }
 
   /**
-   * Used for mass combining shapes using a specific {@link IBooleanFunction} and a given start shape.
+   * Used for mass combining shapes using a specific {@link BooleanOp} and a given start shape.
    *
    * @param initial  The {@link VoxelShape} to start with
-   * @param function The {@link IBooleanFunction} to perform
-   * @param simplify True if the returned shape should run {@link VoxelShape#simplify()}, False otherwise
+   * @param function The {@link BooleanOp} to perform
+   * @param simplify True if the returned shape should run {@link VoxelShape#optimize()}, False otherwise
    * @param shapes   The list of {@link VoxelShape}s to include
    * @return A {@link VoxelShape} based on the input parameters.
    * @implNote We do not do any simplification until after combining all the shapes, and then only if the {@code simplify} is True. This is because there is a
