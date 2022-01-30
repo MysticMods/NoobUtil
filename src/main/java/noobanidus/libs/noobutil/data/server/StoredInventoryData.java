@@ -1,8 +1,9 @@
 package noobanidus.libs.noobutil.data.server;
 
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
+import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.level.saveddata.SavedData;
-import net.minecraftforge.common.util.Constants;
 import noobanidus.libs.noobutil.inventory.ILargeInventory;
 import noobanidus.libs.noobutil.reference.ModData;
 import noobanidus.libs.noobutil.reference.NBTConstants;
@@ -20,7 +21,6 @@ public class StoredInventoryData<T extends ILargeInventory> extends SavedData {
   }
 
   public StoredInventoryData(UUID id, int size, IntFunction<T> builder) {
-    super(ID(id));
     this.id = id;
     this.size = size;
     this.inventory = builder.apply(this.size);
@@ -34,11 +34,11 @@ public class StoredInventoryData<T extends ILargeInventory> extends SavedData {
     return id;
   }
 
-  @Override
+  // TODO:
   public void load(CompoundTag nbt) {
     this.id = nbt.getUUID(NBTConstants.SavedInventoryData.Id);
     this.size = nbt.getInt(NBTConstants.SavedInventoryData.Size);
-    if (nbt.contains(NBTConstants.SavedInventoryData.Inventory, Constants.NBT.TAG_COMPOUND)) {
+    if (nbt.contains(NBTConstants.SavedInventoryData.Inventory, Tag.TAG_COMPOUND)) {
       this.inventory.deserialize(nbt.getCompound(NBTConstants.SavedInventoryData.Inventory));
     }
   }

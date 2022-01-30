@@ -2,7 +2,6 @@ package noobanidus.libs.noobutil.data.slot;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
-import net.minecraftforge.common.util.Constants;
 import noobanidus.libs.noobutil.reference.NBTConstants;
 
 public abstract class SlotInfoBase<V> {
@@ -51,13 +50,13 @@ public abstract class SlotInfoBase<V> {
     String key = tag.getString(NBTConstants.Key);
     Tag value = tag.get(NBTConstants.Value);
     byte id = value.getId();
-    if (id == Constants.NBT.TAG_STRING) {
+    if (id == Tag.TAG_STRING) {
       return new StringDataEntry(key, tag.getString(NBTConstants.Value));
-    } else if (id == Constants.NBT.TAG_INT) {
+    } else if (id == Tag.TAG_INT) {
       return new IntegerDataEntry(key, tag.getInt(NBTConstants.Value));
-    } else if (id == Constants.NBT.TAG_FLOAT) {
+    } else if (id == Tag.TAG_FLOAT) {
       return new FloatDataEntry(key, tag.getFloat(NBTConstants.Value));
-    } else if (id == Constants.NBT.TAG_BYTE) {
+    } else if (id == Tag.TAG_BYTE) {
       return new BooleanDataEntry(key, tag.getBoolean(NBTConstants.Value));
     } else {
       throw new RuntimeException("Invalid NBT tag stored in data entry: " + tag);

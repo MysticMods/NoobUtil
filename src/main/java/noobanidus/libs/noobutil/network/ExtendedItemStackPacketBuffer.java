@@ -37,19 +37,7 @@ public class ExtendedItemStackPacketBuffer extends FriendlyByteBuf {
         nbttagcompound = stack.getItem().getShareTag(stack);
       }
 
-      writeNBT(nbttagcompound);
-    }
-  }
-
-  public void writeNBT(@Nullable CompoundTag nbt) {
-    if (nbt == null) {
-      writeByte(0);
-    } else {
-      try {
-        NbtIo.write(nbt, new ByteBufOutputStream(this.getBuffer()));
-      } catch (IOException ioexception) {
-        throw new EncoderException(ioexception);
-      }
+      writeNbt(nbttagcompound);
     }
   }
 
@@ -61,24 +49,8 @@ public class ExtendedItemStackPacketBuffer extends FriendlyByteBuf {
     } else {
       int j = readInt();
       ItemStack itemstack = new ItemStack(Item.byId(i), j);
-      itemstack.setTag(readNBT());
+      itemstack.setTag(readNbt());
       return itemstack;
-    }
-  }
-
-  public CompoundTag readNBT() {
-    int i = readerIndex();
-    byte b0 = readByte();
-
-    if (b0 == 0) {
-      return null;
-    } else {
-      readerIndex(i);
-      try {
-        return NbtIo.read(new ByteBufInputStream(getBuffer()), new NbtAccounter(2097152L));
-      } catch (IOException ioexception) {
-        throw new EncoderException(ioexception);
-      }
     }
   }
 }

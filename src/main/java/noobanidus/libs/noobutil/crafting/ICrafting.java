@@ -24,7 +24,7 @@ public interface ICrafting<H extends IItemHandler, T extends BlockEntity & IRefe
       return null;
     }
 
-    return player.inventory;
+    return player.getInventory();
   }
 
   @Override

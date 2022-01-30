@@ -1,22 +1,20 @@
 package noobanidus.libs.noobutil.material;
 
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.Material;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ArmorMaterial;
-import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.common.ToolType;
 import noobanidus.libs.noobutil.config.IArmorConfig;
-import noobanidus.libs.noobutil.item.WeaponType;
 import noobanidus.libs.noobutil.ingredient.LazyIngredient;
+import noobanidus.libs.noobutil.item.WeaponType;
 
 import javax.annotation.Nonnull;
 import java.util.Arrays;
@@ -205,7 +203,7 @@ public class MaterialType {
     return name;
   }
 
-  public String getIngotName () {
+  public String getIngotName() {
     return name + "_ingot";
   }
 
@@ -254,16 +252,16 @@ public class MaterialType {
     return this;
   }
 
-  public Block.Properties getBlockProps (Block.Properties props) {
-    return props.strength(5.0F, 6.0F).sound(SoundType.METAL).harvestTool(ToolType.PICKAXE).harvestLevel(1);
+  public Block.Properties getBlockProps(Block.Properties props) {
+    return props.strength(5.0F, 6.0F).sound(SoundType.METAL)/*.harvestTool(ToolType.PICKAXE).harvestLevel(1)*/;
   }
 
   public Supplier<Block.Properties> getBlockProps() {
     return () -> getBlockProps(Block.Properties.of(Material.METAL));
   }
 
-  public Block.Properties getOreBlockProperties (Block.Properties props) {
-    return props.strength(3.0f, 3.0f).requiresCorrectToolForDrops().harvestTool(ToolType.PICKAXE).harvestLevel(getHarvestLevel() - 1);
+  public Block.Properties getOreBlockProperties(Block.Properties props) {
+    return props.strength(3.0f, 3.0f).requiresCorrectToolForDrops()/*.harvestTool(ToolType.PICKAXE).harvestLevel(getHarvestLevel() - 1)*/;
   }
 
   public Supplier<Block.Properties> getOreBlockProperties() {
@@ -298,7 +296,7 @@ public class MaterialType {
     return name + "_nugget";
   }
 
-  public class ArmorMaterial implements ArmorMaterial {
+  public class ArmorMaterial implements net.minecraft.world.item.ArmorMaterial {
     @Override
     public int getDurabilityForSlot(EquipmentSlot slotIn) {
       return material == null ? MAX_DAMAGE_ARRAY[slotIn.getIndex()] * maxDamageFactor : material.getDurabilityForSlot(slotIn);

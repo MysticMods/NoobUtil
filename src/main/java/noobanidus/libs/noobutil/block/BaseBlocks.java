@@ -1,6 +1,7 @@
 package noobanidus.libs.noobutil.block;
 
-import net.minecraft.block.AbstractFurnaceBlock;
+import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.grower.AbstractTreeGrower;
@@ -61,14 +62,9 @@ public class BaseBlocks {
     private final int maxXP;
 
     public OreBlock(Properties props, int minXP, int maxXP) {
-      super(props);
+      super(props, UniformInt.of(minXP, maxXP));
       this.minXP = minXP;
       this.maxXP = maxXP;
-    }
-
-    @Override
-    protected int xpOnDrop(Random rand) {
-      return Mth.nextInt(rand, minXP, maxXP);
     }
   }
 

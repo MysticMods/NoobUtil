@@ -1,9 +1,9 @@
 package noobanidus.libs.noobutil.item;
 
 import com.google.common.collect.Sets;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.item.*;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
@@ -82,11 +82,9 @@ public class BaseItems {
   }
 
   public static class KnifeItem extends DiggerItem {
-    public static Set<Block> EFFECTIVE_BLOCKS = Sets.newHashSet(Blocks.ACACIA_LOG, Blocks.BIRCH_LOG, Blocks.DARK_OAK_LOG, Blocks.JUNGLE_LOG, Blocks.OAK_LOG, Blocks.SPRUCE_LOG);
-
     // TODO rework knives to strip logs of bark with right click, or drop bark by mining it
     public KnifeItem(Tier tier, float attackDamage, float attackSpeed, Properties props) {
-      super(attackDamage, attackSpeed, tier, EFFECTIVE_BLOCKS, props);
+      super(attackDamage, attackSpeed, tier, BlockTags.LOGS, props);
     }
   }
 

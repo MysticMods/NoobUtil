@@ -2,8 +2,14 @@ package noobanidus.libs.noobutil.data.generator;
 
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateRecipeProvider;
+import com.tterrag.registrate.util.DataIngredient;
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
+import net.minecraft.advancements.critereon.EntityPredicate;
+import net.minecraft.advancements.critereon.InventoryChangeTrigger;
+import net.minecraft.advancements.critereon.ItemPredicate;
+import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.core.Registry;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.data.*;
 import net.minecraft.world.item.Item;
@@ -48,7 +54,7 @@ public class RecipeGenerator {
   }
 
   public ResourceLocation getId(Tag.Named<Item> tag) {
-    return SerializationTags.getInstance().getItems().getId(tag);
+    return SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getId(tag);
   }
 
   public <T extends Item> NonNullBiConsumer<DataGenContext<Item, T>, RegistrateRecipeProvider> storage(Supplier<RegistryEntry<Block>> block, Supplier<RegistryEntry<Item>> ingot, Tag.Named<Item> blockTag, Tag.Named<Item> ingotTag, @Nullable Tag.Named<Item> oreTag, @Nullable Supplier<RegistryEntry<Item>> nugget, @Nullable Tag.Named<Item> nuggetTag, @Nullable Tag.Named<Item> dustTag) {
@@ -60,12 +66,12 @@ public class RecipeGenerator {
           .pattern("###")
           .pattern("###")
           .define('#', ingotTag)
-          .unlockedBy("has_at_least_9_" + safeName(getId(ingotTag)), p.hasItem(ingotTag))
+          .unlockedBy("has_at_least_9_" + safeName(getId(ingotTag)), DataIngredient.tag(ingotTag).getCritereon(p))
           .save(p, rl(safeName(getId(ingotTag)) + "_to_storage_block"));
       // Block to ingot
       ShapelessRecipeBuilder.shapeless(ingot.get().get(), 9)
           .requires(blockTag)
-          .unlockedBy("has_block_" + safeName(getId(blockTag)), p.hasItem(blockTag))
+          .unlockedBy("has_block_" + safeName(getId(blockTag)), DataIngredient.tag(blockTag).getCritereon(p))
           .save(p, rl(safeName(getId(blockTag)) + "_to_9_ingots"));
       if (oreTag != null) {
         // Ore smelting
@@ -77,11 +83,11 @@ public class RecipeGenerator {
             .pattern("###")
             .pattern("###")
             .define('#', nuggetTag)
-            .unlockedBy("has_at_least_9_" + safeName(getId(nuggetTag)), p.hasItem(nuggetTag))
+            .unlockedBy("has_at_least_9_" + safeName(getId(nuggetTag)), DataIngredient.tag(nuggetTag).getCritereon(p))
             .save(p, rl(safeName(getId(nuggetTag)) + "_to_ingot"));
         ShapelessRecipeBuilder.shapeless(Objects.requireNonNull(nugget).get().get(), 9)
             .requires(ingotTag)
-            .unlockedBy("has_ingot_" + safeName(getId(ingotTag)), p.hasItem(ingotTag))
+            .unlockedBy("has_ingot_" + safeName(getId(ingotTag)), DataIngredient.tag(ingotTag).getCritereon(p))
             .save(p, rl(safeName(getId(ingotTag)) + "_to_9_nuggets"));
       }
       if (dustTag != null) {
@@ -90,65 +96,77 @@ public class RecipeGenerator {
     };
   }
 
+  protected static InventoryChangeTrigger.TriggerInstance inventoryTrigger(ItemPredicate... pPredicates) {
+    return new InventoryChangeTrigger.TriggerInstance(EntityPredicate.Composite.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, pPredicates);
+  }
+
+  protected static InventoryChangeTrigger.TriggerInstance has(Tag<Item> pTag) {
+    return inventoryTrigger(ItemPredicate.Builder.item().of(pTag).build());
+  }
+
+  protected static InventoryChangeTrigger.TriggerInstance has(ItemLike pItemLike) {
+    return inventoryTrigger(ItemPredicate.Builder.item().of(pItemLike).build());
+  }
+
   public <T extends ItemLike & IForgeRegistryEntry<?>> void ore(Tag.Named<Item> source, Supplier<T> result, float xp, Consumer<FinishedRecipe> consumer) {
-    SimpleCookingRecipeBuilder.smelting(Ingredient.of(source), result.get(), xp, 200).unlockedBy("has_" + safeName(getId(source)), RegistrateRecipeProvider.hasItem(source)).save(consumer, rl(safeId(result.get()) + "_from_smelting"));
-    SimpleCookingRecipeBuilder.blasting(Ingredient.of(source), result.get(), xp, 100).unlockedBy("has_" + safeName(getId(source)), RegistrateRecipeProvider.hasItem(source)).save(consumer, rl(safeId(result.get()) + "_from_blasting"));
+    SimpleCookingRecipeBuilder.smelting(Ingredient.of(source), result.get(), xp, 200).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer, rl(safeId(result.get()) + "_from_smelting"));
+    SimpleCookingRecipeBuilder.blasting(Ingredient.of(source), result.get(), xp, 100).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer, rl(safeId(result.get()) + "_from_blasting"));
   }
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> void dust(Tag.Named<Item> source, Supplier<T> result, float xp, Consumer<FinishedRecipe> consumer) {
-    SimpleCookingRecipeBuilder.smelting(Ingredient.of(source), result.get(), xp, 200).unlockedBy("has_" + safeName(getId(source)), RegistrateRecipeProvider.hasItem(source)).save(consumer, rl(safeId(result.get()) + "_from_smelting_dust"));
-    SimpleCookingRecipeBuilder.blasting(Ingredient.of(source), result.get(), xp, 100).unlockedBy("has_" + safeName(getId(source)), RegistrateRecipeProvider.hasItem(source)).save(consumer, rl(safeId(result.get()) + "_from_blasting_dust"));
+    SimpleCookingRecipeBuilder.smelting(Ingredient.of(source), result.get(), xp, 200).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer, rl(safeId(result.get()) + "_from_smelting_dust"));
+    SimpleCookingRecipeBuilder.blasting(Ingredient.of(source), result.get(), xp, 100).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer, rl(safeId(result.get()) + "_from_blasting_dust"));
   }
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> void recycle(Supplier<? extends T> source, Supplier<? extends T> result, float xp, Consumer<FinishedRecipe> consumer) {
     SimpleCookingRecipeBuilder.smelting(Ingredient.of(source.get()), result.get(), xp, 200)
-        .unlockedBy("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get()))
+        .unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get()))
         .save(consumer, safeId(result.get()) + "_from_smelting");
     SimpleCookingRecipeBuilder.blasting(Ingredient.of(source.get()), result.get(), xp, 100)
-        .unlockedBy("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get()))
+        .unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get()))
         .save(consumer, safeId(result.get()) + "_from_blasting");
   }
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> void recycle(Supplier<? extends T> source, Supplier<? extends T> result, float xp, String namespace, Consumer<FinishedRecipe> consumer) {
     SimpleCookingRecipeBuilder.smelting(Ingredient.of(source.get()), result.get(), xp, 200)
-        .unlockedBy("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get()))
+        .unlockedBy("has_" + safeName(source.get().getRegistryName()),has(source.get()))
         .save(consumer, new ResourceLocation(namespace, safeName(result.get()) + "_from_smelting_" + safeName(source.get())));
     SimpleCookingRecipeBuilder.blasting(Ingredient.of(source.get()), result.get(), xp, 100)
-        .unlockedBy("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get()))
+        .unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get()))
         .save(consumer, new ResourceLocation(namespace, safeName(result.get()) + "_from_blasting_" + safeName(source.get())));
   }
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> void recycle(Tag.Named<Item> tag, Supplier<? extends T> result, float xp, Consumer<FinishedRecipe> consumer) {
     SimpleCookingRecipeBuilder.smelting(Ingredient.of(tag), result.get(), xp, 200)
-        .unlockedBy("has_" + safeName(result.get().getRegistryName()), RegistrateRecipeProvider.hasItem(result.get()))
+        .unlockedBy("has_" + safeName(result.get().getRegistryName()), has(result.get()))
         .save(consumer, safeId(result.get()) + "_from_smelting");
     SimpleCookingRecipeBuilder.blasting(Ingredient.of(tag), result.get(), xp, 100)
-        .unlockedBy("has_" + safeName(result.get().getRegistryName()), RegistrateRecipeProvider.hasItem(result.get()))
+        .unlockedBy("has_" + safeName(result.get().getRegistryName()), has(result.get()))
         .save(consumer, safeId(result.get()) + "_from_blasting");
   }
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> void food(Supplier<? extends T> source, Supplier<? extends T> result, float xp, Consumer<FinishedRecipe> consumer) {
-    SimpleCookingRecipeBuilder.smelting(Ingredient.of(source.get()), result.get(), xp, 200).unlockedBy("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get())).save(consumer);
-    SimpleCookingRecipeBuilder.cooking(Ingredient.of(source.get()), result.get(), xp, 100, RecipeSerializer.SMOKING_RECIPE).unlockedBy("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get())).save(consumer, safeId(result.get()) + "_from_smoker");
-    SimpleCookingRecipeBuilder.cooking(Ingredient.of(source.get()), result.get(), xp, 600, RecipeSerializer.CAMPFIRE_COOKING_RECIPE).unlockedBy("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get())).save(consumer, safeId(result.get()) + "_from_campfire");
+    SimpleCookingRecipeBuilder.smelting(Ingredient.of(source.get()), result.get(), xp, 200).unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get())).save(consumer);
+    SimpleCookingRecipeBuilder.cooking(Ingredient.of(source.get()), result.get(), xp, 100, RecipeSerializer.SMOKING_RECIPE).unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get())).save(consumer, safeId(result.get()) + "_from_smoker");
+    SimpleCookingRecipeBuilder.cooking(Ingredient.of(source.get()), result.get(), xp, 600, RecipeSerializer.CAMPFIRE_COOKING_RECIPE).unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get())).save(consumer, safeId(result.get()) + "_from_campfire");
   }
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> void food(Tag.Named<Item> source, Supplier<? extends T> result, float xp, Consumer<FinishedRecipe> consumer) {
-    SimpleCookingRecipeBuilder.smelting(Ingredient.of(source), result.get(), xp, 200).unlockedBy("has_" + safeName(getId(source)), RegistrateRecipeProvider.hasItem(source)).save(consumer);
-    SimpleCookingRecipeBuilder.cooking(Ingredient.of(source), result.get(), xp, 100, RecipeSerializer.SMOKING_RECIPE).unlockedBy("has_" + safeName(getId(source)), RegistrateRecipeProvider.hasItem(source)).save(consumer, safeId(result.get()) + "_from_smoker");
-    SimpleCookingRecipeBuilder.cooking(Ingredient.of(source), result.get(), xp, 600, RecipeSerializer.CAMPFIRE_COOKING_RECIPE).unlockedBy("has_" + safeName(getId(source)), RegistrateRecipeProvider.hasItem(source)).save(consumer, safeId(result.get()) + "_from_campfire");
+    SimpleCookingRecipeBuilder.smelting(Ingredient.of(source), result.get(), xp, 200).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer);
+    SimpleCookingRecipeBuilder.cooking(Ingredient.of(source), result.get(), xp, 100, RecipeSerializer.SMOKING_RECIPE).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer, safeId(result.get()) + "_from_smoker");
+    SimpleCookingRecipeBuilder.cooking(Ingredient.of(source), result.get(), xp, 600, RecipeSerializer.CAMPFIRE_COOKING_RECIPE).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer, safeId(result.get()) + "_from_campfire");
   }
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> void smelting(Supplier<? extends T> source, Supplier<? extends T> result, float xp, boolean blast, Consumer<FinishedRecipe> consumer) {
-    SimpleCookingRecipeBuilder.smelting(Ingredient.of(source.get()), result.get(), xp, 200).unlockedBy("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get())).save(consumer, safeId(result.get()) + "_from_smelting");
+    SimpleCookingRecipeBuilder.smelting(Ingredient.of(source.get()), result.get(), xp, 200).unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get())).save(consumer, safeId(result.get()) + "_from_smelting");
     if (blast) {
-      SimpleCookingRecipeBuilder.blasting(Ingredient.of(source.get()), result.get(), xp, 100).unlockedBy("has_" + safeName(source.get().getRegistryName()), RegistrateRecipeProvider.hasItem(source.get())).save(consumer, safeId(result.get()) + "_from_blasting");
+      SimpleCookingRecipeBuilder.blasting(Ingredient.of(source.get()), result.get(), xp, 100).unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get())).save(consumer, safeId(result.get()) + "_from_blasting");
     }
   }
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> void storage(Supplier<? extends T> input, Supplier<? extends T> output, Consumer<FinishedRecipe> consumer) {
-    ShapedRecipeBuilder.shaped(output.get()).pattern("###").pattern("###").pattern("###").define('#', input.get()).unlockedBy("has_at_least_9_" + safeName(input.get()), RegistrateRecipeProvider.hasItem(input.get())).save(consumer);
-    ShapelessRecipeBuilder.shapeless(input.get(), 9).requires(output.get()).unlockedBy("has_" + safeName(output.get()), RegistrateRecipeProvider.hasItem(output.get())).save(consumer, safeId(input.get()) + "_from_" + safeName(output.get()));
+    ShapedRecipeBuilder.shaped(output.get()).pattern("###").pattern("###").pattern("###").define('#', input.get()).unlockedBy("has_at_least_9_" + safeName(input.get()), has(input.get())).save(consumer);
+    ShapelessRecipeBuilder.shapeless(input.get(), 9).requires(output.get()).unlockedBy("has_" + safeName(output.get()), has(output.get())).save(consumer, safeId(input.get()) + "_from_" + safeName(output.get()));
   }
 
   public Item getModElement(Tag.Named<Item> input) {
@@ -166,12 +184,12 @@ public class RecipeGenerator {
     ShapedRecipeBuilder.shaped(output.get())
         .pattern("###")
         .pattern("###")
-        .pattern("###").define('#', input).unlockedBy("has_at_least_9_" + safeName(getId(input)), RegistrateRecipeProvider.hasItem(input)).save(consumer);
-    ShapelessRecipeBuilder.shapeless(getModElement(input), 9).requires(output.get()).unlockedBy("has_" + safeName(output.get()), RegistrateRecipeProvider.hasItem(output.get())).save(consumer, new ResourceLocation(modid, safeName(getId(input)) + "_from_" + safeName(output.get())));
+        .pattern("###").define('#', input).unlockedBy("has_at_least_9_" + safeName(getId(input)), has(input)).save(consumer);
+    ShapelessRecipeBuilder.shapeless(getModElement(input), 9).requires(output.get()).unlockedBy("has_" + safeName(output.get()), has(output.get())).save(consumer, new ResourceLocation(modid, safeName(getId(input)) + "_from_" + safeName(output.get())));
   }
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> ShapelessRecipeBuilder singleItemUnfinished(Supplier<? extends T> source, Supplier<? extends T> result, int required, int amount) {
-    return ShapelessRecipeBuilder.shapeless(result.get(), amount).requires(source.get(), required).unlockedBy("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()));
+    return ShapelessRecipeBuilder.shapeless(result.get(), amount).requires(source.get(), required).unlockedBy("has_" + safeName(source.get()), has(source.get()));
   }
 
   public ResourceLocation safeId(ResourceLocation id) {
@@ -213,7 +231,7 @@ public class RecipeGenerator {
         .pattern("XX")
         .define('X', source.get())
         .group(group)
-        .unlockedBy("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
+        .unlockedBy("has_" + safeName(source.get()), has(source.get()))
         .save(consumer);
   }
 
@@ -227,11 +245,11 @@ public class RecipeGenerator {
         .pattern("X  ").pattern("XX ").pattern("XXX")
         .define('X', source.get())
         .group(group)
-        .unlockedBy("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
+        .unlockedBy("has_" + safeName(source.get()), has(source.get()))
         .save(consumer);
     if (stone) {
       SingleItemRecipeBuilder.stonecutting(Ingredient.of(source.get()), result.get())
-          .unlocks("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
+          .unlockedBy("has_" + safeName(source.get()), has(source.get()))
           .save(consumer, safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting");
     }
   }
@@ -242,11 +260,11 @@ public class RecipeGenerator {
         .pattern("XXX")
         .define('X', source.get())
         .group(group)
-        .unlockedBy("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
+        .unlockedBy("has_" + safeName(source.get()), has(source.get()))
         .save(consumer);
     if (stone) {
       SingleItemRecipeBuilder.stonecutting(Ingredient.of(source.get()), result.get(), 2)
-          .unlocks("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
+          .unlockedBy("has_" + safeName(source.get()), has(source.get()))
           .save(consumer, safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting");
     }
   }
@@ -258,11 +276,11 @@ public class RecipeGenerator {
         .pattern("X")
         .define('X', source.get())
         .group(group)
-        .unlockedBy("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
+        .unlockedBy("has_" + safeName(source.get()), has(source.get()))
         .save(consumer);
     if (stone) {
       SingleItemRecipeBuilder.stonecutting(Ingredient.of(source.get()), result.get(), 2)
-          .unlocks("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
+          .unlockedBy("has_" + safeName(source.get()), has(source.get()))
           .save(consumer, safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting");
     }
   }
@@ -275,11 +293,11 @@ public class RecipeGenerator {
         .pattern("X")
         .define('X', source.get())
         .group(group)
-        .unlockedBy("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
+        .unlockedBy("has_" + safeName(source.get()), has(source.get()))
         .save(consumer);
     if (stone) {
       SingleItemRecipeBuilder.stonecutting(Ingredient.of(source.get()), result.get(), 2)
-          .unlocks("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
+          .unlockedBy("has_" + safeName(source.get()), has(source.get()))
           .save(consumer, safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting");
     }
   }
@@ -291,7 +309,7 @@ public class RecipeGenerator {
         .define('W', source.get())
         .define('#', Tags.Items.RODS_WOODEN)
         .group(group)
-        .unlockedBy("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
+        .unlockedBy("has_" + safeName(source.get()), has(source.get()))
         .save(consumer);
   }
 
@@ -302,7 +320,7 @@ public class RecipeGenerator {
         .define('W', source.get())
         .define('#', Tags.Items.RODS_WOODEN)
         .group(group)
-        .unlockedBy("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
+        .unlockedBy("has_" + safeName(source.get()), has(source.get()))
         .save(consumer);
   }
 
@@ -310,11 +328,11 @@ public class RecipeGenerator {
     ShapedRecipeBuilder.shaped(result.get(), 6)
         .pattern("XXX").pattern("XXX")
         .define('X', source.get())
-        .unlockedBy("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
+        .unlockedBy("has_" + safeName(source.get()), has(source.get()))
         .save(consumer);
     if (stone) {
       SingleItemRecipeBuilder.stonecutting(Ingredient.of(source.get()), result.get())
-          .unlocks("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
+          .unlockedBy("has_" + safeName(source.get()), has(source.get()))
           .save(consumer, safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting");
     }
   }
@@ -325,7 +343,7 @@ public class RecipeGenerator {
         .pattern("XX").pattern("XX").pattern("XX")
         .define('X', source.get())
         .group(group)
-        .unlockedBy("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
+        .unlockedBy("has_" + safeName(source.get()), has(source.get()))
         .save(consumer);
   }
 
@@ -335,7 +353,7 @@ public class RecipeGenerator {
         .pattern("XXX").pattern("XXX")
         .define('X', source.get())
         .group(group)
-        .unlockedBy("has_" + safeName(source.get()), RegistrateRecipeProvider.hasItem(source.get()))
+        .unlockedBy("has_" + safeName(source.get()), has(source.get()))
         .save(consumer);
   }
 
@@ -348,7 +366,7 @@ public class RecipeGenerator {
         .define('X', material.get())
         .define('S', Tags.Items.RODS_WOODEN)
         .group(group)
-        .unlockedBy("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
+        .unlockedBy("has_" + safeName(material.get()), has(material.get()))
         .save(consumer);
   }
 
@@ -361,7 +379,7 @@ public class RecipeGenerator {
         .define('X', material.get())
         .define('S', Tags.Items.RODS_WOODEN)
         .group(group)
-        .unlockedBy("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
+        .unlockedBy("has_" + safeName(material.get()), has(material.get()))
         .save(consumer);
   }
 
@@ -374,7 +392,7 @@ public class RecipeGenerator {
         .define('X', material.get())
         .define('S', Tags.Items.RODS_WOODEN)
         .group(group)
-        .unlockedBy("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
+        .unlockedBy("has_" + safeName(material.get()), has(material.get()))
         .save(consumer);
   }
 
@@ -387,7 +405,7 @@ public class RecipeGenerator {
         .define('X', material.get())
         .define('S', Tags.Items.RODS_WOODEN)
         .group(group)
-        .unlockedBy("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
+        .unlockedBy("has_" + safeName(material.get()), has(material.get()))
         .save(consumer);
   }
 
@@ -399,7 +417,7 @@ public class RecipeGenerator {
         .define('X', material.get())
         .define('S', Tags.Items.RODS_WOODEN)
         .group(group)
-        .unlockedBy("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
+        .unlockedBy("has_" + safeName(material.get()), has(material.get()))
         .save(consumer);
   }
 
@@ -411,7 +429,7 @@ public class RecipeGenerator {
         .define('X', material)
         .define('S', Tags.Items.RODS_WOODEN)
         .group(group)
-        .unlockedBy("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
+        .unlockedBy("has_" + safeName(getId(material)), has(material))
         .save(consumer, safeName(result.get()) + "_from_" + safeName(getId(material)));
   }
 
@@ -424,7 +442,7 @@ public class RecipeGenerator {
         .define('X', material.get())
         .define('S', Tags.Items.RODS_WOODEN)
         .group(group)
-        .unlockedBy("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
+        .unlockedBy("has_" + safeName(material.get()), has(material.get()))
         .save(consumer);
   }
 
@@ -435,7 +453,7 @@ public class RecipeGenerator {
         .pattern("X X")
         .define('X', material.get())
         .group(group)
-        .unlockedBy("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
+        .unlockedBy("has_" + safeName(material.get()), has(material.get()))
         .save(consumer);
   }
 
@@ -448,7 +466,7 @@ public class RecipeGenerator {
         .define('X', sword.get())
         .define('S', Tags.Items.RODS_WOODEN)
         .group(group)
-        .unlockedBy("has_" + safeName(sword.get()), RegistrateRecipeProvider.hasItem(sword.get()))
+        .unlockedBy("has_" + safeName(sword.get()), has(sword.get()))
         .save(consumer, new ResourceLocation(modid, Objects.requireNonNull(result.get().getRegistryName()).getPath()));
   }
 
@@ -461,7 +479,7 @@ public class RecipeGenerator {
         .define('X', sword)
         .define('S', Tags.Items.RODS_WOODEN)
         .group(group)
-        .unlockedBy("has_" + safeName(sword), RegistrateRecipeProvider.hasItem(sword))
+        .unlockedBy("has_" + safeName(sword), has(sword))
         .save(consumer, new ResourceLocation(modid, Objects.requireNonNull(result.get().getRegistryName()).getPath()));
   }
 
@@ -473,7 +491,7 @@ public class RecipeGenerator {
         .pattern("X X")
         .define('X', material.get())
         .group(group)
-        .unlockedBy("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
+        .unlockedBy("has_" + safeName(material.get()), has(material.get()))
         .save(consumer);
   }
 
@@ -485,7 +503,7 @@ public class RecipeGenerator {
         .pattern("XXX")
         .define('X', material.get())
         .group(group)
-        .unlockedBy("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
+        .unlockedBy("has_" + safeName(material.get()), has(material.get()))
         .save(consumer);
   }
 
@@ -496,7 +514,7 @@ public class RecipeGenerator {
         .pattern("X X")
         .define('X', material.get())
         .group(group)
-        .unlockedBy("has_" + safeName(material.get()), RegistrateRecipeProvider.hasItem(material.get()))
+        .unlockedBy("has_" + safeName(material.get()), has(material.get()))
         .save(consumer);
   }
 
@@ -509,7 +527,7 @@ public class RecipeGenerator {
         .define('X', material)
         .define('S', Tags.Items.RODS_WOODEN)
         .group(group)
-        .unlockedBy("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
+        .unlockedBy("has_" + safeName(getId(material)), has(material))
         .save(consumer);
   }
 
@@ -522,7 +540,7 @@ public class RecipeGenerator {
         .define('X', material)
         .define('S', Tags.Items.RODS_WOODEN)
         .group(group)
-        .unlockedBy("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
+        .unlockedBy("has_" + safeName(getId(material)), has(material))
         .save(consumer);
   }
 
@@ -535,7 +553,7 @@ public class RecipeGenerator {
         .define('X', material)
         .define('S', Tags.Items.RODS_WOODEN)
         .group(group)
-        .unlockedBy("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
+        .unlockedBy("has_" + safeName(getId(material)), has(material))
         .save(consumer);
   }
 
@@ -548,7 +566,7 @@ public class RecipeGenerator {
         .define('X', material)
         .define('S', Tags.Items.RODS_WOODEN)
         .group(group)
-        .unlockedBy("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
+        .unlockedBy("has_" + safeName(getId(material)), has(material))
         .save(consumer);
   }
 
@@ -561,7 +579,7 @@ public class RecipeGenerator {
         .define('X', material)
         .define('S', Tags.Items.RODS_WOODEN)
         .group(group)
-        .unlockedBy("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
+        .unlockedBy("has_" + safeName(getId(material)), has(material))
         .save(consumer);
   }
 
@@ -572,7 +590,7 @@ public class RecipeGenerator {
         .pattern("X X")
         .define('X', material)
         .group(group)
-        .unlockedBy("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
+        .unlockedBy("has_" + safeName(getId(material)), has(material))
         .save(consumer);
   }
 
@@ -584,7 +602,7 @@ public class RecipeGenerator {
         .pattern("X X")
         .define('X', material)
         .group(group)
-        .unlockedBy("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
+        .unlockedBy("has_" + safeName(getId(material)), has(material))
         .save(consumer);
   }
 
@@ -596,7 +614,7 @@ public class RecipeGenerator {
         .pattern("XXX")
         .define('X', material)
         .group(group)
-        .unlockedBy("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
+        .unlockedBy("has_" + safeName(getId(material)), has(material))
         .save(consumer);
   }
 
@@ -607,7 +625,7 @@ public class RecipeGenerator {
         .pattern("X X")
         .define('X', material)
         .group(group)
-        .unlockedBy("has_" + safeName(getId(material)), RegistrateRecipeProvider.hasItem(material))
+        .unlockedBy("has_" + safeName(getId(material)), has(material))
         .save(consumer);
   }
 
@@ -629,8 +647,8 @@ public class RecipeGenerator {
             .define('S', Items.SUGAR)
             .define('B', Items.GLASS_BOTTLE)
             .define('W', Items.WATER_BUCKET)
-            .unlockedBy("has_first", RegistrateRecipeProvider.hasItem(ingredient.get()))
-            .unlockedBy("has_sugar", RegistrateRecipeProvider.hasItem(Items.SUGAR))
+            .unlockedBy("has_first", has(ingredient.get()))
+            .unlockedBy("has_sugar", has(Items.SUGAR))
             .save(p);
   }
 }

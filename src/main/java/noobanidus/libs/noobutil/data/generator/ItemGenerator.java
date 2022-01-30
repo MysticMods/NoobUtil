@@ -4,7 +4,6 @@ import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.item.*;
 import noobanidus.libs.noobutil.item.WeaponType;
 import noobanidus.libs.noobutil.material.MaterialType;
 

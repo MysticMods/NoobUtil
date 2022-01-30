@@ -22,7 +22,11 @@ public interface IContainerCrafting<H extends ILargeInventory, C extends Abstrac
   Player getPlayer();
 
   default Inventory getPlayerInventory() {
-    return getPlayer().inventory;
+    Player player = getPlayer();
+    if (player == null) {
+      return null;
+    }
+    return player.getInventory();
   }
 
   @Override
