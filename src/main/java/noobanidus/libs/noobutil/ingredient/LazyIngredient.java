@@ -2,8 +2,8 @@ package noobanidus.libs.noobutil.ingredient;
 
 import com.google.gson.JsonElement;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import noobanidus.libs.noobutil.type.LazySupplier;
 

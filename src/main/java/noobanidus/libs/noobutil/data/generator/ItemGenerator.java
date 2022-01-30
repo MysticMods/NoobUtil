@@ -2,21 +2,29 @@ package noobanidus.libs.noobutil.data.generator;
 
 import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
-import net.minecraft.block.Block;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.item.*;
 import noobanidus.libs.noobutil.item.WeaponType;
 import noobanidus.libs.noobutil.material.MaterialType;
 
+import net.minecraft.world.item.ArmorItem;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.DyeColor;
+import net.minecraft.world.item.DyeItem;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemNameBlockItem;
+import net.minecraft.world.item.Tier;
+
 public class ItemGenerator {
   @FunctionalInterface
   public interface ToolBuilder<V extends Item> {
-    V apply(IItemTier tier, int attackDamageIn, float attackSpeedIn, Item.Properties builder);
+    V apply(Tier tier, int attackDamageIn, float attackSpeedIn, Item.Properties builder);
   }
 
   @FunctionalInterface
   public interface ArmorBuilder<V extends Item> {
-    V apply(IArmorMaterial materialIn, EquipmentSlotType slot, Item.Properties builder);
+    V apply(ArmorMaterial materialIn, EquipmentSlot slot, Item.Properties builder);
   }
 
   public static <T extends Item> NonNullFunction<Item.Properties, T> tool(ToolBuilder<T> builder, WeaponType matType, MaterialType material) {
@@ -51,7 +59,7 @@ public class ItemGenerator {
     return tool(builder, WeaponType.HOE, material);
   }
 
-  public static <T extends ArmorItem> NonNullFunction<Item.Properties, T> armor(ArmorBuilder<T> builder, MaterialType material, EquipmentSlotType slot) {
+  public static <T extends ArmorItem> NonNullFunction<Item.Properties, T> armor(ArmorBuilder<T> builder, MaterialType material, EquipmentSlot slot) {
     return (b) -> builder.apply(material.getArmorMaterial(), slot, b);
   }
 
@@ -59,7 +67,7 @@ public class ItemGenerator {
     return (b) -> new DyeItem(color, b);
   }
 
-  public static <T extends Block> NonNullFunction<Item.Properties, BlockNamedItem> blockNamedItem(RegistryEntry<T> block) {
-    return (b) -> new BlockNamedItem(block.get(), b);
+  public static <T extends Block> NonNullFunction<Item.Properties, ItemNameBlockItem> blockNamedItem(RegistryEntry<T> block) {
+    return (b) -> new ItemNameBlockItem(block.get(), b);
   }
 }

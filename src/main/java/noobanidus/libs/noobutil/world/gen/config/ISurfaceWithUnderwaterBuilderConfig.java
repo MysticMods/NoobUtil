@@ -1,8 +1,8 @@
 package noobanidus.libs.noobutil.world.gen.config;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.world.gen.surfacebuilders.ISurfaceBuilderConfig;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.surfacebuilders.SurfaceBuilderConfiguration;
 
-public interface ISurfaceWithUnderwaterBuilderConfig extends ISurfaceBuilderConfig {
+public interface ISurfaceWithUnderwaterBuilderConfig extends SurfaceBuilderConfiguration {
   BlockState getUnderWaterMaterial();
 }

@@ -1,6 +1,6 @@
 package noobanidus.libs.noobutil.world.gen;
 
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.Mth;
 
 public class ColorConstants {
 	//Mountains, Plains, Desert
@@ -21,7 +21,7 @@ public class ColorConstants {
 
   public static int getSkyColor(float temperature) {
     float f = temperature / 3.0F;
-    f = MathHelper.clamp(f, -1.0F, 1.0F);
-    return MathHelper.hsvToRgb(0.62222224F - f * 0.05F, 0.5F + f * 0.1F, 1.0F);
+    f = Mth.clamp(f, -1.0F, 1.0F);
+    return Mth.hsvToRgb(0.62222224F - f * 0.05F, 0.5F + f * 0.1F, 1.0F);
   }
 }

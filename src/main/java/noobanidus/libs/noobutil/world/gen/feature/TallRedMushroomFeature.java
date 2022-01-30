@@ -1,8 +1,8 @@
 package noobanidus.libs.noobutil.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.world.gen.feature.BigMushroomFeatureConfig;
-import net.minecraft.world.gen.feature.BigRedMushroomFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.HugeMushroomFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.HugeRedMushroomFeature;
 
 import java.util.Random;
 
@@ -13,8 +13,8 @@ import java.util.Random;
  * Default BiggerMushroomFeatureConfig uses the same values as this but allows for configuration.
  *
  */
-public class TallRedMushroomFeature extends BigRedMushroomFeature {
-  public TallRedMushroomFeature(Codec<BigMushroomFeatureConfig> codec) {
+public class TallRedMushroomFeature extends HugeRedMushroomFeature {
+  public TallRedMushroomFeature(Codec<HugeMushroomFeatureConfiguration> codec) {
     super(codec);
   }
 

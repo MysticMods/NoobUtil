@@ -1,6 +1,6 @@
 package noobanidus.libs.noobutil.inventory;
 
-import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import noobanidus.libs.noobutil.data.server.StoredInventoryData;
 
@@ -17,9 +17,9 @@ public interface ILargeInventory extends IItemHandlerModifiable {
 
   void resize(int size);
 
-  CompoundNBT serialize();
+  CompoundTag serialize();
 
-  void deserialize(CompoundNBT result);
+  void deserialize(CompoundTag result);
 
   default <T extends ILargeInventory> void setInventoryData(StoredInventoryData<T> data) {
   }

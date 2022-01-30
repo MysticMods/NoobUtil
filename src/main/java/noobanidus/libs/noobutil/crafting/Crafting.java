@@ -1,18 +1,18 @@
 package noobanidus.libs.noobutil.crafting;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.items.IItemHandler;
 import noobanidus.libs.noobutil.block.entities.IReferentialBlockEntity;
 import noobanidus.libs.noobutil.inventory.IInvWrapper;
 
 import javax.annotation.Nullable;
 
-public abstract class Crafting<H extends IItemHandler, T extends TileEntity & IReferentialBlockEntity> extends IInvWrapper<H> implements ICrafting<H, T> {
+public abstract class Crafting<H extends IItemHandler, T extends BlockEntity & IReferentialBlockEntity> extends IInvWrapper<H> implements ICrafting<H, T> {
   protected final T blockentity;
-  protected final PlayerEntity player;
+  protected final Player player;
 
-  public Crafting(T blockentity, H handler, @Nullable PlayerEntity player) {
+  public Crafting(T blockentity, H handler, @Nullable Player player) {
     super(handler);
     this.blockentity = blockentity;
     this.player = player;
@@ -25,7 +25,7 @@ public abstract class Crafting<H extends IItemHandler, T extends TileEntity & IR
 
   @Override
   @Nullable
-  public PlayerEntity getPlayer() {
+  public Player getPlayer() {
     return player;
   }
 

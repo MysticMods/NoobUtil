@@ -1,59 +1,62 @@
 package noobanidus.libs.noobutil.block;
 
 import net.minecraft.block.AbstractFurnaceBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.trees.Tree;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.DirectionProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.shapes.ISelectionContext;
-import net.minecraft.util.math.shapes.VoxelShape;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.grower.AbstractTreeGrower;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.level.BlockGetter;
 
 import javax.annotation.Nonnull;
 import java.util.Random;
 import java.util.function.Supplier;
 
+import net.minecraft.world.level.block.PressurePlateBlock.Sensitivity;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
+
 @SuppressWarnings("deprecation")
 public class BaseBlocks {
-  public static class CropsBlock extends net.minecraft.block.CropsBlock {
+  public static class CropsBlock extends net.minecraft.world.level.block.CropBlock {
     public CropsBlock(Properties builder) {
       super(builder);
     }
 
     @Override
     @Nonnull
-    public VoxelShape getShape(BlockState state, IBlockReader blockReader, BlockPos pos, ISelectionContext selectionContext) {
+    public VoxelShape getShape(BlockState state, BlockGetter blockReader, BlockPos pos, CollisionContext selectionContext) {
       return Block.box(0, 0, 0, 16.0D, 2.0D * (state.getValue(AGE) + 1), 16.0D);
     }
   }
 
   public static class SeededCropsBlock extends CropsBlock {
-    private final Supplier<Supplier<? extends IItemProvider>> seedProvider;
+    private final Supplier<Supplier<? extends ItemLike>> seedProvider;
 
-    public SeededCropsBlock(Properties builder, Supplier<Supplier<? extends IItemProvider>> seedProvider) {
+    public SeededCropsBlock(Properties builder, Supplier<Supplier<? extends ItemLike>> seedProvider) {
       super(builder);
       this.seedProvider = seedProvider;
     }
 
     @Override
-    protected IItemProvider getBaseSeedId() {
+    protected ItemLike getBaseSeedId() {
       return seedProvider.get().get();
     }
   }
 
-  public static class DoorBlock extends net.minecraft.block.DoorBlock {
+  public static class DoorBlock extends net.minecraft.world.level.block.DoorBlock {
     public DoorBlock(Properties builder) {
       super(builder);
     }
   }
 
-  public static class OreBlock extends net.minecraft.block.OreBlock {
+  public static class OreBlock extends net.minecraft.world.level.block.OreBlock {
     private final int minXP;
     private final int maxXP;
 
@@ -65,41 +68,41 @@ public class BaseBlocks {
 
     @Override
     protected int xpOnDrop(Random rand) {
-      return MathHelper.nextInt(rand, minXP, maxXP);
+      return Mth.nextInt(rand, minXP, maxXP);
     }
   }
 
-  public static class PressurePlateBlock extends net.minecraft.block.PressurePlateBlock {
+  public static class PressurePlateBlock extends net.minecraft.world.level.block.PressurePlateBlock {
     public PressurePlateBlock(Sensitivity sensitivityIn, Properties propertiesIn) {
       super(sensitivityIn, propertiesIn);
     }
   }
 
-  public static class SaplingBlock extends net.minecraft.block.SaplingBlock {
-    public SaplingBlock(Tree tree, Properties proeprties) {
+  public static class SaplingBlock extends net.minecraft.world.level.block.SaplingBlock {
+    public SaplingBlock(AbstractTreeGrower tree, Properties proeprties) {
       super(tree, proeprties);
     }
   }
 
-  public static class StoneButtonBlock extends net.minecraft.block.StoneButtonBlock {
+  public static class StoneButtonBlock extends net.minecraft.world.level.block.StoneButtonBlock {
     public StoneButtonBlock(Properties properties) {
       super(properties);
     }
   }
 
-  public static class TrapDoorBlock extends net.minecraft.block.TrapDoorBlock {
+  public static class TrapDoorBlock extends net.minecraft.world.level.block.TrapDoorBlock {
     public TrapDoorBlock(Properties properties) {
       super(properties);
     }
   }
 
-  public static class WeightedPressurePlateBlock extends net.minecraft.block.WeightedPressurePlateBlock {
+  public static class WeightedPressurePlateBlock extends net.minecraft.world.level.block.WeightedPressurePlateBlock {
     public WeightedPressurePlateBlock(int weight, Properties properties) {
       super(weight, properties);
     }
   }
 
-  public static class WoodButtonBlock extends net.minecraft.block.WoodButtonBlock {
+  public static class WoodButtonBlock extends net.minecraft.world.level.block.WoodButtonBlock {
     public WoodButtonBlock(Properties properties) {
       super(properties);
     }
@@ -114,7 +117,7 @@ public class BaseBlocks {
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
       return SHAPE;
     }
   }
@@ -129,12 +132,12 @@ public class BaseBlocks {
 
     @SuppressWarnings("deprecation")
     @Override
-    public VoxelShape getShape(BlockState state, IBlockReader worldIn, BlockPos pos, ISelectionContext context) {
+    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
       return SHAPE;
     }
   }
 
-  public static class HorizontalBlock extends net.minecraft.block.HorizontalBlock {
+  public static class HorizontalBlock extends net.minecraft.world.level.block.HorizontalDirectionalBlock {
     public static DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
 
     protected HorizontalBlock(Properties props) {
@@ -142,12 +145,12 @@ public class BaseBlocks {
     }
 
     @Override
-    public BlockState getStateForPlacement(BlockItemUseContext pContext) {
+    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
       return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
     }
 
     @Override
-    protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> pBuilder) {
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
       super.createBlockStateDefinition(pBuilder);
 
       pBuilder.add(FACING);

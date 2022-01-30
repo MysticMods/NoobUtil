@@ -1,8 +1,8 @@
 package noobanidus.libs.noobutil.inventory;
 
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.Container;
 
 @FunctionalInterface
 public interface ISlotListener {
-  void slotChanged (IInventory inventory, int slot);
+  void slotChanged (Container inventory, int slot);
 }

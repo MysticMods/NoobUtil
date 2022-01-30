@@ -1,16 +1,16 @@
 package noobanidus.libs.noobutil.material;
 
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
-import net.minecraft.block.Block;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
-import net.minecraft.inventory.EquipmentSlotType;
-import net.minecraft.item.IArmorMaterial;
-import net.minecraft.item.IItemTier;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.item.ArmorMaterial;
+import net.minecraft.world.item.Tier;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.tags.Tag;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.common.ToolType;
@@ -33,8 +33,8 @@ public class MaterialType {
   private static final int[] MAX_DAMAGE_ARRAY = new int[]{13, 15, 16, 11};
 
   private final String name;
-  private IItemTier tier = null;
-  private IArmorMaterial material = null;
+  private Tier tier = null;
+  private ArmorMaterial material = null;
   private int maxUses;
   private float efficiency;
   private float attackDamage;
@@ -101,7 +101,7 @@ public class MaterialType {
     return this;
   }
 
-  public MaterialType itemMaterial(int maxUses, float efficiency, float attackDamage, int harvestLevel, int enchantability, Supplier<ITag.INamedTag<Item>> repairTag) {
+  public MaterialType itemMaterial(int maxUses, float efficiency, float attackDamage, int harvestLevel, int enchantability, Supplier<Tag.Named<Item>> repairTag) {
     itemMaterial(maxUses, efficiency, attackDamage, harvestLevel, enchantability);
     this.repairMaterial = new LazyIngredient(() -> Ingredient.of(repairTag.get()));
     return this;
@@ -126,12 +126,12 @@ public class MaterialType {
     return this;
   }
 
-  public MaterialType setItemTier(IItemTier tier) {
+  public MaterialType setItemTier(Tier tier) {
     this.tier = tier;
     return this;
   }
 
-  public MaterialType setArmorMaterial(IArmorMaterial material) {
+  public MaterialType setArmorMaterial(ArmorMaterial material) {
     this.material = material;
     return this;
   }
@@ -298,24 +298,24 @@ public class MaterialType {
     return name + "_nugget";
   }
 
-  public class ArmorMaterial implements IArmorMaterial {
+  public class ArmorMaterial implements ArmorMaterial {
     @Override
-    public int getDurabilityForSlot(EquipmentSlotType slotIn) {
+    public int getDurabilityForSlot(EquipmentSlot slotIn) {
       return material == null ? MAX_DAMAGE_ARRAY[slotIn.getIndex()] * maxDamageFactor : material.getDurabilityForSlot(slotIn);
     }
 
     @Override
-    public int getDefenseForSlot(EquipmentSlotType slotIn) {
+    public int getDefenseForSlot(EquipmentSlot slotIn) {
       if (configProvider != null) {
         IArmorConfig config = configProvider.apply(name);
         if (config != null) {
-          if (slotIn == EquipmentSlotType.HEAD) {
+          if (slotIn == EquipmentSlot.HEAD) {
             return config.getHead();
-          } else if (slotIn == EquipmentSlotType.FEET) {
+          } else if (slotIn == EquipmentSlot.FEET) {
             return config.getFeet();
-          } else if (slotIn == EquipmentSlotType.CHEST) {
+          } else if (slotIn == EquipmentSlot.CHEST) {
             return config.getChest();
-          } else if (slotIn == EquipmentSlotType.LEGS) {
+          } else if (slotIn == EquipmentSlot.LEGS) {
             return config.getLegs();
           }
         }
@@ -362,7 +362,7 @@ public class MaterialType {
     }
   }
 
-  public class ItemMaterial implements IItemTier {
+  public class ItemMaterial implements Tier {
     @Override
     public int getUses() {
       return tier == null ? maxUses : tier.getUses();

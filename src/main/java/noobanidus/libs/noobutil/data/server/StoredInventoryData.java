@@ -1,7 +1,7 @@
 package noobanidus.libs.noobutil.data.server;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.world.storage.WorldSavedData;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.saveddata.SavedData;
 import net.minecraftforge.common.util.Constants;
 import noobanidus.libs.noobutil.inventory.ILargeInventory;
 import noobanidus.libs.noobutil.reference.ModData;
@@ -10,7 +10,7 @@ import noobanidus.libs.noobutil.reference.NBTConstants;
 import java.util.UUID;
 import java.util.function.IntFunction;
 
-public class StoredInventoryData<T extends ILargeInventory> extends WorldSavedData {
+public class StoredInventoryData<T extends ILargeInventory> extends SavedData {
   private UUID id;
   private final T inventory;
   private int size;
@@ -35,7 +35,7 @@ public class StoredInventoryData<T extends ILargeInventory> extends WorldSavedDa
   }
 
   @Override
-  public void load(CompoundNBT nbt) {
+  public void load(CompoundTag nbt) {
     this.id = nbt.getUUID(NBTConstants.SavedInventoryData.Id);
     this.size = nbt.getInt(NBTConstants.SavedInventoryData.Size);
     if (nbt.contains(NBTConstants.SavedInventoryData.Inventory, Constants.NBT.TAG_COMPOUND)) {
@@ -44,7 +44,7 @@ public class StoredInventoryData<T extends ILargeInventory> extends WorldSavedDa
   }
 
   @Override
-  public CompoundNBT save(CompoundNBT compound) {
+  public CompoundTag save(CompoundTag compound) {
     compound.putInt(NBTConstants.SavedInventoryData.Size, this.size);
     compound.putUUID(NBTConstants.SavedInventoryData.Id, this.id);
     if (this.inventory != null) {

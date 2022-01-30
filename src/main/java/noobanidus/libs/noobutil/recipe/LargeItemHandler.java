@@ -1,7 +1,7 @@
 package noobanidus.libs.noobutil.recipe;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.core.NonNullList;
 import noobanidus.libs.noobutil.type.ItemStackEntry;
 
 import javax.annotation.Nonnull;

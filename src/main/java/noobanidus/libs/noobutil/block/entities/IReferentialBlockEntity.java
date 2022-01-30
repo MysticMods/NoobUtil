@@ -1,7 +1,7 @@
 package noobanidus.libs.noobutil.block.entities;
 
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.level.block.entity.BlockEntity;
 
 public interface IReferentialBlockEntity {
-  TileEntity getBlockEntity();
+  BlockEntity getBlockEntity();
 }

@@ -1,12 +1,12 @@
 package noobanidus.libs.noobutil.advancement;
 
 import com.google.gson.JsonElement;
-import net.minecraft.entity.player.ServerPlayerEntity;
+import net.minecraft.server.level.ServerPlayer;
 
 import javax.annotation.Nullable;
 
 public interface IGenericPredicate<T> {
-  boolean test(ServerPlayerEntity player, T condition);
+  boolean test(ServerPlayer player, T condition);
 
   IGenericPredicate<T> deserialize(@Nullable JsonElement element);
 }

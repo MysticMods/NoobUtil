@@ -1,27 +1,27 @@
 package noobanidus.libs.noobutil.crafting;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.player.PlayerInventory;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.player.Inventory;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.core.NonNullList;
 import noobanidus.libs.noobutil.block.entities.IReferentialBlockEntity;
 import noobanidus.libs.noobutil.container.IPartitionedPlayerContainer;
 import noobanidus.libs.noobutil.inventory.ILargeInventory;
 
 import java.util.List;
 
-public interface IContainerCrafting<H extends ILargeInventory, C extends Container & IPartitionedPlayerContainer, T extends TileEntity & IReferentialBlockEntity> extends ICrafting<H, T> {
+public interface IContainerCrafting<H extends ILargeInventory, C extends AbstractContainerMenu & IPartitionedPlayerContainer, T extends BlockEntity & IReferentialBlockEntity> extends ICrafting<H, T> {
 
   C getContainer();
 
   T getBlockEntity();
 
-  PlayerEntity getPlayer();
+  Player getPlayer();
 
-  default PlayerInventory getPlayerInventory() {
+  default Inventory getPlayerInventory() {
     return getPlayer().inventory;
   }
 

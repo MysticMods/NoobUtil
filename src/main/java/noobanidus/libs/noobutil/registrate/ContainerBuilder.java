@@ -2,19 +2,19 @@ package noobanidus.libs.noobutil.registrate;
 
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
 
-public class ContainerBuilder<T extends Container, P> extends AbstractBuilder<ContainerType<?>, ContainerType<T>, P, ContainerBuilder<T, P>> {
-  private final ContainerType.IFactory<T> factory;
+public class ContainerBuilder<T extends AbstractContainerMenu, P> extends AbstractBuilder<MenuType<?>, MenuType<T>, P, ContainerBuilder<T, P>> {
+  private final MenuType.MenuSupplier<T> factory;
 
-  public ContainerBuilder(CustomRegistrate owner, P parent, String name, BuilderCallback callback, ContainerType.IFactory<T> factory) {
-    super(owner, parent, name, callback, ContainerType.class);
+  public ContainerBuilder(CustomRegistrate owner, P parent, String name, BuilderCallback callback, MenuType.MenuSupplier<T> factory) {
+    super(owner, parent, name, callback, MenuType.class);
     this.factory = factory;
   }
 
   @Override
-  protected ContainerType<T> createEntry() {
-    return new ContainerType<>(factory);
+  protected MenuType<T> createEntry() {
+    return new MenuType<>(factory);
   }
 }

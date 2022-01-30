@@ -2,12 +2,12 @@ package noobanidus.libs.noobutil.ingredient;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
 import noobanidus.libs.noobutil.reference.JsonConstants;
@@ -22,14 +22,16 @@ import java.util.stream.Stream;
 
 // Derived from Mekanism's ExcludingIngredient: https://github.com/mekanism/Mekanism/blob/1.16.x/src/main/java/mekanism/common/recipe/ingredient/ExcludingIngredient.java
 // MIT licensed.
+import net.minecraft.world.item.crafting.Ingredient.Value;
+
 public class ExcludingIngredient extends Ingredient {
 
   //Helper methods for the two most common types we may be creating
-  public static ExcludingIngredient create(ITag<Item> base, IItemProvider without) {
+  public static ExcludingIngredient create(Tag<Item> base, ItemLike without) {
     return new ExcludingIngredient(Ingredient.of(base), Ingredient.of(without));
   }
 
-  public static ExcludingIngredient create(ITag<Item> base, ITag<Item> without) {
+  public static ExcludingIngredient create(Tag<Item> base, Tag<Item> without) {
     return new ExcludingIngredient(Ingredient.of(base), Ingredient.of(without));
   }
 
@@ -67,7 +69,7 @@ public class ExcludingIngredient extends Ingredient {
     return Serializer.INSTANCE;
   }
 
-  private static class ExcludingItemList implements IItemList {
+  private static class ExcludingItemList implements Value {
 
     private final Ingredient base;
     private final Ingredient without;
@@ -111,14 +113,14 @@ public class ExcludingIngredient extends Ingredient {
     }
 
     @Override
-    public ExcludingIngredient parse(@Nonnull PacketBuffer buffer) {
+    public ExcludingIngredient parse(@Nonnull FriendlyByteBuf buffer) {
       Ingredient base = Ingredient.fromNetwork(buffer);
       Ingredient without = Ingredient.fromNetwork(buffer);
       return new ExcludingIngredient(base, without);
     }
 
     @Override
-    public void write(@Nonnull PacketBuffer buffer, ExcludingIngredient ingredient) {
+    public void write(@Nonnull FriendlyByteBuf buffer, ExcludingIngredient ingredient) {
       CraftingHelper.write(buffer, ingredient.excludingItemList.base);
       CraftingHelper.write(buffer, ingredient.excludingItemList.without);
     }

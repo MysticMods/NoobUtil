@@ -3,10 +3,10 @@ package noobanidus.libs.noobutil.data.generator;
 import com.tterrag.registrate.providers.RegistrateItemTagsProvider;
 import com.tterrag.registrate.providers.RegistrateTagsProvider;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.item.Item;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.Tags;
 
 import java.util.function.Supplier;
@@ -48,7 +48,7 @@ public class TagBuilder {
     }
   }
 
-  public static class ItemsBuilder extends Builder<Item, IItemProvider> {
+  public static class ItemsBuilder extends Builder<Item, ItemLike> {
     private final RegistrateItemTagsProvider itemProvider;
 
     public ItemsBuilder(RegistrateTagsProvider<Item> provider) {
@@ -57,19 +57,19 @@ public class TagBuilder {
     }
 
     @Override
-    public Builder<Item, IItemProvider> add(Tags.IOptionalNamedTag<Item> tag, NonNullSupplier<? extends IItemProvider>... items) {
-      provider.tag(tag).add(Stream.of(items).map(Supplier::get).map(IItemProvider::asItem).toArray(Item[]::new));
+    public Builder<Item, ItemLike> add(Tags.IOptionalNamedTag<Item> tag, NonNullSupplier<? extends ItemLike>... items) {
+      provider.tag(tag).add(Stream.of(items).map(Supplier::get).map(ItemLike::asItem).toArray(Item[]::new));
       return this;
     }
 
     @Override
-    public Builder<Item, IItemProvider> add(Tags.IOptionalNamedTag<Item> tag, IItemProvider... items) {
-      provider.tag(tag).add(Stream.of(items).map(IItemProvider::asItem).toArray(Item[]::new));
+    public Builder<Item, ItemLike> add(Tags.IOptionalNamedTag<Item> tag, ItemLike... items) {
+      provider.tag(tag).add(Stream.of(items).map(ItemLike::asItem).toArray(Item[]::new));
       return this;
     }
 
-    public Builder<Item, IItemProvider> addBlocks(ITag.INamedTag<Item> destination, ITag.INamedTag<Block> ... sources) {
-      for (ITag.INamedTag<Block> blockTag : sources) {
+    public Builder<Item, ItemLike> addBlocks(Tag.Named<Item> destination, Tag.Named<Block> ... sources) {
+      for (Tag.Named<Block> blockTag : sources) {
         itemProvider.copy(blockTag, destination);
       }
 

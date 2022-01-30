@@ -3,18 +3,18 @@ package noobanidus.libs.noobutil.recipe.builder;
 import com.google.common.collect.Lists;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
-import net.minecraft.advancements.ICriterionInstance;
-import net.minecraft.advancements.IRequirementsStrategy;
-import net.minecraft.advancements.criterion.RecipeUnlockedTrigger;
-import net.minecraft.data.IFinishedRecipe;
-import net.minecraft.data.ShapelessRecipeBuilder;
-import net.minecraft.item.Item;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.registry.Registry;
+import net.minecraft.advancements.CriterionTriggerInstance;
+import net.minecraft.advancements.RequirementsStrategy;
+import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
+import net.minecraft.data.recipes.FinishedRecipe;
+import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.core.Registry;
 import noobanidus.libs.noobutil.recipe.UniqueShapelessRecipe;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,28 +29,28 @@ public class UniqueShapelessRecipeBuilder {
   private final Advancement.Builder advancement = Advancement.Builder.advancement();
   private String group;
 
-  public UniqueShapelessRecipeBuilder(IItemProvider pResult, int pCount) {
+  public UniqueShapelessRecipeBuilder(ItemLike pResult, int pCount) {
     this.result = pResult.asItem();
     this.count = pCount;
   }
 
-  public static UniqueShapelessRecipeBuilder shapeless(IItemProvider pResult) {
+  public static UniqueShapelessRecipeBuilder shapeless(ItemLike pResult) {
     return new UniqueShapelessRecipeBuilder(pResult, 1);
   }
 
-  public static UniqueShapelessRecipeBuilder shapeless(IItemProvider pResult, int pCount) {
+  public static UniqueShapelessRecipeBuilder shapeless(ItemLike pResult, int pCount) {
     return new UniqueShapelessRecipeBuilder(pResult, pCount);
   }
 
-  public UniqueShapelessRecipeBuilder requires(ITag<Item> pTag) {
+  public UniqueShapelessRecipeBuilder requires(Tag<Item> pTag) {
     return this.requires(Ingredient.of(pTag));
   }
 
-  public UniqueShapelessRecipeBuilder requires(IItemProvider pItem) {
+  public UniqueShapelessRecipeBuilder requires(ItemLike pItem) {
     return this.requires(pItem, 1);
   }
 
-  public UniqueShapelessRecipeBuilder requires(IItemProvider pItem, int pQuantity) {
+  public UniqueShapelessRecipeBuilder requires(ItemLike pItem, int pQuantity) {
     for (int i = 0; i < pQuantity; ++i) {
       this.requires(Ingredient.of(pItem));
     }
@@ -70,7 +70,7 @@ public class UniqueShapelessRecipeBuilder {
     return this;
   }
 
-  public UniqueShapelessRecipeBuilder unlockedBy(String p_200483_1_, ICriterionInstance p_200483_2_) {
+  public UniqueShapelessRecipeBuilder unlockedBy(String p_200483_1_, CriterionTriggerInstance p_200483_2_) {
     this.advancement.addCriterion(p_200483_1_, p_200483_2_);
     return this;
   }
@@ -80,11 +80,11 @@ public class UniqueShapelessRecipeBuilder {
     return this;
   }
 
-  public void save(Consumer<IFinishedRecipe> p_200482_1_) {
+  public void save(Consumer<FinishedRecipe> p_200482_1_) {
     this.save(p_200482_1_, Registry.ITEM.getKey(this.result));
   }
 
-  public void save(Consumer<IFinishedRecipe> p_200484_1_, String p_200484_2_) {
+  public void save(Consumer<FinishedRecipe> p_200484_1_, String p_200484_2_) {
     ResourceLocation resourcelocation = Registry.ITEM.getKey(this.result);
     if ((new ResourceLocation(p_200484_2_)).equals(resourcelocation)) {
       throw new IllegalStateException("Unique Shapeless Recipe " + p_200484_2_ + " should remove its 'save' argument");
@@ -93,9 +93,9 @@ public class UniqueShapelessRecipeBuilder {
     }
   }
 
-  public void save(Consumer<IFinishedRecipe> p_200485_1_, ResourceLocation p_200485_2_) {
+  public void save(Consumer<FinishedRecipe> p_200485_1_, ResourceLocation p_200485_2_) {
     this.ensureValid(p_200485_2_);
-    this.advancement.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(p_200485_2_)).rewards(AdvancementRewards.Builder.recipe(p_200485_2_)).requirements(IRequirementsStrategy.OR);
+    this.advancement.parent(new ResourceLocation("recipes/root")).addCriterion("has_the_recipe", RecipeUnlockedTrigger.unlocked(p_200485_2_)).rewards(AdvancementRewards.Builder.recipe(p_200485_2_)).requirements(RequirementsStrategy.OR);
     p_200485_1_.accept(new Result(p_200485_2_, this.result, this.count, this.group == null ? "" : this.group, this.ingredients, this.advancement, new ResourceLocation(p_200485_2_.getNamespace(), "recipes/" + this.result.getItemCategory().getRecipeFolderName() + "/" + p_200485_2_.getPath())));
   }
 
@@ -111,7 +111,7 @@ public class UniqueShapelessRecipeBuilder {
     }
 
     @Override
-    public IRecipeSerializer<?> getType() {
+    public RecipeSerializer<?> getType() {
       if (UniqueShapelessRecipe.getStoredSerializer() == null) {
         throw new NullPointerException("UniqueShapelessRecipe serializer has not been registered");
       }

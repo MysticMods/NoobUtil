@@ -3,13 +3,13 @@ package noobanidus.libs.noobutil.ingredient;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import it.unimi.dsi.fastutil.ints.IntList;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.tags.ITag;
-import net.minecraft.util.IItemProvider;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.tags.Tag;
+import net.minecraft.world.level.ItemLike;
 import noobanidus.libs.noobutil.NoobUtil;
 import noobanidus.libs.noobutil.reference.NBTConstants;
 
@@ -23,21 +23,21 @@ public class IngredientStack {
   private final Ingredient ingredient;
   // TODO: Consider finality of this field
   private int count;
-  private final CompoundNBT nbt;
+  private final CompoundTag nbt;
 
   public IngredientStack(ItemStack stack) {
     this(stack.getItem(), stack.getCount(), stack.getTag());
   }
 
-  public IngredientStack(IItemProvider item) {
+  public IngredientStack(ItemLike item) {
     this(item, 1);
   }
 
-  public IngredientStack(IItemProvider item, int count) {
+  public IngredientStack(ItemLike item, int count) {
     this(item, count, null);
   }
 
-  public IngredientStack(IItemProvider item, int count, CompoundNBT nbt) {
+  public IngredientStack(ItemLike item, int count, CompoundTag nbt) {
     this.ingredient = Ingredient.of(item.asItem());
     this.count = count;
     this.nbt = nbt;
@@ -51,21 +51,21 @@ public class IngredientStack {
     this(ingredient, count, null);
   }
 
-  public IngredientStack(Ingredient ingredient, int count, CompoundNBT nbt) {
+  public IngredientStack(Ingredient ingredient, int count, CompoundTag nbt) {
     this.ingredient = ingredient;
     this.count = count;
     this.nbt = nbt;
   }
 
-  public IngredientStack(ITag<Item> tag) {
+  public IngredientStack(Tag<Item> tag) {
     this(tag, 1);
   }
 
-  public IngredientStack(ITag<Item> tag, int count) {
+  public IngredientStack(Tag<Item> tag, int count) {
     this(tag, count, null);
   }
 
-  public IngredientStack(ITag<Item> tag, int count, CompoundNBT nbt) {
+  public IngredientStack(Tag<Item> tag, int count, CompoundTag nbt) {
     this.ingredient = Ingredient.of(tag);
     this.count = count;
     this.nbt = nbt;
@@ -131,7 +131,7 @@ public class IngredientStack {
   }
 
   @Nullable
-  public CompoundNBT getNBT() {
+  public CompoundTag getNBT() {
     return nbt;
   }
 
@@ -149,7 +149,7 @@ public class IngredientStack {
     JsonObject result = new JsonObject();
     result.add(NBTConstants.Ingredient, ingredient.toJson());
     result.addProperty(NBTConstants.Count, this.count);
-    CompoundNBT.CODEC.encodeStart(JsonOps.INSTANCE, this.nbt).resultOrPartial(NoobUtil.logger::error).ifPresent((i) -> result.add(NBTConstants.NBT, i));
+    CompoundTag.CODEC.encodeStart(JsonOps.INSTANCE, this.nbt).resultOrPartial(NoobUtil.logger::error).ifPresent((i) -> result.add(NBTConstants.NBT, i));
     return result;
   }
 
@@ -161,16 +161,16 @@ public class IngredientStack {
 
     Ingredient ing = Ingredient.fromJson(object.getAsJsonObject(NBTConstants.Ingredient));
     int count = object.get(NBTConstants.Count).getAsInt();
-    CompoundNBT tag = object.has(NBTConstants.NBT) ? CompoundNBT.CODEC.parse(JsonOps.INSTANCE, object.getAsJsonObject(NBTConstants.NBT)).resultOrPartial(NoobUtil.logger::error).orElse(null) : null;
+    CompoundTag tag = object.has(NBTConstants.NBT) ? CompoundTag.CODEC.parse(JsonOps.INSTANCE, object.getAsJsonObject(NBTConstants.NBT)).resultOrPartial(NoobUtil.logger::error).orElse(null) : null;
     return new IngredientStack(ing, count, tag);
   }
 
-  public void write (PacketBuffer buffer) {
+  public void write (FriendlyByteBuf buffer) {
     buffer.writeVarInt(count);
     ingredient.toNetwork(buffer);
   }
 
-  public static IngredientStack read (PacketBuffer buffer) {
+  public static IngredientStack read (FriendlyByteBuf buffer) {
     int count = buffer.readVarInt();
     Ingredient ingredient = Ingredient.fromNetwork(buffer);
     return new IngredientStack(ingredient, count);

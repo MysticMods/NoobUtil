@@ -2,9 +2,9 @@ package noobanidus.libs.noobutil.type;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.INBT;
-import net.minecraft.nbt.NBTDynamicOps;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.Tag;
+import net.minecraft.nbt.NbtOps;
 import noobanidus.libs.noobutil.NoobUtil;
 import noobanidus.libs.noobutil.data.slot.SlotInfoTable;
 
@@ -91,15 +91,15 @@ public class ItemStackEntry {
   }
 
   // TODO: CHECK THE PARTIAL BOOLEAN VALUE
-  public INBT serialize() {
-    return NBTDynamicOps.INSTANCE.withEncoder(CODEC).apply(this).getOrThrow(false, NoobUtil.logger::error);
+  public Tag serialize() {
+    return NbtOps.INSTANCE.withEncoder(CODEC).apply(this).getOrThrow(false, NoobUtil.logger::error);
   }
 
   // TODO: CHECK THE PARTIAL BOOLEAN VALUE
-  public static ItemStackEntry deserialize(INBT tag) {
+  public static ItemStackEntry deserialize(Tag tag) {
     if (tag == null) {
       return EMPTY;
     }
-    return CODEC.parse(NBTDynamicOps.INSTANCE, tag).getOrThrow(false, NoobUtil.logger::error);
+    return CODEC.parse(NbtOps.INSTANCE, tag).getOrThrow(false, NoobUtil.logger::error);
   }
 }

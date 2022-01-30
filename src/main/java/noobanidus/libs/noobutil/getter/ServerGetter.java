@@ -1,9 +1,9 @@
 package noobanidus.libs.noobutil.getter;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.server.ServerLifecycleHooks;
 
 import javax.annotation.Nullable;
@@ -13,23 +13,23 @@ public class ServerGetter implements Getter {
 
   @Nullable
   @Override
-  public PlayerEntity getterGetPlayer() {
+  public Player getterGetPlayer() {
     return null;
   }
 
   @Nullable
   @Override
-  public World getterGetWorld() {
+  public Level getterGetWorld() {
     MinecraftServer server = getterGetServer();
     if (server != null) {
-      return server.getLevel(World.OVERWORLD);
+      return server.getLevel(Level.OVERWORLD);
     }
     return null;
   }
 
   @Nullable
   @Override
-  public Container getterGetContainer() {
+  public AbstractContainerMenu getterGetContainer() {
     return null;
   }
 

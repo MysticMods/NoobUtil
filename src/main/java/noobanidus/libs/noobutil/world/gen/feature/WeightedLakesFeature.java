@@ -1,17 +1,17 @@
 package noobanidus.libs.noobutil.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.block.material.Material;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.SectionPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.LightType;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.Feature;
-import net.minecraft.world.gen.feature.structure.Structure;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.LightLayer;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import noobanidus.libs.noobutil.world.gen.config.WeightedBlockStateFeatureConfig;
 
 import java.util.Random;
@@ -24,7 +24,7 @@ public class WeightedLakesFeature extends Feature<WeightedBlockStateFeatureConfi
   }
 
   @Override
-  public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, WeightedBlockStateFeatureConfig config) {
+  public boolean place(WorldGenLevel reader, ChunkGenerator generator, Random rand, BlockPos pos, WeightedBlockStateFeatureConfig config) {
     while (pos.getY() > 5 && reader.isEmptyBlock(pos)) {
       pos = pos.below();
     }
@@ -33,7 +33,7 @@ public class WeightedLakesFeature extends Feature<WeightedBlockStateFeatureConfi
       return false;
     } else {
       pos = pos.below(4);
-      if (reader.startsForFeature(SectionPos.of(pos), Structure.VILLAGE).findAny().isPresent()) {
+      if (reader.startsForFeature(SectionPos.of(pos), StructureFeature.VILLAGE).findAny().isPresent()) {
         return false;
       } else {
         boolean[] aboolean = new boolean[2048];
@@ -95,7 +95,7 @@ public class WeightedLakesFeature extends Feature<WeightedBlockStateFeatureConfi
             for (int j4 = 4; j4 < 8; ++j4) {
               if (aboolean[(i2 * 16 + j3) * 8 + j4]) {
                 BlockPos blockpos = pos.offset(i2, j4 - 1, j3);
-                if (isDirt(reader.getBlockState(blockpos).getBlock()) && reader.getBrightness(LightType.SKY, pos.offset(i2, j4, j3)) > 0) {
+                if (isDirt(reader.getBlockState(blockpos).getBlock()) && reader.getBrightness(LightLayer.SKY, pos.offset(i2, j4, j3)) > 0) {
                   Biome biome = reader.getBiome(blockpos);
                   if (biome.getGenerationSettings().getSurfaceBuilderConfig().getTopMaterial().is(Blocks.MYCELIUM)) {
                     reader.setBlock(blockpos, Blocks.MYCELIUM.defaultBlockState(), 2);

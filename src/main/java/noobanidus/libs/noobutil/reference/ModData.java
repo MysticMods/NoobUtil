@@ -1,6 +1,6 @@
 package noobanidus.libs.noobutil.reference;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public class ModData {
   private static String modid = null;

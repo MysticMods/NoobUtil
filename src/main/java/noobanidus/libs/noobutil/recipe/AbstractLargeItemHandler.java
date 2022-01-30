@@ -1,8 +1,8 @@
 package noobanidus.libs.noobutil.recipe;
 
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.util.NonNullList;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.core.NonNullList;
 import net.minecraftforge.items.ItemHandlerHelper;
 import noobanidus.libs.noobutil.inventory.IInventoryListener;
 import noobanidus.libs.noobutil.inventory.ILargeInventory;
@@ -187,8 +187,8 @@ public abstract class AbstractLargeItemHandler implements ILargeInventory {
   }
 
   @Override
-  public CompoundNBT serialize() {
-    CompoundNBT result = new CompoundNBT();
+  public CompoundTag serialize() {
+    CompoundTag result = new CompoundTag();
     result.putInt("slots", size());
     for (int i = 0; i < size(); i++) {
       ItemStackEntry entry = stacks.get(i);
@@ -200,7 +200,7 @@ public abstract class AbstractLargeItemHandler implements ILargeInventory {
   }
 
   @Override
-  public void deserialize(CompoundNBT result) {
+  public void deserialize(CompoundTag result) {
     int size = result.getInt("slots");
     resize(size);
     for (int i = 0; i < size; i++) {

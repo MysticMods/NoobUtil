@@ -5,11 +5,11 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.network.PacketBuffer;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import noobanidus.libs.noobutil.network.AbstractNetworkObject;
 import noobanidus.libs.noobutil.util.ItemUtil;
 
@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
+public class ItemTracking extends AbstractNetworkObject<FriendlyByteBuf> {
   private static final Set<String> DAMAGE_SET = Sets.newHashSet("Damage");
   private final Map<Item, TrackingEntry> trackingMap = new HashMap<>();
 
@@ -54,14 +54,14 @@ public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
   }
 
   @Override
-  public void serialize(PacketBuffer buffer) {
+  public void serialize(FriendlyByteBuf buffer) {
     buffer.writeVarInt(trackingMap.size());
     for (TrackingEntry entry : trackingMap.values()) {
       entry.serialize(buffer);
     }
   }
 
-  public static ItemTracking deserialize (PacketBuffer buffer) {
+  public static ItemTracking deserialize (FriendlyByteBuf buffer) {
     ItemTracking tracking = new ItemTracking();
     int entryCount = buffer.readVarInt();
     for (int i = 0; i < entryCount; i++){
@@ -85,7 +85,7 @@ public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
     return this;
   }
 
-  public static class TrackingEntry extends AbstractNetworkObject<PacketBuffer> implements Iterable<ItemEntry> {
+  public static class TrackingEntry extends AbstractNetworkObject<FriendlyByteBuf> implements Iterable<ItemEntry> {
     private final ResourceLocation location;
     private final Item canonicalItem;
     private final ItemStack canonicalStack;
@@ -136,7 +136,7 @@ public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
         return false;
       }
 
-      CompoundNBT tag = stack.getTag();
+      CompoundTag tag = stack.getTag();
 
       if (!stack.hasTag() || tag == null) {
         base.add(new ItemEntry(blockId, getCanonicalStack(), stack.getCount(), slotIndex));
@@ -160,7 +160,7 @@ public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
     }
 
     @Override
-    public void serialize(PacketBuffer buffer) {
+    public void serialize(FriendlyByteBuf buffer) {
       buffer.writeVarInt(Item.getId(canonicalItem));
       buffer.writeVarInt(base.size());
       ItemEntry.lastUUID = null;
@@ -184,7 +184,7 @@ public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
       }
     }
 
-    public static TrackingEntry deserialize(PacketBuffer buffer) {
+    public static TrackingEntry deserialize(FriendlyByteBuf buffer) {
       TrackingEntry entry = new TrackingEntry(Item.byId(buffer.readVarInt()));
       int baseCount = buffer.readVarInt();
       for (int i = 0; i < baseCount; i++) {
@@ -225,7 +225,7 @@ public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
     }
   }
 
-  public static class ItemEntry extends AbstractNetworkObject<PacketBuffer> {
+  public static class ItemEntry extends AbstractNetworkObject<FriendlyByteBuf> {
     private final UUID identifier;
     private final ItemStack canonicalStack;
     private final int count;
@@ -277,7 +277,7 @@ public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
     public static UUID lastUUID = null;
 
     @Override
-    public void serialize(PacketBuffer buffer) {
+    public void serialize(FriendlyByteBuf buffer) {
       if (lastUUID != null && lastUUID.equals(getIdentifier())) {
         buffer.writeBoolean(true);
         lastUUID = getIdentifier();
@@ -289,7 +289,7 @@ public class ItemTracking extends AbstractNetworkObject<PacketBuffer> {
       buffer.writeVarInt(getSlot());
     }
 
-    public static ItemEntry deserialize(PacketBuffer buffer, ItemStack canonicalStack) {
+    public static ItemEntry deserialize(FriendlyByteBuf buffer, ItemStack canonicalStack) {
       if (!buffer.readBoolean()) {
         lastUUID = buffer.readUUID();
       }

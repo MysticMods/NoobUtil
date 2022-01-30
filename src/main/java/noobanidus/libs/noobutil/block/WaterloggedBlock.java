@@ -1,24 +1,24 @@
 package noobanidus.libs.noobutil.block;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.IWaterLoggable;
-import net.minecraft.fluid.FluidState;
-import net.minecraft.fluid.Fluids;
-import net.minecraft.item.BlockItemUseContext;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.StateContainer;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.block.AbstractBlock.Properties;
+import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 @SuppressWarnings({"deprecation", "Duplicates"})
-public class WaterloggedBlock extends Block implements IWaterLoggable {
+public class WaterloggedBlock extends Block implements SimpleWaterloggedBlock {
   protected static final BooleanProperty WATERLOGGED = BlockStateProperties.WATERLOGGED;
 
   public WaterloggedBlock(Properties properties) {
@@ -27,7 +27,7 @@ public class WaterloggedBlock extends Block implements IWaterLoggable {
 
   @Nullable
   @Override
-  public BlockState getStateForPlacement(BlockItemUseContext context) {
+  public BlockState getStateForPlacement(BlockPlaceContext context) {
     BlockState state = defaultBlockState();
     FluidState fluidState = context.getLevel().getFluidState(context.getClickedPos());
     if (fluidState.getType() == Fluids.WATER) {
@@ -38,7 +38,7 @@ public class WaterloggedBlock extends Block implements IWaterLoggable {
   }
 
   @Override
-  public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, IWorld worldIn, BlockPos currentPos, BlockPos facingPos) {
+  public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
     if (stateIn.getValue(WATERLOGGED)) {
       worldIn.getLiquidTicks().scheduleTick(currentPos, Fluids.WATER, Fluids.WATER.getTickDelay(worldIn));
     }
@@ -47,7 +47,7 @@ public class WaterloggedBlock extends Block implements IWaterLoggable {
   }
 
   @Override
-  protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> builder) {
+  protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
     super.createBlockStateDefinition(builder);
     builder.add(WATERLOGGED);
   }

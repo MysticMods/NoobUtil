@@ -1,13 +1,13 @@
 package noobanidus.libs.noobutil.data.slot;
 
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.INBT;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.util.Constants;
 import noobanidus.libs.noobutil.reference.NBTConstants;
 
 public abstract class SlotInfoBase<V> {
   protected final String key;
-  protected CompoundNBT tag;
+  protected CompoundTag tag;
 
   public SlotInfoBase(String key) {
     this.key = key;
@@ -19,11 +19,11 @@ public abstract class SlotInfoBase<V> {
 
   public abstract Class<?> getType();
 
-  public abstract CompoundNBT getTag();
+  public abstract CompoundTag getTag();
 
-  protected CompoundNBT getBaseTag() {
+  protected CompoundTag getBaseTag() {
     if (tag == null) {
-      tag = new CompoundNBT();
+      tag = new CompoundTag();
       tag.putString(NBTConstants.Key, key);
     }
     return tag;
@@ -47,9 +47,9 @@ public abstract class SlotInfoBase<V> {
 
   public abstract V asObject();
 
-  public static SlotInfoBase<?> fromNBT(CompoundNBT tag) {
+  public static SlotInfoBase<?> fromNBT(CompoundTag tag) {
     String key = tag.getString(NBTConstants.Key);
-    INBT value = tag.get(NBTConstants.Value);
+    Tag value = tag.get(NBTConstants.Value);
     byte id = value.getId();
     if (id == Constants.NBT.TAG_STRING) {
       return new StringDataEntry(key, tag.getString(NBTConstants.Value));
@@ -78,7 +78,7 @@ public abstract class SlotInfoBase<V> {
     }
 
     @Override
-    public CompoundNBT getTag() {
+    public CompoundTag getTag() {
       if (tag == null) {
         tag = getBaseTag();
         tag.putString(NBTConstants.Value, value);
@@ -111,7 +111,7 @@ public abstract class SlotInfoBase<V> {
     }
 
     @Override
-    public CompoundNBT getTag() {
+    public CompoundTag getTag() {
       if (tag == null) {
         tag = getBaseTag();
         tag.putInt(NBTConstants.Value, value);
@@ -144,7 +144,7 @@ public abstract class SlotInfoBase<V> {
     }
 
     @Override
-    public CompoundNBT getTag() {
+    public CompoundTag getTag() {
       if (tag == null) {
         tag = getBaseTag();
         tag.putFloat(NBTConstants.Value, value);
@@ -177,7 +177,7 @@ public abstract class SlotInfoBase<V> {
     }
 
     @Override
-    public CompoundNBT getTag() {
+    public CompoundTag getTag() {
       if (tag == null) {
         tag = getBaseTag();
         tag.putBoolean(NBTConstants.Value, value);

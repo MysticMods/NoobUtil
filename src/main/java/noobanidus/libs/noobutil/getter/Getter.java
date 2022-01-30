@@ -1,9 +1,9 @@
 package noobanidus.libs.noobutil.getter;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Container;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.DistExecutor;
 import noobanidus.libs.noobutil.client.ClientGetter;
 
@@ -11,29 +11,29 @@ import javax.annotation.Nullable;
 
 public interface Getter {
   @Nullable
-  PlayerEntity getterGetPlayer();
+  Player getterGetPlayer();
 
   @Nullable
-  World getterGetWorld();
+  Level getterGetWorld();
 
   @Nullable
-  Container getterGetContainer();
+  AbstractContainerMenu getterGetContainer();
 
   @Nullable
   MinecraftServer getterGetServer();
 
   @Nullable
-  static PlayerEntity getPlayer() {
+  static Player getPlayer() {
     return DistExecutor.safeRunForDist(() -> ClientGetter.INSTANCE::getterGetPlayer, () -> ServerGetter.INSTANCE::getterGetPlayer);
   }
 
   @Nullable
-  static World getWorld() {
+  static Level getWorld() {
     return DistExecutor.safeRunForDist(() -> ClientGetter.INSTANCE::getterGetWorld, () -> ServerGetter.INSTANCE::getterGetWorld);
   }
 
   @Nullable
-  static Container getContainer() {
+  static AbstractContainerMenu getContainer() {
     return DistExecutor.safeRunForDist(() -> ClientGetter.INSTANCE::getterGetContainer, () -> ServerGetter.INSTANCE::getterGetContainer);
   }
 

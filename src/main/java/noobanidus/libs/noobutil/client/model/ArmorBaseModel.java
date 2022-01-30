@@ -1,14 +1,14 @@
 package noobanidus.libs.noobutil.client.model;
 
-import net.minecraft.client.renderer.entity.model.BipedModel;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.item.ArmorStandEntity;
-import net.minecraft.inventory.EquipmentSlotType;
+import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.decoration.ArmorStand;
+import net.minecraft.world.entity.EquipmentSlot;
 
-public class ArmorBaseModel extends BipedModel<LivingEntity> {
-  public EquipmentSlotType slot;
+public class ArmorBaseModel extends HumanoidModel<LivingEntity> {
+  public EquipmentSlot slot;
 
-  public ArmorBaseModel(EquipmentSlotType slot, float modelSize, float yOffset, int width, int height) {
+  public ArmorBaseModel(EquipmentSlot slot, float modelSize, float yOffset, int width, int height) {
     super(modelSize, yOffset, width, height);
     this.texHeight = 64;
     this.texWidth = 64;
@@ -18,12 +18,12 @@ public class ArmorBaseModel extends BipedModel<LivingEntity> {
 
   @Override
   public void setupAnim(LivingEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-    if (!(entity instanceof ArmorStandEntity)) {
+    if (!(entity instanceof ArmorStand)) {
       super.setupAnim(entity, limbSwing, limbSwingAmount, ageInTicks, netHeadYaw, headPitch);
       return;
     }
 
-    ArmorStandEntity entityIn = (ArmorStandEntity) entity;
+    ArmorStand entityIn = (ArmorStand) entity;
     this.head.xRot = ((float) Math.PI / 180F) * entityIn.getHeadPose().getX();
     this.head.yRot = ((float) Math.PI / 180F) * entityIn.getHeadPose().getY();
     this.head.zRot = ((float) Math.PI / 180F) * entityIn.getHeadPose().getZ();

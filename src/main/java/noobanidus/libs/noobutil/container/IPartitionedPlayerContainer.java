@@ -1,6 +1,6 @@
 package noobanidus.libs.noobutil.container;
 
-import net.minecraft.inventory.container.Slot;
+import net.minecraft.world.inventory.Slot;
 
 import java.util.List;
 

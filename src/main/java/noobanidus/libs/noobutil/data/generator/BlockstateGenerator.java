@@ -6,9 +6,9 @@ import com.tterrag.registrate.util.entry.RegistryEntry;
 import com.tterrag.registrate.util.nullness.NonNullBiConsumer;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 import net.minecraft.block.*;
-import net.minecraft.state.properties.BlockStateProperties;
-import net.minecraft.util.Direction;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.core.Direction;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.ModelProvider;
@@ -18,6 +18,17 @@ import noobanidus.libs.noobutil.reference.ModData;
 
 import java.util.Objects;
 import java.util.function.Supplier;
+
+import net.minecraft.world.level.block.BasePressurePlateBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.ButtonBlock;
+import net.minecraft.world.level.block.CropBlock;
+import net.minecraft.world.level.block.FenceBlock;
+import net.minecraft.world.level.block.FenceGateBlock;
+import net.minecraft.world.level.block.PressurePlateBlock;
+import net.minecraft.world.level.block.SlabBlock;
+import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.WallBlock;
 
 @SuppressWarnings("unchecked")
 public class BlockstateGenerator {
@@ -31,7 +42,7 @@ public class BlockstateGenerator {
     ModelFile crop = p.models().getExistingFile(new ResourceLocation("minecraft", "block/crop"));
     p.getVariantBuilder(ctx.getEntry())
         .forAllStates(state -> {
-          String file = prefix + state.getValue(((CropsBlock) state.getBlock()).getAgeProperty());
+          String file = prefix + state.getValue(((CropBlock) state.getBlock()).getAgeProperty());
           ModelFile stage = p.models().getBuilder(file)
               .parent(crop)
               .texture("crop", p.modLoc("block/crops/" + file));
@@ -44,7 +55,7 @@ public class BlockstateGenerator {
     ModelFile crop = p.models().getExistingFile(new ResourceLocation("minecraft", "block/cross"));
     p.getVariantBuilder(ctx.getEntry())
         .forAllStates(state -> {
-          String file = prefix + state.getValue(((CropsBlock) state.getBlock()).getAgeProperty());
+          String file = prefix + state.getValue(((CropBlock) state.getBlock()).getAgeProperty());
           ModelFile stage = p.models().getBuilder(file)
               .parent(crop)
               .texture("cross", p.modLoc("block/crops/" + file));
@@ -64,11 +75,11 @@ public class BlockstateGenerator {
     return simpleBlockstate(new ResourceLocation(ModData.getModid(), parent));
   }
 
-  public static <T extends StairsBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> stairs(RegistryEntry<? extends Block> parent) {
+  public static <T extends StairBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> stairs(RegistryEntry<? extends Block> parent) {
     return (ctx, p) -> p.stairsBlock(ctx.getEntry(), p.blockTexture(parent.get()));
   }
 
-  public static <T extends StairsBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> stairs(Supplier<? extends Block> parent) {
+  public static <T extends StairBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> stairs(Supplier<? extends Block> parent) {
     return (ctx, p) -> p.stairsBlock(ctx.getEntry(), p.blockTexture(parent.get()));
   }
 
@@ -123,7 +134,7 @@ public class BlockstateGenerator {
                     .texture("wall", p.blockTexture(parent.get()))));
   }
 
-  public static <T extends AbstractButtonBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> button(NonNullSupplier<? extends Block> parent) {
+  public static <T extends ButtonBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> button(NonNullSupplier<? extends Block> parent) {
     return (ctx, p) -> {
       ModelFile button = p.models().singleTexture(name(ctx.getEntry()), new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/button"), p.blockTexture(parent.get()));
       ModelFile buttonPressed = p.models().singleTexture(name(ctx.getEntry()) + "_pressed", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/button_pressed"), p.blockTexture(parent.get()));
@@ -132,9 +143,9 @@ public class BlockstateGenerator {
           .forAllStates(state -> {
             int x = 0;
             int y = 0;
-            switch (state.getValue(AbstractButtonBlock.FACE)) {
+            switch (state.getValue(ButtonBlock.FACE)) {
               case CEILING:
-                switch (state.getValue(AbstractButtonBlock.FACING)) {
+                switch (state.getValue(ButtonBlock.FACING)) {
                   case EAST:
                     y = 270;
                     x = 180;
@@ -153,7 +164,7 @@ public class BlockstateGenerator {
                 }
                 break;
               case FLOOR:
-                switch (state.getValue(AbstractButtonBlock.FACING)) {
+                switch (state.getValue(ButtonBlock.FACING)) {
                   case EAST:
                     y = 90;
                     break;
@@ -168,7 +179,7 @@ public class BlockstateGenerator {
                 }
                 break;
               case WALL:
-                switch (state.getValue(AbstractButtonBlock.FACING)) {
+                switch (state.getValue(ButtonBlock.FACING)) {
                   case EAST:
                     y = 90;
                     x = 90;
@@ -187,7 +198,7 @@ public class BlockstateGenerator {
                 }
                 break;
             }
-            ConfiguredModel.Builder<?> builder = ConfiguredModel.builder().modelFile(state.getValue(AbstractButtonBlock.POWERED) ? buttonPressed : button);
+            ConfiguredModel.Builder<?> builder = ConfiguredModel.builder().modelFile(state.getValue(ButtonBlock.POWERED) ? buttonPressed : button);
             if (y != 0) {
               builder.rotationY(y);
             }
@@ -199,7 +210,7 @@ public class BlockstateGenerator {
     };
   }
 
-  public static <T extends AbstractPressurePlateBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> pressurePlate(NonNullSupplier<? extends Block> parent) {
+  public static <T extends BasePressurePlateBlock> NonNullBiConsumer<DataGenContext<Block, T>, RegistrateBlockstateProvider> pressurePlate(NonNullSupplier<? extends Block> parent) {
     return (ctx, p) -> {
       ModelFile plate = p.models().singleTexture(name(ctx.getEntry()), new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/pressure_plate_up"), p.blockTexture(parent.get()));
       ModelFile platePowered = p.models().singleTexture(name(ctx.getEntry()) + "_down", new ResourceLocation("minecraft", ModelProvider.BLOCK_FOLDER + "/pressure_plate_down"), p.blockTexture(parent.get()));

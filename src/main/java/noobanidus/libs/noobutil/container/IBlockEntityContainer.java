@@ -1,6 +1,6 @@
 package noobanidus.libs.noobutil.container;
 
-import net.minecraft.inventory.IInventory;
+import net.minecraft.world.Container;
 import noobanidus.libs.noobutil.block.entities.IInventoryBlockEntity;
 import noobanidus.libs.noobutil.inventory.ILargeInventory;
 
@@ -23,7 +23,7 @@ public interface IBlockEntityContainer<V extends ILargeInventory, T extends IInv
 
   void inventoryChanged(ILargeInventory inventory, int slot);
 
-  default void inventoryChanged(IInventory inventory, int slot) {
+  default void inventoryChanged(Container inventory, int slot) {
 
   }
 }

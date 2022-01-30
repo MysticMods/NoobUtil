@@ -1,16 +1,16 @@
 package noobanidus.libs.noobutil.world.gen;
 
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.biome.BiomeAmbience;
-import net.minecraft.world.biome.BiomeGenerationSettings;
-import net.minecraft.world.biome.MobSpawnInfo;
-import net.minecraft.world.gen.GenerationStage;
-import net.minecraft.world.gen.feature.ConfiguredFeature;
-import net.minecraft.world.gen.feature.IFeatureConfig;
-import net.minecraft.world.gen.feature.StructureFeature;
-import net.minecraft.world.gen.feature.structure.Structure;
-import net.minecraft.world.gen.surfacebuilders.ConfiguredSurfaceBuilder;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.biome.BiomeSpecialEffects;
+import net.minecraft.world.level.biome.BiomeGenerationSettings;
+import net.minecraft.world.level.biome.MobSpawnSettings;
+import net.minecraft.world.level.levelgen.GenerationStep;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
+import net.minecraft.world.level.levelgen.feature.StructureFeature;
+import net.minecraft.world.level.levelgen.surfacebuilders.ConfiguredSurfaceBuilder;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,9 +24,9 @@ public final class BiomeBuilder implements Cloneable {
   public static final BiomeTemplate BIOME_TEMPLATE = new BiomeTemplate(create());
 
   private ConfiguredSurfaceBuilder<?> surfaceBuilder;
-  private Biome.RainType precipitation;
-  private Biome.Category category;
-  private BiomeAmbience.Builder effects;
+  private Biome.Precipitation precipitation;
+  private Biome.BiomeCategory category;
+  private BiomeSpecialEffects.Builder effects;
   private Biome.TemperatureModifier temperatureModifier;
   private Float depth;
   private Float scale;
@@ -34,10 +34,10 @@ public final class BiomeBuilder implements Cloneable {
   private Float downfall;
 
   private final ArrayList<Consumer<BiomeGenerationSettings.Builder>> defaultFeatureFunctions = new ArrayList<>();
-  private final ArrayList<Pair<GenerationStage.Decoration, ConfiguredFeature<?, ?>>> features = new ArrayList<>();
-  private final ArrayList<StructureFeature<? extends IFeatureConfig, ? extends Structure<? extends IFeatureConfig>>> structureFeatures = new ArrayList<>();
-  private final ArrayList<MobSpawnInfo.Spawners> spawnEntries = new ArrayList<>();
-  private final ArrayList<Consumer<MobSpawnInfo.Builder>> spawnFunctions = new ArrayList<>();
+  private final ArrayList<Pair<GenerationStep.Decoration, ConfiguredFeature<?, ?>>> features = new ArrayList<>();
+  private final ArrayList<ConfiguredStructureFeature<? extends FeatureConfiguration, ? extends StructureFeature<? extends FeatureConfiguration>>> structureFeatures = new ArrayList<>();
+  private final ArrayList<MobSpawnSettings.SpawnerData> spawnEntries = new ArrayList<>();
+  private final ArrayList<Consumer<MobSpawnSettings.Builder>> spawnFunctions = new ArrayList<>();
   private float spawnChance = -1.0F;
   private boolean template = false;
   private boolean playerSpawnFriendly = false;
@@ -93,8 +93,8 @@ public final class BiomeBuilder implements Cloneable {
     this.playerSpawnFriendly = existing.playerSpawnFriendly;
   }
 
-  public static BiomeAmbience.Builder createDefaultBiomeAmbience() {
-    return new BiomeAmbience.Builder()
+  public static BiomeSpecialEffects.Builder createDefaultBiomeAmbience() {
+    return new BiomeSpecialEffects.Builder()
         .waterColor(0x3F76E4)
         .waterFogColor(0x50533)
         .skyColor(ColorConstants.getSkyColor(0.2F))
@@ -107,7 +107,7 @@ public final class BiomeBuilder implements Cloneable {
       throw new IllegalStateException("Tried to call build() on a frozen Builder instance!");
     }
 
-    Biome.Builder builder = new Biome.Builder();
+    Biome.BiomeBuilder builder = new Biome.BiomeBuilder();
     builder.biomeCategory(this.category);
     builder.depth(this.depth);
     builder.scale(this.scale);
@@ -120,16 +120,16 @@ public final class BiomeBuilder implements Cloneable {
 
     BiomeGenerationSettings.Builder generationSettings = new BiomeGenerationSettings.Builder().surfaceBuilder(this.surfaceBuilder);
 
-    MobSpawnInfo.Builder spawnSettings = new MobSpawnInfo.Builder();
+    MobSpawnSettings.Builder spawnSettings = new MobSpawnSettings.Builder();
     if (this.spawnChance != -1.0F) {
       spawnSettings.creatureGenerationProbability(this.spawnChance);
     }
 
-    for (MobSpawnInfo.Spawners spawnEntry : spawnEntries) {
+    for (MobSpawnSettings.SpawnerData spawnEntry : spawnEntries) {
       spawnSettings.addSpawn(spawnEntry.type.getCategory(), spawnEntry);
     }
 
-    for (Consumer<MobSpawnInfo.Builder> mobFunction : spawnFunctions) {
+    for (Consumer<MobSpawnSettings.Builder> mobFunction : spawnFunctions) {
       mobFunction.accept(spawnSettings);
     }
 
@@ -137,7 +137,7 @@ public final class BiomeBuilder implements Cloneable {
       spawnSettings.setPlayerCanSpawn();
     }
 
-    for (StructureFeature<? extends IFeatureConfig, ? extends Structure<? extends IFeatureConfig>> structure : structureFeatures) {
+    for (ConfiguredStructureFeature<? extends FeatureConfiguration, ? extends StructureFeature<? extends FeatureConfiguration>> structure : structureFeatures) {
       generationSettings.addStructureStart(structure);
     }
 
@@ -145,7 +145,7 @@ public final class BiomeBuilder implements Cloneable {
       featureFunction.accept(generationSettings);
     }
 
-    for (Pair<GenerationStage.Decoration, ConfiguredFeature<?, ?>> feature : features) {
+    for (Pair<GenerationStep.Decoration, ConfiguredFeature<?, ?>> feature : features) {
       generationSettings.addFeature(feature.getFirst(), feature.getSecond());
     }
 
@@ -159,12 +159,12 @@ public final class BiomeBuilder implements Cloneable {
     return this;
   }
 
-  public BiomeBuilder precipitation(Biome.RainType precipitation) {
+  public BiomeBuilder precipitation(Biome.Precipitation precipitation) {
     this.precipitation = precipitation;
     return this;
   }
 
-  public BiomeBuilder category(Biome.Category category) {
+  public BiomeBuilder category(Biome.BiomeCategory category) {
     this.category = category;
     return this;
   }
@@ -189,33 +189,33 @@ public final class BiomeBuilder implements Cloneable {
     return this;
   }
 
-  public BiomeBuilder effects(BiomeAmbience.Builder effects) {
+  public BiomeBuilder effects(BiomeSpecialEffects.Builder effects) {
     this.effects = effects;
     return this;
   }
 
-  public BiomeBuilder addFeature(GenerationStage.Decoration step, ConfiguredFeature<?, ?> feature) {
+  public BiomeBuilder addFeature(GenerationStep.Decoration step, ConfiguredFeature<?, ?> feature) {
     this.features.add(Pair.of(step, feature));
     return this;
   }
 
-  public BiomeBuilder addSpawnEntry(MobSpawnInfo.Spawners entry) {
+  public BiomeBuilder addSpawnEntry(MobSpawnSettings.SpawnerData entry) {
     this.spawnEntries.add(entry);
     return this;
   }
 
-  public BiomeBuilder addSpawnFunction(Consumer<MobSpawnInfo.Builder> function) {
+  public BiomeBuilder addSpawnFunction(Consumer<MobSpawnSettings.Builder> function) {
     this.spawnFunctions.add(function);
     return this;
   }
 
   @SafeVarargs
-  public final BiomeBuilder addSpawnFunctions(Consumer<MobSpawnInfo.Builder>... functions) {
+  public final BiomeBuilder addSpawnFunctions(Consumer<MobSpawnSettings.Builder>... functions) {
     this.spawnFunctions.addAll(Arrays.asList(functions));
     return this;
   }
 
-  public BiomeBuilder addStructureFeature(StructureFeature<? extends IFeatureConfig, ? extends Structure<? extends IFeatureConfig>> stucture) {
+  public BiomeBuilder addStructureFeature(ConfiguredStructureFeature<? extends FeatureConfiguration, ? extends StructureFeature<? extends FeatureConfiguration>> stucture) {
     this.structureFeatures.add(stucture);
     return this;
   }

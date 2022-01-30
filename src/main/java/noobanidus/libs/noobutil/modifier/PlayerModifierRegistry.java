@@ -1,10 +1,10 @@
 package noobanidus.libs.noobutil.modifier;
 
-import net.minecraft.entity.EntityType;
-import net.minecraft.entity.ai.attributes.Attribute;
-import net.minecraft.entity.ai.attributes.AttributeModifierMap;
-import net.minecraft.entity.ai.attributes.GlobalEntityTypeAttributes;
-import net.minecraft.entity.ai.attributes.ModifiableAttributeInstance;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.attributes.Attribute;
+import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
+import net.minecraft.world.entity.ai.attributes.DefaultAttributes;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import noobanidus.libs.noobutil.NoobUtil;
 
 import java.util.HashMap;
@@ -30,11 +30,11 @@ public class PlayerModifierRegistry {
       return;
     }
 
-    AttributeModifierMap player = GlobalEntityTypeAttributes.getSupplier(EntityType.PLAYER);
-    Map<Attribute, ModifiableAttributeInstance> map = new HashMap<>(player.instances);
+    AttributeSupplier player = DefaultAttributes.getSupplier(EntityType.PLAYER);
+    Map<Attribute, AttributeInstance> map = new HashMap<>(player.instances);
     for (Supplier<? extends Attribute> modifier : attributes) {
       Attribute attr = modifier.get();
-      map.put(attr, new ModifiableAttributeInstance(attr, (instance) -> {
+      map.put(attr, new AttributeInstance(attr, (instance) -> {
       }));
     }
     player.instances = map;

@@ -1,17 +1,17 @@
 package noobanidus.libs.noobutil.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.HugeMushroomBlock;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.HugeMushroomBlock;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.BigMushroomFeatureConfig;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.feature.configurations.HugeMushroomFeatureConfiguration;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import noobanidus.libs.noobutil.world.gen.config.BiggerMushroomFeatureConfig;
 
 import java.util.Random;
@@ -22,7 +22,7 @@ public class ConfigurableHeightBigMushroomFeature extends Feature<BiggerMushroom
     super(codec);
   }
 
-  protected void placeTrunk(IWorld pLevel, Random pRandom, BlockPos pPos, BigMushroomFeatureConfig pConfig, int pMaxHeight, BlockPos.Mutable pMutablePos) {
+  protected void placeTrunk(LevelAccessor pLevel, Random pRandom, BlockPos pPos, HugeMushroomFeatureConfiguration pConfig, int pMaxHeight, BlockPos.MutableBlockPos pMutablePos) {
     for (int i = 0; i < pMaxHeight; ++i) {
       pMutablePos.set(pPos).move(Direction.UP, i);
       if (pLevel.getBlockState(pMutablePos).canBeReplacedByLogs(pLevel, pMutablePos)) {
@@ -31,7 +31,7 @@ public class ConfigurableHeightBigMushroomFeature extends Feature<BiggerMushroom
     }
   }
 
-  protected boolean isValidPosition(IWorld pLevel, BlockPos pPos, int pMaxHeight, BlockPos.Mutable pMutablePos, BiggerMushroomFeatureConfig pConfig) {
+  protected boolean isValidPosition(LevelAccessor pLevel, BlockPos pPos, int pMaxHeight, BlockPos.MutableBlockPos pMutablePos, BiggerMushroomFeatureConfig pConfig) {
     int i = pPos.getY();
     if (i >= 1 && i + pMaxHeight + 1 < 256) {
       Block block = pLevel.getBlockState(pPos.below()).getBlock();
@@ -59,9 +59,9 @@ public class ConfigurableHeightBigMushroomFeature extends Feature<BiggerMushroom
     }
   }
 
-  public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, BiggerMushroomFeatureConfig config) {
+  public boolean place(WorldGenLevel reader, ChunkGenerator generator, Random rand, BlockPos pos, BiggerMushroomFeatureConfig config) {
     int i = this.getTreeHeight(rand, config.getA(), config.getB());
-    BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
+    BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
     if (!this.isValidPosition(reader, pos, i, blockpos$mutable, config)) {
       return false;
     } else {
@@ -71,7 +71,7 @@ public class ConfigurableHeightBigMushroomFeature extends Feature<BiggerMushroom
     }
   }
 
-  protected void makeCap(IWorld pLevel, Random pRandom, BlockPos pPos, int pTreeHeight, BlockPos.Mutable pMutablePos, BigMushroomFeatureConfig pConfig) {
+  protected void makeCap(LevelAccessor pLevel, Random pRandom, BlockPos pPos, int pTreeHeight, BlockPos.MutableBlockPos pMutablePos, HugeMushroomFeatureConfiguration pConfig) {
     for (int i = pTreeHeight - 3; i <= pTreeHeight; ++i) {
       int j = i < pTreeHeight ? pConfig.foliageRadius : pConfig.foliageRadius - 1;
       int k = pConfig.foliageRadius - 2;

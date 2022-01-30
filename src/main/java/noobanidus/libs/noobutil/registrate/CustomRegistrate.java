@@ -3,15 +3,15 @@ package noobanidus.libs.noobutil.registrate;
 import com.tterrag.registrate.AbstractRegistrate;
 import com.tterrag.registrate.builders.BlockBuilder;
 import com.tterrag.registrate.util.nullness.NonNullFunction;
-import net.minecraft.block.Block;
-import net.minecraft.block.RotatedPillarBlock;
-import net.minecraft.block.material.Material;
-import net.minecraft.inventory.container.Container;
-import net.minecraft.inventory.container.ContainerType;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.potion.Effect;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.RotatedPillarBlock;
+import net.minecraft.world.level.material.Material;
+import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.MenuType;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.effect.MobEffect;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 
 import java.util.function.Supplier;
@@ -25,55 +25,55 @@ public class CustomRegistrate extends AbstractRegistrate<CustomRegistrate> {
     return new CustomRegistrate(modid).registerEventListeners(FMLJavaModLoadingContext.get().getModEventBus());
   }
 
-  public <T extends Effect> EffectBuilder<T, CustomRegistrate> effect(Supplier<T> factory) {
+  public <T extends MobEffect> EffectBuilder<T, CustomRegistrate> effect(Supplier<T> factory) {
     return effect(this, factory);
   }
 
-  public <T extends Effect> EffectBuilder<T, CustomRegistrate> effect(String name, Supplier<T> factory) {
+  public <T extends MobEffect> EffectBuilder<T, CustomRegistrate> effect(String name, Supplier<T> factory) {
     return effect(this, name, factory);
   }
 
-  public <T extends Effect, P> EffectBuilder<T, P> effect(P parent, Supplier<T> factory) {
+  public <T extends MobEffect, P> EffectBuilder<T, P> effect(P parent, Supplier<T> factory) {
     return effect(parent, currentName(), factory);
   }
 
-  public <T extends Effect, P> EffectBuilder<T, P> effect(P parent, String name, Supplier<T> factory) {
+  public <T extends MobEffect, P> EffectBuilder<T, P> effect(P parent, String name, Supplier<T> factory) {
     return entry(name, callback -> EffectBuilder.create(this, parent, name, callback, factory));
   }
 
   // Serializers
 
-  public <T extends IRecipeSerializer<?>> RecipeSerializerBuilder<T, CustomRegistrate> recipeSerializer(Supplier<? extends T> factory) {
+  public <T extends RecipeSerializer<?>> RecipeSerializerBuilder<T, CustomRegistrate> recipeSerializer(Supplier<? extends T> factory) {
     return recipeSerializer(this, factory);
   }
 
-  public <T extends IRecipeSerializer<?>> RecipeSerializerBuilder<T, CustomRegistrate> recipeSerializer(String name, Supplier<? extends T> factory) {
+  public <T extends RecipeSerializer<?>> RecipeSerializerBuilder<T, CustomRegistrate> recipeSerializer(String name, Supplier<? extends T> factory) {
     return recipeSerializer(this, name, factory);
   }
 
-  public <T extends IRecipeSerializer<?>, P> RecipeSerializerBuilder<T, P> recipeSerializer(P parent, Supplier<? extends T> factory) {
+  public <T extends RecipeSerializer<?>, P> RecipeSerializerBuilder<T, P> recipeSerializer(P parent, Supplier<? extends T> factory) {
     return recipeSerializer(parent, currentName(), factory);
   }
 
-  public <T extends IRecipeSerializer<?>, P> RecipeSerializerBuilder<T, P> recipeSerializer(P parent, String name, Supplier<? extends T> factory) {
+  public <T extends RecipeSerializer<?>, P> RecipeSerializerBuilder<T, P> recipeSerializer(P parent, String name, Supplier<? extends T> factory) {
     return entry(name, callback -> new RecipeSerializerBuilder<>(this, parent, name, callback, factory));
   }
 
   // Containers
 
-  public <T extends Container> ContainerBuilder<T, CustomRegistrate> containerType(String name, ContainerType.IFactory<T> factory) {
+  public <T extends AbstractContainerMenu> ContainerBuilder<T, CustomRegistrate> containerType(String name, MenuType.MenuSupplier<T> factory) {
     return containerType(this, name, factory);
   }
 
-  public <T extends Container> ContainerBuilder<T, CustomRegistrate> containerType(ContainerType.IFactory<T> factory) {
+  public <T extends AbstractContainerMenu> ContainerBuilder<T, CustomRegistrate> containerType(MenuType.MenuSupplier<T> factory) {
     return containerType(this, factory);
   }
 
-  public <T extends Container, P> ContainerBuilder<T, P> containerType(P parent, ContainerType.IFactory<T> factory) {
+  public <T extends AbstractContainerMenu, P> ContainerBuilder<T, P> containerType(P parent, MenuType.MenuSupplier<T> factory) {
     return containerType(parent, currentName(), factory);
   }
 
-  public <T extends Container, P> ContainerBuilder<T, P> containerType(P parent, String name, ContainerType.IFactory<T> factory) {
+  public <T extends AbstractContainerMenu, P> ContainerBuilder<T, P> containerType(P parent, String name, MenuType.MenuSupplier<T> factory) {
     return entry(name, callback -> new ContainerBuilder<>(this, parent, name, callback, factory));
   }
 

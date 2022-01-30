@@ -1,12 +1,12 @@
 package noobanidus.libs.noobutil.world.gen.surfacebuilder;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.util.math.BlockPos.Mutable;
-import net.minecraft.world.biome.Biome;
-import net.minecraft.world.chunk.IChunk;
-import net.minecraft.world.gen.surfacebuilders.SurfaceBuilder;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.core.BlockPos.MutableBlockPos;
+import net.minecraft.world.level.biome.Biome;
+import net.minecraft.world.level.chunk.ChunkAccess;
+import net.minecraft.world.level.levelgen.surfacebuilders.SurfaceBuilder;
 import noobanidus.libs.noobutil.world.gen.config.ISurfaceWithUnderwaterBuilderConfig;
 
 import java.util.Random;
@@ -26,7 +26,7 @@ public class BeachSurfaceBuilder extends SurfaceBuilder<ISurfaceWithUnderwaterBu
   }
 
   @Override
-  public void apply(Random rand, IChunk chunk, Biome biome, int x, int z, int height, double noiseVal, BlockState var9, BlockState var10, int var11, long seed, ISurfaceWithUnderwaterBuilderConfig config) {
+  public void apply(Random rand, ChunkAccess chunk, Biome biome, int x, int z, int height, double noiseVal, BlockState var9, BlockState var10, int var11, long seed, ISurfaceWithUnderwaterBuilderConfig config) {
     int localX = x & 15;
     int localZ = z & 15;
     BlockState chosenSand = this.sand.apply(noiseVal);
@@ -36,7 +36,7 @@ public class BeachSurfaceBuilder extends SurfaceBuilder<ISurfaceWithUnderwaterBu
     boolean beach = false;
     boolean underwater = false;
 
-    Mutable pos = new Mutable(localX, 0, localZ);
+    MutableBlockPos pos = new MutableBlockPos(localX, 0, localZ);
 
     for (int y = height; y >= 0; --y) {
       pos.set(localX, y, localZ);

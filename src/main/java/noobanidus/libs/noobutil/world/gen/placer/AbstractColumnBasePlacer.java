@@ -4,13 +4,13 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableSet;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.util.Direction;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IWorld;
-import net.minecraft.world.gen.blockplacer.BlockPlacer;
-import net.minecraft.world.gen.blockplacer.BlockPlacerType;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.core.Direction;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.levelgen.feature.blockplacers.BlockPlacer;
+import net.minecraft.world.level.levelgen.feature.blockplacers.BlockPlacerType;
 import noobanidus.libs.noobutil.type.LazyStateSupplier;
 
 import java.util.List;
@@ -52,8 +52,8 @@ public abstract class AbstractColumnBasePlacer extends BlockPlacer {
   protected abstract BlockPlacerType<?> type();
 
   @Override
-  public void place(IWorld world, BlockPos pos, BlockState state, Random random) {
-    BlockPos.Mutable blockpos$mutable = pos.mutable();
+  public void place(LevelAccessor world, BlockPos pos, BlockState state, Random random) {
+    BlockPos.MutableBlockPos blockpos$mutable = pos.mutable();
     int i = this.minSize + random.nextInt(random.nextInt(this.extraSize + 1) + 1);
 
     for (int j = 0; j < i; ++j) {

@@ -2,7 +2,7 @@ package noobanidus.libs.noobutil.registrate;
 
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.sounds.SoundEvent;
 
 import java.util.function.Supplier;
 

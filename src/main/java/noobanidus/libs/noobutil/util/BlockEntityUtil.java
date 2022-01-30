@@ -1,12 +1,12 @@
 package noobanidus.libs.noobutil.util;
 
-import net.minecraft.block.BlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.Level;
 
 public class BlockEntityUtil {
-  public static <T extends TileEntity> void updateViaState(T tile) {
-    World world = tile.getLevel();
+  public static <T extends BlockEntity> void updateViaState(T tile) {
+    Level world = tile.getLevel();
     if (world == null || world.isClientSide()) {
       return;
     }

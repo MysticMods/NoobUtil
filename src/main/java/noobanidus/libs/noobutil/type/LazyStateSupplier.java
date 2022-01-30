@@ -2,15 +2,15 @@ package noobanidus.libs.noobutil.type;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.block.Blocks;
-import net.minecraft.nbt.CompoundNBT;
-import net.minecraft.nbt.NBTDynamicOps;
-import net.minecraft.state.BooleanProperty;
-import net.minecraft.state.IntegerProperty;
-import net.minecraft.state.Property;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.IntegerProperty;
+import net.minecraft.world.level.block.state.properties.Property;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.registries.ForgeRegistries;
 import noobanidus.libs.noobutil.NoobUtil;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Optional;
 
 @SuppressWarnings("WeakerAccess")
-public class LazyStateSupplier extends LazySupplier<BlockState> implements INBTSerializable<CompoundNBT> {
+public class LazyStateSupplier extends LazySupplier<BlockState> implements INBTSerializable<CompoundTag> {
   public static Codec<LazyStateSupplier> CODEC = RecordCodecBuilder.create(instance -> instance.group(ResourceLocation.CODEC.fieldOf("location").forGetter(o -> o.location),
       PropertyPair.CODEC.listOf().fieldOf("properties").forGetter(o -> o.properties),
       BlockState.CODEC.optionalFieldOf("state").forGetter(o -> o.state)).apply(instance, (loc, props, state) -> state.map(o -> new LazyStateSupplier(o, props)).orElseGet(() -> new LazyStateSupplier(loc, props))));
@@ -90,19 +90,19 @@ public class LazyStateSupplier extends LazySupplier<BlockState> implements INBTS
   }
 
   @Override
-  public CompoundNBT serializeNBT() {
-    final CompoundNBT tag = new CompoundNBT();
-    tag.put("lazy_state", CODEC.encodeStart(NBTDynamicOps.INSTANCE, this).getOrThrow(false, NoobUtil.logger::debug));
+  public CompoundTag serializeNBT() {
+    final CompoundTag tag = new CompoundTag();
+    tag.put("lazy_state", CODEC.encodeStart(NbtOps.INSTANCE, this).getOrThrow(false, NoobUtil.logger::debug));
     return tag;
   }
 
   @Override
-  public void deserializeNBT(CompoundNBT nbt) {
+  public void deserializeNBT(CompoundTag nbt) {
     throw new NotImplementedException("deserializeNBT not implemented, use fromNBT static method");
   }
 
-  public static LazyStateSupplier fromNBT (CompoundNBT nbt) {
-    return CODEC.decode(NBTDynamicOps.INSTANCE, nbt.get("lazy_state")).getOrThrow(false, NoobUtil.logger::debug).getFirst();
+  public static LazyStateSupplier fromNBT (CompoundTag nbt) {
+    return CODEC.decode(NbtOps.INSTANCE, nbt.get("lazy_state")).getOrThrow(false, NoobUtil.logger::debug).getFirst();
   }
 
   public static class PropertyPair {

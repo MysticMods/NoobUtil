@@ -2,10 +2,10 @@ package noobanidus.libs.noobutil.world.gen.config;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.world.gen.blockstateprovider.BlockStateProvider;
-import net.minecraft.world.gen.feature.BigMushroomFeatureConfig;
+import net.minecraft.world.level.levelgen.feature.stateproviders.BlockStateProvider;
+import net.minecraft.world.level.levelgen.feature.configurations.HugeMushroomFeatureConfiguration;
 
-public class BiggerMushroomFeatureConfig extends BigMushroomFeatureConfig {
+public class BiggerMushroomFeatureConfig extends HugeMushroomFeatureConfiguration {
   public static final Codec<BiggerMushroomFeatureConfig> CODEC = RecordCodecBuilder.create(instance ->
       instance.group(
           BlockStateProvider.CODEC.fieldOf("cap_provider").forGetter((o) -> o.capProvider),

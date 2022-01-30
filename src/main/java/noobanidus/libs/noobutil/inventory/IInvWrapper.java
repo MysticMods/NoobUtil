@@ -1,12 +1,12 @@
 package noobanidus.libs.noobutil.inventory;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.IInventory;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.Container;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import noobanidus.libs.noobutil.inventory.IIInvWrapper;
 
-public class IInvWrapper<T extends IItemHandler> implements IInventory, IIInvWrapper<T> {
+public class IInvWrapper<T extends IItemHandler> implements Container, IIInvWrapper<T> {
   private final T handler;
 
   public IInvWrapper(T handler) {
@@ -60,7 +60,7 @@ public class IInvWrapper<T extends IItemHandler> implements IInventory, IIInvWra
   }
 
   @Override
-  public boolean stillValid(PlayerEntity player) {
+  public boolean stillValid(Player player) {
     return true;
   }
 

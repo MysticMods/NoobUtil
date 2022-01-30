@@ -1,41 +1,41 @@
 package noobanidus.libs.noobutil.recipe;
 
-import net.minecraft.inventory.CraftingInventory;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipeSerializer;
-import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.item.crafting.ShapelessRecipe;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.World;
+import net.minecraft.world.inventory.CraftingContainer;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
+import net.minecraft.core.NonNullList;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.RecipeMatcher;
 import noobanidus.libs.noobutil.util.ItemUtil;
 
 import java.util.List;
 
 public class UniqueShapelessRecipe extends ShapelessRecipe {
-  private static IRecipeSerializer<?> storedSerializer = null;
+  private static RecipeSerializer<?> storedSerializer = null;
 
   public UniqueShapelessRecipe(ResourceLocation pId, String pGroup, ItemStack pResult, NonNullList<Ingredient> pIngredients) {
     super(pId, pGroup, pResult, pIngredients);
   }
 
-  public static IRecipeSerializer<?> getStoredSerializer() {
+  public static RecipeSerializer<?> getStoredSerializer() {
     return storedSerializer;
   }
 
-  public static void setStoredSerializer(IRecipeSerializer<?> storedSerializer) {
+  public static void setStoredSerializer(RecipeSerializer<?> storedSerializer) {
     UniqueShapelessRecipe.storedSerializer = storedSerializer;
   }
 
-  public IRecipeSerializer<?> getSerializer() {
+  public RecipeSerializer<?> getSerializer() {
     if (getStoredSerializer() == null) {
       throw new NullPointerException("serializer has not been registered for UniqueShapelessRecipe");
     }
     return getStoredSerializer();
   }
 
-  public boolean matches(CraftingInventory pInv, World pLevel) {
+  public boolean matches(CraftingContainer pInv, Level pLevel) {
     List<ItemStack> inputs = new java.util.ArrayList<>();
     int count = 0;
 

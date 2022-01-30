@@ -1,11 +1,11 @@
 package noobanidus.libs.noobutil.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Block;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import noobanidus.libs.noobutil.world.gen.config.BlockStateRadiusFeatureConfig;
 
 import java.util.Random;
@@ -16,7 +16,7 @@ public class RadiusBlockBlobFeature extends Feature<BlockStateRadiusFeatureConfi
   }
 
   @Override
-  public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateRadiusFeatureConfig config) {
+  public boolean place(WorldGenLevel reader, ChunkGenerator generator, Random rand, BlockPos pos, BlockStateRadiusFeatureConfig config) {
     while (true) {
       if (pos.getY() > 3) {
         if (reader.isEmptyBlock(pos.below())) {

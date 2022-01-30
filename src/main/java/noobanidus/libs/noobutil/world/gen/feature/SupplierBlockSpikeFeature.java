@@ -1,14 +1,14 @@
 package noobanidus.libs.noobutil.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.core.BlockPos;
+import net.minecraft.util.Mth;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import noobanidus.libs.noobutil.world.gen.config.SupplierBlockStateFeatureConfig;
 
 import java.util.Random;
@@ -19,7 +19,7 @@ public class SupplierBlockSpikeFeature extends Feature<SupplierBlockStateFeature
   }
 
   @Override
-  public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, SupplierBlockStateFeatureConfig config) {
+  public boolean place(WorldGenLevel reader, ChunkGenerator generator, Random rand, BlockPos pos, SupplierBlockStateFeatureConfig config) {
     while (reader.isEmptyBlock(pos) && pos.getY() > 2) {
       pos = pos.below();
     }
@@ -36,13 +36,13 @@ public class SupplierBlockSpikeFeature extends Feature<SupplierBlockStateFeature
 
       for (int k = 0; k < i; ++k) {
         float f = (1.0F - (float) k / (float) i) * (float) j;
-        int l = MathHelper.ceil(f);
+        int l = Mth.ceil(f);
 
         for (int i1 = -l; i1 <= l; ++i1) {
-          float f1 = (float) MathHelper.abs(i1) - 0.25F;
+          float f1 = (float) Mth.abs(i1) - 0.25F;
 
           for (int j1 = -l; j1 <= l; ++j1) {
-            float f2 = (float) MathHelper.abs(j1) - 0.25F;
+            float f2 = (float) Mth.abs(j1) - 0.25F;
             if ((i1 == 0 && j1 == 0 || !(f1 * f1 + f2 * f2 > f * f)) && (i1 != -l && i1 != l && j1 != -l && j1 != l || !(rand.nextFloat() > 0.75F))) {
               BlockState blockstate = reader.getBlockState(pos.offset(i1, k, j1));
               Block block = blockstate.getBlock();

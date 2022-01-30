@@ -1,17 +1,17 @@
 package noobanidus.libs.noobutil.container;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.inventory.container.Slot;
-import net.minecraft.world.World;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.level.Level;
 
 import javax.annotation.Nullable;
 import java.util.List;
 
 public interface IPlayerContainer {
-  PlayerEntity getPlayer();
+  Player getPlayer();
 
   @Nullable
-  default World getPlayerWorld () {
+  default Level getPlayerWorld () {
     if (getPlayer() == null) {
       return null;
     }

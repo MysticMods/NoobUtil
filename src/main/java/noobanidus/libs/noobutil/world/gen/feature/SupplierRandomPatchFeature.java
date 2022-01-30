@@ -1,13 +1,13 @@
 package noobanidus.libs.noobutil.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.block.BlockState;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.tags.FluidTags;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import noobanidus.libs.noobutil.world.gen.config.SupplierBlockClusterFeatureConfig;
 
 import java.util.Random;
@@ -18,17 +18,17 @@ public class SupplierRandomPatchFeature extends Feature<SupplierBlockClusterFeat
   }
 
   @Override
-  public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, SupplierBlockClusterFeatureConfig config) {
+  public boolean place(WorldGenLevel reader, ChunkGenerator generator, Random rand, BlockPos pos, SupplierBlockClusterFeatureConfig config) {
     BlockState blockstate = config.stateProvider.get();
     BlockPos blockpos;
     if (config.project) {
-      blockpos = reader.getHeightmapPos(Heightmap.Type.WORLD_SURFACE_WG, pos);
+      blockpos = reader.getHeightmapPos(Heightmap.Types.WORLD_SURFACE_WG, pos);
     } else {
       blockpos = pos;
     }
 
     int i = 0;
-    BlockPos.Mutable pos2 = new BlockPos.Mutable();
+    BlockPos.MutableBlockPos pos2 = new BlockPos.MutableBlockPos();
 
     for (int j = 0; j < config.tryCount; ++j) {
       pos2.setWithOffset(blockpos, rand.nextInt(config.xSpread + 1) - rand.nextInt(config.xSpread + 1), rand.nextInt(config.ySpread + 1) - rand.nextInt(config.ySpread + 1), rand.nextInt(config.zSpread + 1) - rand.nextInt(config.zSpread + 1));

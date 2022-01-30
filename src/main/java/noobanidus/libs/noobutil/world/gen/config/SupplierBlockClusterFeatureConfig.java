@@ -9,14 +9,14 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockState;
-import net.minecraft.world.gen.blockplacer.BlockPlacer;
-import net.minecraft.world.gen.feature.IFeatureConfig;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.blockplacers.BlockPlacer;
+import net.minecraft.world.level.levelgen.feature.configurations.FeatureConfiguration;
 import noobanidus.libs.noobutil.type.LazyStateSupplier;
 import noobanidus.libs.noobutil.type.LazySupplier;
 
-public class SupplierBlockClusterFeatureConfig implements IFeatureConfig {
+public class SupplierBlockClusterFeatureConfig implements FeatureConfiguration {
   public static final Codec<SupplierBlockClusterFeatureConfig> CODEC = RecordCodecBuilder.create((instance) -> instance.group(LazyStateSupplier.CODEC.fieldOf("state_provider").forGetter((o) -> o.stateProvider), BlockPlacer.CODEC.fieldOf("block_placer").forGetter((o) -> o.blockPlacer), LazyStateSupplier.CODEC.listOf().fieldOf("whitelist").forGetter((o) -> ImmutableList.copyOf(o.whitelist)), LazyStateSupplier.CODEC.listOf().fieldOf("blacklist").forGetter((o) -> ImmutableList.copyOf(o.blacklist)), Codec.INT.fieldOf("tries").orElse(128).forGetter((o) -> o.tryCount), Codec.INT.fieldOf("xspread").orElse(7).forGetter((o) -> o.xSpread), Codec.INT.fieldOf("yspread").orElse(3).forGetter((o) -> o.ySpread), Codec.INT.fieldOf("zspread").orElse(7).forGetter((o) -> o.zSpread), Codec.BOOL.fieldOf("can_replace").orElse(false).forGetter((o) -> o.isReplaceable), Codec.BOOL.fieldOf("project").orElse(true).forGetter((o) -> o.project), Codec.BOOL.fieldOf("need_water").orElse(false).forGetter((o) -> o.requiresWater)).apply(instance, SupplierBlockClusterFeatureConfig::new));
 
   public final LazyStateSupplier stateProvider;

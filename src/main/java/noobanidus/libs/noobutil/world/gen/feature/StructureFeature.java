@@ -1,18 +1,18 @@
 package noobanidus.libs.noobutil.world.gen.feature;
 
 import com.mojang.serialization.Codec;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.WeightedList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MutableBoundingBox;
-import net.minecraft.world.ISeedReader;
-import net.minecraft.world.IServerWorld;
-import net.minecraft.world.gen.ChunkGenerator;
-import net.minecraft.world.gen.Heightmap;
-import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.entity.ai.behavior.WeightedList;
+import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.level.chunk.ChunkGenerator;
+import net.minecraft.world.level.levelgen.Heightmap;
+import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.gen.feature.template.*;
 import noobanidus.libs.noobutil.type.IntPair;
 import noobanidus.libs.noobutil.world.gen.config.StructureFeatureConfig;
@@ -23,6 +23,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import net.minecraft.world.level.levelgen.structure.templatesystem.BlockIgnoreProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureManager;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructurePlaceSettings;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureProcessor;
+import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 
 public class StructureFeature extends Feature<StructureFeatureConfig> {
   private final WeightedList<ResourceLocation> structures;
@@ -59,19 +65,19 @@ public class StructureFeature extends Feature<StructureFeatureConfig> {
   }
 
   @Override
-  public boolean place(ISeedReader reader, ChunkGenerator generator, Random rand, BlockPos pos, StructureFeatureConfig config) {
+  public boolean place(WorldGenLevel reader, ChunkGenerator generator, Random rand, BlockPos pos, StructureFeatureConfig config) {
     Rotation rotation = Rotation.getRandom(rand);
 
     ResourceLocation structure = this.structures.getOne(rand);
-    TemplateManager manager = reader.getLevel().getServer().getStructureManager();
-    Template template = manager.get(structure);
+    StructureManager manager = reader.getLevel().getServer().getStructureManager();
+    StructureTemplate template = manager.get(structure);
     if (template == null) {
       throw new IllegalArgumentException("Invalid structure: " + structure);
     }
     ChunkPos chunkpos = new ChunkPos(pos);
 
-    MutableBoundingBox mutableboundingbox = new MutableBoundingBox(chunkpos.getMinBlockX(), 0, chunkpos.getMinBlockZ(), chunkpos.getMaxBlockX(), 256, chunkpos.getMaxBlockZ());
-    PlacementSettings placementsettings = (new PlacementSettings()).setRotation(rotation).setBoundingBox(mutableboundingbox).setRandom(rand).addProcessor(BlockIgnoreStructureProcessor.STRUCTURE_AND_AIR);
+    BoundingBox mutableboundingbox = new BoundingBox(chunkpos.getMinBlockX(), 0, chunkpos.getMinBlockZ(), chunkpos.getMaxBlockX(), 256, chunkpos.getMaxBlockZ());
+    StructurePlaceSettings placementsettings = (new StructurePlaceSettings()).setRotation(rotation).setBoundingBox(mutableboundingbox).setRandom(rand).addProcessor(BlockIgnoreProcessor.STRUCTURE_AND_AIR);
     BlockPos blockpos = template.getSize(rotation);
     int j = rand.nextInt(16 - blockpos.getX());
     int k = rand.nextInt(16 - blockpos.getZ());
@@ -79,7 +85,7 @@ public class StructureFeature extends Feature<StructureFeatureConfig> {
 
     for (int i1 = 0; i1 < blockpos.getX(); ++i1) {
       for (int j1 = 0; j1 < blockpos.getZ(); ++j1) {
-        l = Math.min(l, reader.getHeight(Heightmap.Type.OCEAN_FLOOR_WG, pos.getX() + i1 + j, pos.getZ() + j1 + k));
+        l = Math.min(l, reader.getHeight(Heightmap.Types.OCEAN_FLOOR_WG, pos.getX() + i1 + j, pos.getZ() + j1 + k));
       }
     }
 
@@ -97,11 +103,11 @@ public class StructureFeature extends Feature<StructureFeatureConfig> {
     return result;
   }
 
-  protected void prePlaceCallback (IServerWorld pServerLevel, BlockPos p_237146_2_, BlockPos p_237146_3_, PlacementSettings pSettings, Random pRandom, int pFlags) {
+  protected void prePlaceCallback (ServerLevelAccessor pServerLevel, BlockPos p_237146_2_, BlockPos p_237146_3_, StructurePlaceSettings pSettings, Random pRandom, int pFlags) {
 
   }
 
-  protected void postPlaceCallback (IServerWorld pServerLevel, BlockPos p_237146_2_, BlockPos p_237146_3_, PlacementSettings pSettings, Random pRandom, int pFlags) {
+  protected void postPlaceCallback (ServerLevelAccessor pServerLevel, BlockPos p_237146_2_, BlockPos p_237146_3_, StructurePlaceSettings pSettings, Random pRandom, int pFlags) {
 
   }
 }

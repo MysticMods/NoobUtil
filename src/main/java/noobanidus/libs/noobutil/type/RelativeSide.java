@@ -1,6 +1,6 @@
 package noobanidus.libs.noobutil.type;
 
-import net.minecraft.util.Direction;
+import net.minecraft.core.Direction;
 
 import javax.annotation.Nonnull;
 

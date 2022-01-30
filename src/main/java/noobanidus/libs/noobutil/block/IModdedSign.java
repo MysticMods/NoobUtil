@@ -1,6 +1,6 @@
 package noobanidus.libs.noobutil.block;
 
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.resources.ResourceLocation;
 
 public interface IModdedSign {
   ResourceLocation getTexture();

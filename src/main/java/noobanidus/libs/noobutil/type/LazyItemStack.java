@@ -1,7 +1,7 @@
 package noobanidus.libs.noobutil.type;
 
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 
 import java.util.function.Supplier;
 
