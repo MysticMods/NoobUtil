@@ -1,6 +1,8 @@
 package noobanidus.libs.noobutil.block.entities;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.entity.ChestBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.nbt.CompoundTag;
@@ -23,13 +25,11 @@ public class DecayingBlockEntity extends BlockEntity {
     this.state = block;
   }
 
-  // TODO:
-/*  @Override
-  public void tick() {
-    if (level != null && !level.isClientSide && decay-- <= 0) {
-      level.setBlockAndUpdate(worldPosition, state.get());
+  public static void decayingTick (Level pLevel, BlockPos pPos, BlockState pState, DecayingBlockEntity pBlockEntity) {
+    if (pLevel != null && pBlockEntity.decay-- <= 0) {
+      pLevel.setBlock(pPos, pBlockEntity.state.get(), 3);
     }
-  }*/
+  }
 
   @Override
   public void load(CompoundTag tag) {
