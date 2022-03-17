@@ -2,6 +2,7 @@ package noobanidus.libs.noobutil.ingredient;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -27,11 +28,11 @@ import net.minecraft.world.item.crafting.Ingredient.Value;
 public class ExcludingIngredient extends Ingredient {
 
   //Helper methods for the two most common types we may be creating
-  public static ExcludingIngredient create(Tag<Item> base, ItemLike without) {
+  public static ExcludingIngredient create(TagKey<Item> base, ItemLike without) {
     return new ExcludingIngredient(Ingredient.of(base), Ingredient.of(without));
   }
 
-  public static ExcludingIngredient create(Tag<Item> base, Tag<Item> without) {
+  public static ExcludingIngredient create(TagKey<Item> base, TagKey<Item> without) {
     return new ExcludingIngredient(Ingredient.of(base), Ingredient.of(without));
   }
 

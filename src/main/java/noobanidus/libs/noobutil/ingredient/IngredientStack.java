@@ -3,6 +3,7 @@ package noobanidus.libs.noobutil.ingredient;
 import com.google.gson.JsonObject;
 import com.mojang.serialization.JsonOps;
 import it.unimi.dsi.fastutil.ints.IntList;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -57,15 +58,15 @@ public class IngredientStack {
     this.nbt = nbt;
   }
 
-  public IngredientStack(Tag<Item> tag) {
+  public IngredientStack(TagKey<Item> tag) {
     this(tag, 1);
   }
 
-  public IngredientStack(Tag<Item> tag, int count) {
+  public IngredientStack(TagKey<Item> tag, int count) {
     this(tag, count, null);
   }
 
-  public IngredientStack(Tag<Item> tag, int count, CompoundTag nbt) {
+  public IngredientStack(TagKey<Item> tag, int count, CompoundTag nbt) {
     this.ingredient = Ingredient.of(tag);
     this.count = count;
     this.nbt = nbt;

@@ -1,7 +1,6 @@
 package noobanidus.libs.noobutil.events;
 
 import com.google.common.collect.ImmutableList;
-import com.tterrag.registrate.util.entry.RegistryEntry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent;
@@ -9,6 +8,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.registries.IForgeRegistry;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import net.minecraftforge.registries.RegistryManager;
+import net.minecraftforge.registries.RegistryObject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -43,8 +43,8 @@ public class Remapper {
   }
 
   @SafeVarargs
-  public final <T extends IForgeRegistryEntry<T>> void remap(String modid, RegistryEntry<T>... entries) {
-    for (RegistryEntry<T> entry : entries) {
+  public final <T extends IForgeRegistryEntry<T>> void remap(String modid, RegistryObject<T>... entries) {
+    for (RegistryObject<T> entry : entries) {
       ResourceLocation old_id = new ResourceLocation(modid, entry.getId().getPath());
       remap(old_id, entry);
     }
@@ -54,7 +54,7 @@ public class Remapper {
     remapper.add(Remap.of(old_id, entry));
   }
 
-  public <T extends IForgeRegistryEntry<T>> void remap(ResourceLocation old_id, RegistryEntry<T> entry) {
+  public <T extends IForgeRegistryEntry<T>> void remap(ResourceLocation old_id, RegistryObject<T> entry) {
     remapper.add(Remap.of(old_id, entry));
   }
 
@@ -96,7 +96,7 @@ public class Remapper {
     public static ResourceLocation IGNORE = new ResourceLocation("noobutil", "ignore");
 
     private final T entry;
-    private final RegistryEntry<T> registryEntry;
+    private final RegistryObject<T> registryEntry;
     private final ResourceLocation resourceLocation;
     private final ResourceLocation oldResourceLocation;
 
@@ -114,7 +114,7 @@ public class Remapper {
       this.oldResourceLocation = oldResourceLocation;
     }
 
-    protected Remap(ResourceLocation oldResourceLocation, RegistryEntry<T> registryEntry) {
+    protected Remap(ResourceLocation oldResourceLocation, RegistryObject<T> registryEntry) {
       this.entry = null;
       this.registryEntry = registryEntry;
       this.resourceLocation = registryEntry.getId();
@@ -162,7 +162,7 @@ public class Remapper {
       return new Remap<>(oldKey, entry);
     }
 
-    public static <T extends IForgeRegistryEntry<T>> Remap<T> of(ResourceLocation oldKey, RegistryEntry<T> entry) {
+    public static <T extends IForgeRegistryEntry<T>> Remap<T> of(ResourceLocation oldKey, RegistryObject<T> entry) {
       return new Remap<>(oldKey, entry);
     }
 

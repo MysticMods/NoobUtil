@@ -3,6 +3,7 @@ package noobanidus.libs.noobutil.material;
 import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.Tag;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Tier;
@@ -99,7 +100,7 @@ public class MaterialType {
     return this;
   }
 
-  public MaterialType itemMaterial(int maxUses, float efficiency, float attackDamage, int harvestLevel, int enchantability, Supplier<Tag.Named<Item>> repairTag) {
+  public MaterialType itemMaterial(int maxUses, float efficiency, float attackDamage, int harvestLevel, int enchantability, Supplier<TagKey<Item>> repairTag) {
     itemMaterial(maxUses, efficiency, attackDamage, harvestLevel, enchantability);
     this.repairMaterial = new LazyIngredient(() -> Ingredient.of(repairTag.get()));
     return this;

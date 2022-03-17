@@ -8,6 +8,7 @@ import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -42,7 +43,7 @@ public class UniqueShapelessRecipeBuilder {
     return new UniqueShapelessRecipeBuilder(pResult, pCount);
   }
 
-  public UniqueShapelessRecipeBuilder requires(Tag<Item> pTag) {
+  public UniqueShapelessRecipeBuilder requires(TagKey<Item> pTag) {
     return this.requires(Ingredient.of(pTag));
   }
 
