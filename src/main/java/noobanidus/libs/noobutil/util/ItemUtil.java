@@ -71,9 +71,9 @@ public class ItemUtil {
       if (ticks != -1) {
         item.setPickUpDelay(ticks);
       }
-      if (hoverStart != -1) {
+/*      if (hoverStart != -1) {
         item.bobOffs = hoverStart;
-      }
+      }*/
       return spawnItem(world, item);
     }
 

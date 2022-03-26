@@ -1,4 +1,3 @@
-/*
 package noobanidus.libs.noobutil.data.generator;
 
 import com.tterrag.registrate.providers.DataGenContext;
@@ -10,19 +9,19 @@ import net.minecraft.advancements.critereon.EntityPredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
+import net.minecraft.core.Holder;
 import net.minecraft.core.Registry;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.data.*;
+import net.minecraft.data.recipes.*;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.tags.Tag;
-import net.minecraft.tags.Tag;
-import net.minecraft.tags.SerializationTags;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.Tags;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.IForgeRegistryEntry;
 import noobanidus.libs.noobutil.item.BaseItems;
 
@@ -30,14 +29,6 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-
-// TODO: Transition these to DataGenerators
-
-import net.minecraft.data.recipes.FinishedRecipe;
-import net.minecraft.data.recipes.ShapedRecipeBuilder;
-import net.minecraft.data.recipes.ShapelessRecipeBuilder;
-import net.minecraft.data.recipes.SimpleCookingRecipeBuilder;
-import net.minecraft.data.recipes.SingleItemRecipeBuilder;
 
 @SuppressWarnings({"Duplicates", "WeakerAccess", "unused"})
 public class RecipeGenerator {
@@ -54,11 +45,11 @@ public class RecipeGenerator {
     return new ResourceLocation(modid, comp);
   }
 
-  public ResourceLocation getId(Tag.Named<Item> tag) {
-    return SerializationTags.getInstance().getOrEmpty(Registry.ITEM_REGISTRY).getId(tag);
+  public ResourceLocation getId(TagKey<Item> tag) {
+    return tag.location();
   }
 
-  public <T extends Item> NonNullBiConsumer<DataGenContext<Item, T>, RegistrateRecipeProvider> storage(Supplier<RegistryEntry<Block>> block, Supplier<RegistryEntry<Item>> ingot, Tag.Named<Item> blockTag, Tag.Named<Item> ingotTag, @Nullable Tag.Named<Item> oreTag, @Nullable Supplier<RegistryEntry<Item>> nugget, @Nullable Tag.Named<Item> nuggetTag, @Nullable Tag.Named<Item> dustTag) {
+  public <T extends Item> NonNullBiConsumer<DataGenContext<Item, T>, RegistrateRecipeProvider> storage(Supplier<RegistryEntry<Block>> block, Supplier<RegistryEntry<Item>> ingot, TagKey<Item> blockTag, TagKey<Item> ingotTag, @Nullable TagKey<Item> oreTag, @Nullable Supplier<RegistryEntry<Item>> nugget, @Nullable TagKey<Item> nuggetTag, @Nullable TagKey<Item> dustTag) {
     return (ctx, p) -> {
 
       // Ingot to block
@@ -101,7 +92,7 @@ public class RecipeGenerator {
     return new InventoryChangeTrigger.TriggerInstance(EntityPredicate.Composite.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, pPredicates);
   }
 
-  protected static InventoryChangeTrigger.TriggerInstance has(Tag<Item> pTag) {
+  protected static InventoryChangeTrigger.TriggerInstance has(TagKey<Item> pTag) {
     return inventoryTrigger(ItemPredicate.Builder.item().of(pTag).build());
   }
 
@@ -109,12 +100,12 @@ public class RecipeGenerator {
     return inventoryTrigger(ItemPredicate.Builder.item().of(pItemLike).build());
   }
 
-  public <T extends ItemLike & IForgeRegistryEntry<?>> void ore(Tag.Named<Item> source, Supplier<T> result, float xp, Consumer<FinishedRecipe> consumer) {
+  public <T extends ItemLike & IForgeRegistryEntry<?>> void ore(TagKey<Item> source, Supplier<T> result, float xp, Consumer<FinishedRecipe> consumer) {
     SimpleCookingRecipeBuilder.smelting(Ingredient.of(source), result.get(), xp, 200).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer, rl(safeId(result.get()) + "_from_smelting"));
     SimpleCookingRecipeBuilder.blasting(Ingredient.of(source), result.get(), xp, 100).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer, rl(safeId(result.get()) + "_from_blasting"));
   }
 
-  public <T extends ItemLike & IForgeRegistryEntry<?>> void dust(Tag.Named<Item> source, Supplier<T> result, float xp, Consumer<FinishedRecipe> consumer) {
+  public <T extends ItemLike & IForgeRegistryEntry<?>> void dust(TagKey<Item> source, Supplier<T> result, float xp, Consumer<FinishedRecipe> consumer) {
     SimpleCookingRecipeBuilder.smelting(Ingredient.of(source), result.get(), xp, 200).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer, rl(safeId(result.get()) + "_from_smelting_dust"));
     SimpleCookingRecipeBuilder.blasting(Ingredient.of(source), result.get(), xp, 100).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer, rl(safeId(result.get()) + "_from_blasting_dust"));
   }
@@ -130,14 +121,14 @@ public class RecipeGenerator {
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> void recycle(Supplier<? extends T> source, Supplier<? extends T> result, float xp, String namespace, Consumer<FinishedRecipe> consumer) {
     SimpleCookingRecipeBuilder.smelting(Ingredient.of(source.get()), result.get(), xp, 200)
-        .unlockedBy("has_" + safeName(source.get().getRegistryName()),has(source.get()))
+        .unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get()))
         .save(consumer, new ResourceLocation(namespace, safeName(result.get()) + "_from_smelting_" + safeName(source.get())));
     SimpleCookingRecipeBuilder.blasting(Ingredient.of(source.get()), result.get(), xp, 100)
         .unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get()))
         .save(consumer, new ResourceLocation(namespace, safeName(result.get()) + "_from_blasting_" + safeName(source.get())));
   }
 
-  public <T extends ItemLike & IForgeRegistryEntry<?>> void recycle(Tag.Named<Item> tag, Supplier<? extends T> result, float xp, Consumer<FinishedRecipe> consumer) {
+  public <T extends ItemLike & IForgeRegistryEntry<?>> void recycle(TagKey<Item> tag, Supplier<? extends T> result, float xp, Consumer<FinishedRecipe> consumer) {
     SimpleCookingRecipeBuilder.smelting(Ingredient.of(tag), result.get(), xp, 200)
         .unlockedBy("has_" + safeName(result.get().getRegistryName()), has(result.get()))
         .save(consumer, safeId(result.get()) + "_from_smelting");
@@ -152,7 +143,7 @@ public class RecipeGenerator {
     SimpleCookingRecipeBuilder.cooking(Ingredient.of(source.get()), result.get(), xp, 600, RecipeSerializer.CAMPFIRE_COOKING_RECIPE).unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get())).save(consumer, safeId(result.get()) + "_from_campfire");
   }
 
-  public <T extends ItemLike & IForgeRegistryEntry<?>> void food(Tag.Named<Item> source, Supplier<? extends T> result, float xp, Consumer<FinishedRecipe> consumer) {
+  public <T extends ItemLike & IForgeRegistryEntry<?>> void food(TagKey<Item> source, Supplier<? extends T> result, float xp, Consumer<FinishedRecipe> consumer) {
     SimpleCookingRecipeBuilder.smelting(Ingredient.of(source), result.get(), xp, 200).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer);
     SimpleCookingRecipeBuilder.cooking(Ingredient.of(source), result.get(), xp, 100, RecipeSerializer.SMOKING_RECIPE).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer, safeId(result.get()) + "_from_smoker");
     SimpleCookingRecipeBuilder.cooking(Ingredient.of(source), result.get(), xp, 600, RecipeSerializer.CAMPFIRE_COOKING_RECIPE).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer, safeId(result.get()) + "_from_campfire");
@@ -170,9 +161,10 @@ public class RecipeGenerator {
     ShapelessRecipeBuilder.shapeless(input.get(), 9).requires(output.get()).unlockedBy("has_" + safeName(output.get()), has(output.get())).save(consumer, safeId(input.get()) + "_from_" + safeName(output.get()));
   }
 
-  public Item getModElement(Tag.Named<Item> input) {
+  public Item getModElement(TagKey<Item> input) {
     Item last = Items.AIR;
-    for (Item item : input.getValues()) {
+    for (Holder<Item> hItem : Registry.ITEM.getTagOrEmpty(input)) {
+      Item item = hItem.value();
       last = item;
       if (Objects.requireNonNull(item.getRegistryName()).getNamespace().equals(modid)) {
         return item;
@@ -181,7 +173,7 @@ public class RecipeGenerator {
     return last;
   }
 
-  public <T extends ItemLike & IForgeRegistryEntry<?>> void storage(Tag.Named<Item> input, Supplier<? extends T> output, Consumer<FinishedRecipe> consumer) {
+  public <T extends ItemLike & IForgeRegistryEntry<?>> void storage(TagKey<Item> input, Supplier<? extends T> output, Consumer<FinishedRecipe> consumer) {
     ShapedRecipeBuilder.shaped(output.get())
         .pattern("###")
         .pattern("###")
@@ -423,7 +415,7 @@ public class RecipeGenerator {
   }
 
   @SuppressWarnings("ConstantConditions")
-  public <T extends ItemLike & IForgeRegistryEntry<?>> void knife(Tag.Named<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
+  public <T extends ItemLike & IForgeRegistryEntry<?>> void knife(TagKey<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
     ShapedRecipeBuilder.shaped(result.get(), 1)
         .pattern(" X")
         .pattern("S ")
@@ -520,7 +512,7 @@ public class RecipeGenerator {
   }
 
   @SuppressWarnings("ConstantConditions")
-  public <T extends ItemLike & IForgeRegistryEntry<?>> void axe(Tag.Named<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
+  public <T extends ItemLike & IForgeRegistryEntry<?>> void axe(TagKey<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
     ShapedRecipeBuilder.shaped(result.get(), 1)
         .pattern("XX ")
         .pattern("XS ")
@@ -533,7 +525,7 @@ public class RecipeGenerator {
   }
 
   @SuppressWarnings("ConstantConditions")
-  public <T extends ItemLike & IForgeRegistryEntry<?>> void pickaxe(Tag.Named<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
+  public <T extends ItemLike & IForgeRegistryEntry<?>> void pickaxe(TagKey<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
     ShapedRecipeBuilder.shaped(result.get(), 1)
         .pattern("XXX")
         .pattern(" S ")
@@ -546,7 +538,7 @@ public class RecipeGenerator {
   }
 
   @SuppressWarnings("ConstantConditions")
-  public <T extends ItemLike & IForgeRegistryEntry<?>> void shovel(Tag.Named<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
+  public <T extends ItemLike & IForgeRegistryEntry<?>> void shovel(TagKey<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
     ShapedRecipeBuilder.shaped(result.get(), 1)
         .pattern("X")
         .pattern("S")
@@ -559,7 +551,7 @@ public class RecipeGenerator {
   }
 
   @SuppressWarnings("ConstantConditions")
-  public <T extends ItemLike & IForgeRegistryEntry<?>> void sword(Tag.Named<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
+  public <T extends ItemLike & IForgeRegistryEntry<?>> void sword(TagKey<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
     ShapedRecipeBuilder.shaped(result.get(), 1)
         .pattern("X")
         .pattern("X")
@@ -572,7 +564,7 @@ public class RecipeGenerator {
   }
 
   @SuppressWarnings("ConstantConditions")
-  public <T extends ItemLike & IForgeRegistryEntry<?>> void hoe(Tag.Named<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
+  public <T extends ItemLike & IForgeRegistryEntry<?>> void hoe(TagKey<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
     ShapedRecipeBuilder.shaped(result.get(), 1)
         .pattern("XX ")
         .pattern(" S ")
@@ -585,7 +577,7 @@ public class RecipeGenerator {
   }
 
   @SuppressWarnings("ConstantConditions")
-  public <T extends ItemLike & IForgeRegistryEntry<?>> void boots(Tag.Named<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
+  public <T extends ItemLike & IForgeRegistryEntry<?>> void boots(TagKey<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
     ShapedRecipeBuilder.shaped(result.get(), 1)
         .pattern("X X")
         .pattern("X X")
@@ -596,7 +588,7 @@ public class RecipeGenerator {
   }
 
   @SuppressWarnings("ConstantConditions")
-  public <T extends ItemLike & IForgeRegistryEntry<?>> void legs(Tag.Named<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
+  public <T extends ItemLike & IForgeRegistryEntry<?>> void legs(TagKey<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
     ShapedRecipeBuilder.shaped(result.get(), 1)
         .pattern("XXX")
         .pattern("X X")
@@ -608,7 +600,7 @@ public class RecipeGenerator {
   }
 
   @SuppressWarnings("ConstantConditions")
-  public <T extends ItemLike & IForgeRegistryEntry<?>> void chest(Tag.Named<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
+  public <T extends ItemLike & IForgeRegistryEntry<?>> void chest(TagKey<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
     ShapedRecipeBuilder.shaped(result.get(), 1)
         .pattern("X X")
         .pattern("XXX")
@@ -620,7 +612,7 @@ public class RecipeGenerator {
   }
 
   @SuppressWarnings("ConstantConditions")
-  public <T extends ItemLike & IForgeRegistryEntry<?>> void helmet(Tag.Named<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
+  public <T extends ItemLike & IForgeRegistryEntry<?>> void helmet(TagKey<Item> material, Supplier<? extends T> result, @Nullable String group, Consumer<FinishedRecipe> consumer) {
     ShapedRecipeBuilder.shaped(result.get(), 1)
         .pattern("XXX")
         .pattern("X X")
@@ -654,4 +646,3 @@ public class RecipeGenerator {
   }
 }
 
-*/
