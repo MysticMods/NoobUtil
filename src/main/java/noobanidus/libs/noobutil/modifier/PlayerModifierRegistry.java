@@ -33,38 +33,14 @@ public class PlayerModifierRegistry {
       return;
     }
 
-    Field modifiers;
-    Field instances = ObfuscationReflectionHelper.findField(AttributeSupplier.class, "f_22241_");    instances.setAccessible(true);
-    try {
-      modifiers = Field.class.getDeclaredField("modifiers");
-    } catch (NoSuchFieldException e) {
-      return;
-    }
-
-    modifiers.setAccessible(true);
-    try {
-      modifiers.setInt(instances, instances.getModifiers() & ~Modifier.FINAL);
-    } catch (IllegalAccessException e) {
-      return;
-    }
-
     AttributeSupplier player = DefaultAttributes.getSupplier(EntityType.PLAYER);
-    Map<Attribute, AttributeInstance> map = null;
-    try {
-      map = new HashMap<>((Map<Attribute, AttributeInstance>)instances.get(player));
-    } catch (IllegalAccessException e) {
-      return;
-    }
+    Map<Attribute, AttributeInstance> map = player.instances;
     for (Supplier<? extends Attribute> modifier : attributes) {
       Attribute attr = modifier.get();
       map.put(attr, new AttributeInstance(attr, (instance) -> {
       }));
     }
-    try {
-      instances.set(player, map);
-    } catch (IllegalAccessException e) {
-      return;
-    }
+    player.instances = map;
     NoobUtil.logger.info("Added " + attributes.size() + " additional attributes to PlayerEntity.");
     activated = true;
   }
