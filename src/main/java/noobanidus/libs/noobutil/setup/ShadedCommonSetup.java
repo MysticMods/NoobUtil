@@ -5,6 +5,5 @@ import noobanidus.libs.noobutil.modifier.PlayerModifierRegistry;
 
 public class ShadedCommonSetup {
   public static void init(FMLCommonSetupEvent event) {
-    PlayerModifierRegistry.init();
   }
 }
