@@ -265,6 +265,10 @@ public class MaterialType {
     return props.strength(3.0f, 3.0f).requiresCorrectToolForDrops()/*.harvestTool(ToolType.PICKAXE).harvestLevel(getHarvestLevel() - 1)*/;
   }
 
+  public Supplier<Block.Properties> getOreBlockProperties(Material type) {
+    return Block.Properties.of(type).requiresCorrectToolForDrops();
+  }
+
   public Supplier<Block.Properties> getOreBlockProperties() {
     return () -> getOreBlockProperties(Block.Properties.of(Material.STONE));
   }
