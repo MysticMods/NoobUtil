@@ -1,8 +1,11 @@
 package noobanidus.libs.noobutil.reference;
 
 import net.minecraft.resources.ResourceLocation;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ModData {
+  public static Logger logger = LogManager.getLogger();
   private static String modid = null;
   private static String modIdentifier = null;
 

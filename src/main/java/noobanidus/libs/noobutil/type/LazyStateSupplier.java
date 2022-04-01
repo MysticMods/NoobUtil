@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.properties.Property;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.registries.ForgeRegistries;
-import noobanidus.libs.noobutil.NoobUtil;
+import noobanidus.libs.noobutil.reference.ModData;
 import org.apache.commons.lang3.NotImplementedException;
 
 import javax.annotation.Nullable;
@@ -92,7 +92,7 @@ public class LazyStateSupplier extends LazySupplier<BlockState> implements INBTS
   @Override
   public CompoundTag serializeNBT() {
     final CompoundTag tag = new CompoundTag();
-    tag.put("lazy_state", CODEC.encodeStart(NbtOps.INSTANCE, this).getOrThrow(false, NoobUtil.logger::debug));
+    tag.put("lazy_state", CODEC.encodeStart(NbtOps.INSTANCE, this).getOrThrow(false, ModData.logger::debug));
     return tag;
   }
 
@@ -102,7 +102,7 @@ public class LazyStateSupplier extends LazySupplier<BlockState> implements INBTS
   }
 
   public static LazyStateSupplier fromNBT (CompoundTag nbt) {
-    return CODEC.decode(NbtOps.INSTANCE, nbt.get("lazy_state")).getOrThrow(false, NoobUtil.logger::debug).getFirst();
+    return CODEC.decode(NbtOps.INSTANCE, nbt.get("lazy_state")).getOrThrow(false, ModData.logger::debug).getFirst();
   }
 
   public static class PropertyPair {

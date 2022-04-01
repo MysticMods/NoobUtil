@@ -9,9 +9,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.tags.Tag;
 import net.minecraft.world.level.ItemLike;
-import noobanidus.libs.noobutil.NoobUtil;
+import noobanidus.libs.noobutil.reference.ModData;
 import noobanidus.libs.noobutil.reference.NBTConstants;
 
 import javax.annotation.Nullable;
@@ -150,7 +149,7 @@ public class IngredientStack {
     JsonObject result = new JsonObject();
     result.add(NBTConstants.Ingredient, ingredient.toJson());
     result.addProperty(NBTConstants.Count, this.count);
-    CompoundTag.CODEC.encodeStart(JsonOps.INSTANCE, this.nbt).resultOrPartial(NoobUtil.logger::error).ifPresent((i) -> result.add(NBTConstants.NBT, i));
+    CompoundTag.CODEC.encodeStart(JsonOps.INSTANCE, this.nbt).resultOrPartial(ModData.logger::error).ifPresent((i) -> result.add(NBTConstants.NBT, i));
     return result;
   }
 
@@ -162,7 +161,7 @@ public class IngredientStack {
 
     Ingredient ing = Ingredient.fromJson(object.getAsJsonObject(NBTConstants.Ingredient));
     int count = object.get(NBTConstants.Count).getAsInt();
-    CompoundTag tag = object.has(NBTConstants.NBT) ? CompoundTag.CODEC.parse(JsonOps.INSTANCE, object.getAsJsonObject(NBTConstants.NBT)).resultOrPartial(NoobUtil.logger::error).orElse(null) : null;
+    CompoundTag tag = object.has(NBTConstants.NBT) ? CompoundTag.CODEC.parse(JsonOps.INSTANCE, object.getAsJsonObject(NBTConstants.NBT)).resultOrPartial(ModData.logger::error).orElse(null) : null;
     return new IngredientStack(ing, count, tag);
   }
 
