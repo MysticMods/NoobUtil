@@ -61,6 +61,12 @@ public class BaseBlocks {
     private final int minXP;
     private final int maxXP;
 
+    public OreBlock(Properties p_153992_, UniformInt p_153993_) {
+      super(p_153992_, p_153993_);
+      minXP = p_153993_.getMinValue();
+      maxXP = p_153993_.getMaxValue();
+    }
+
     public OreBlock(Properties props, int minXP, int maxXP) {
       super(props, UniformInt.of(minXP, maxXP));
       this.minXP = minXP;
