@@ -55,7 +55,7 @@ public class BaseBlocks {
     }
   }
 
-  public class WildCropBlock extends BushBlock {
+  public static class WildCropBlock extends BushBlock {
     private static final VoxelShape SHAPE = Block.box(0.0D, 0.0D, 0.0D, 16.0D, 16.0D, 16.0D);
     private final TagKey<Block> supporter;
 
