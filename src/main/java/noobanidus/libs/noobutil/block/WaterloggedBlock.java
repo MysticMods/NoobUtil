@@ -23,6 +23,7 @@ public class WaterloggedBlock extends Block implements SimpleWaterloggedBlock {
 
   public WaterloggedBlock(Properties properties) {
     super(properties);
+    this.registerDefaultState(this.getStateDefinition().any().setValue(WATERLOGGED, false));
   }
 
   @Nullable
