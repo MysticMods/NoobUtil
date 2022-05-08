@@ -113,10 +113,10 @@ public class RecipeGenerator {
   public <T extends ItemLike & IForgeRegistryEntry<?>> void recycle(Supplier<? extends T> source, Supplier<? extends T> result, float xp, Consumer<FinishedRecipe> consumer) {
     SimpleCookingRecipeBuilder.smelting(Ingredient.of(source.get()), result.get(), xp, 200)
         .unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get()))
-        .save(consumer, safeId(result.get()) + "_from_smelting");
+        .save(consumer, rl(safeId(result.get()) + "_from_smelting"));
     SimpleCookingRecipeBuilder.blasting(Ingredient.of(source.get()), result.get(), xp, 100)
         .unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get()))
-        .save(consumer, safeId(result.get()) + "_from_blasting");
+        .save(consumer, rl(safeId(result.get()) + "_from_blasting"));
   }
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> void recycle(Supplier<? extends T> source, Supplier<? extends T> result, float xp, String namespace, Consumer<FinishedRecipe> consumer) {
@@ -131,34 +131,34 @@ public class RecipeGenerator {
   public <T extends ItemLike & IForgeRegistryEntry<?>> void recycle(TagKey<Item> tag, Supplier<? extends T> result, float xp, Consumer<FinishedRecipe> consumer) {
     SimpleCookingRecipeBuilder.smelting(Ingredient.of(tag), result.get(), xp, 200)
         .unlockedBy("has_" + safeName(result.get().getRegistryName()), has(result.get()))
-        .save(consumer, safeId(result.get()) + "_from_smelting");
+        .save(consumer, rl(safeId(result.get()) + "_from_smelting"));
     SimpleCookingRecipeBuilder.blasting(Ingredient.of(tag), result.get(), xp, 100)
         .unlockedBy("has_" + safeName(result.get().getRegistryName()), has(result.get()))
-        .save(consumer, safeId(result.get()) + "_from_blasting");
+        .save(consumer, rl(safeId(result.get()) + "_from_blasting"));
   }
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> void food(Supplier<? extends T> source, Supplier<? extends T> result, float xp, Consumer<FinishedRecipe> consumer) {
     SimpleCookingRecipeBuilder.smelting(Ingredient.of(source.get()), result.get(), xp, 200).unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get())).save(consumer);
-    SimpleCookingRecipeBuilder.cooking(Ingredient.of(source.get()), result.get(), xp, 100, RecipeSerializer.SMOKING_RECIPE).unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get())).save(consumer, safeId(result.get()) + "_from_smoker");
-    SimpleCookingRecipeBuilder.cooking(Ingredient.of(source.get()), result.get(), xp, 600, RecipeSerializer.CAMPFIRE_COOKING_RECIPE).unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get())).save(consumer, safeId(result.get()) + "_from_campfire");
+    SimpleCookingRecipeBuilder.cooking(Ingredient.of(source.get()), result.get(), xp, 100, RecipeSerializer.SMOKING_RECIPE).unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get())).save(consumer,rl(safeId(result.get()) + "_from_smoker"));
+    SimpleCookingRecipeBuilder.cooking(Ingredient.of(source.get()), result.get(), xp, 600, RecipeSerializer.CAMPFIRE_COOKING_RECIPE).unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get())).save(consumer, rl(safeId(result.get()) + "_from_campfire"));
   }
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> void food(TagKey<Item> source, Supplier<? extends T> result, float xp, Consumer<FinishedRecipe> consumer) {
     SimpleCookingRecipeBuilder.smelting(Ingredient.of(source), result.get(), xp, 200).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer);
-    SimpleCookingRecipeBuilder.cooking(Ingredient.of(source), result.get(), xp, 100, RecipeSerializer.SMOKING_RECIPE).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer, safeId(result.get()) + "_from_smoker");
-    SimpleCookingRecipeBuilder.cooking(Ingredient.of(source), result.get(), xp, 600, RecipeSerializer.CAMPFIRE_COOKING_RECIPE).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer, safeId(result.get()) + "_from_campfire");
+    SimpleCookingRecipeBuilder.cooking(Ingredient.of(source), result.get(), xp, 100, RecipeSerializer.SMOKING_RECIPE).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer, rl(safeId(result.get()) + "_from_smoker"));
+    SimpleCookingRecipeBuilder.cooking(Ingredient.of(source), result.get(), xp, 600, RecipeSerializer.CAMPFIRE_COOKING_RECIPE).unlockedBy("has_" + safeName(getId(source)), has(source)).save(consumer, rl(safeId(result.get()) + "_from_campfire"));
   }
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> void smelting(Supplier<? extends T> source, Supplier<? extends T> result, float xp, boolean blast, Consumer<FinishedRecipe> consumer) {
-    SimpleCookingRecipeBuilder.smelting(Ingredient.of(source.get()), result.get(), xp, 200).unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get())).save(consumer, safeId(result.get()) + "_from_smelting");
+    SimpleCookingRecipeBuilder.smelting(Ingredient.of(source.get()), result.get(), xp, 200).unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get())).save(consumer, rl(safeId(result.get()) + "_from_smelting"));
     if (blast) {
-      SimpleCookingRecipeBuilder.blasting(Ingredient.of(source.get()), result.get(), xp, 100).unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get())).save(consumer, safeId(result.get()) + "_from_blasting");
+      SimpleCookingRecipeBuilder.blasting(Ingredient.of(source.get()), result.get(), xp, 100).unlockedBy("has_" + safeName(source.get().getRegistryName()), has(source.get())).save(consumer, rl(safeId(result.get()) + "_from_blasting"));
     }
   }
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> void storage(Supplier<? extends T> input, Supplier<? extends T> output, Consumer<FinishedRecipe> consumer) {
     ShapedRecipeBuilder.shaped(output.get()).pattern("###").pattern("###").pattern("###").define('#', input.get()).unlockedBy("has_at_least_9_" + safeName(input.get()), has(input.get())).save(consumer);
-    ShapelessRecipeBuilder.shapeless(input.get(), 9).requires(output.get()).unlockedBy("has_" + safeName(output.get()), has(output.get())).save(consumer, safeId(input.get()) + "_from_" + safeName(output.get()));
+    ShapelessRecipeBuilder.shapeless(input.get(), 9).requires(output.get()).unlockedBy("has_" + safeName(output.get()), has(output.get())).save(consumer, rl(safeId(input.get()) + "_from_" + safeName(output.get())));
   }
 
   public Item getModElement(TagKey<Item> input) {
@@ -178,7 +178,7 @@ public class RecipeGenerator {
         .pattern("###")
         .pattern("###")
         .pattern("###").define('#', input).unlockedBy("has_at_least_9_" + safeName(getId(input)), has(input)).save(consumer);
-    ShapelessRecipeBuilder.shapeless(getModElement(input), 9).requires(output.get()).unlockedBy("has_" + safeName(output.get()), has(output.get())).save(consumer, new ResourceLocation(modid, safeName(getId(input)) + "_from_" + safeName(output.get())));
+    ShapelessRecipeBuilder.shapeless(getModElement(input), 9).requires(output.get()).unlockedBy("has_" + safeName(output.get()), has(output.get())).save(consumer, rl(safeName(getId(input)) + "_from_" + safeName(output.get())));
   }
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> ShapelessRecipeBuilder singleItemUnfinished(Supplier<? extends T> source, Supplier<? extends T> result, int required, int amount) {
@@ -202,7 +202,7 @@ public class RecipeGenerator {
   }
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> void dye(Supplier<? extends T> source, Supplier<? extends T> result, int required, int amount, Consumer<FinishedRecipe> consumer) {
-    singleItemUnfinished(source, result, required, amount).save(consumer, new ResourceLocation(modid, Objects.requireNonNull(result.get().getRegistryName()).getPath()));
+    singleItemUnfinished(source, result, required, amount).save(consumer, rl(Objects.requireNonNull(result.get().getRegistryName()).getPath()));
   }
 
   public <T extends ItemLike & IForgeRegistryEntry<?>> void singleItem(Supplier<? extends T> source, Supplier<? extends T> result, int required, int amount, Consumer<FinishedRecipe> consumer) {
@@ -243,7 +243,7 @@ public class RecipeGenerator {
     if (stone) {
       SingleItemRecipeBuilder.stonecutting(Ingredient.of(source.get()), result.get())
           .unlockedBy("has_" + safeName(source.get()), has(source.get()))
-          .save(consumer, safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting");
+          .save(consumer, rl(safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting"));
     }
   }
 
@@ -258,7 +258,7 @@ public class RecipeGenerator {
     if (stone) {
       SingleItemRecipeBuilder.stonecutting(Ingredient.of(source.get()), result.get(), 2)
           .unlockedBy("has_" + safeName(source.get()), has(source.get()))
-          .save(consumer, safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting");
+          .save(consumer, rl(safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting"));
     }
   }
 
@@ -274,7 +274,7 @@ public class RecipeGenerator {
     if (stone) {
       SingleItemRecipeBuilder.stonecutting(Ingredient.of(source.get()), result.get(), 2)
           .unlockedBy("has_" + safeName(source.get()), has(source.get()))
-          .save(consumer, safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting");
+          .save(consumer, rl(safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting"));
     }
   }
 
@@ -291,7 +291,7 @@ public class RecipeGenerator {
     if (stone) {
       SingleItemRecipeBuilder.stonecutting(Ingredient.of(source.get()), result.get(), 2)
           .unlockedBy("has_" + safeName(source.get()), has(source.get()))
-          .save(consumer, safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting");
+          .save(consumer, rl(safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting"));
     }
   }
 
@@ -326,7 +326,7 @@ public class RecipeGenerator {
     if (stone) {
       SingleItemRecipeBuilder.stonecutting(Ingredient.of(source.get()), result.get())
           .unlockedBy("has_" + safeName(source.get()), has(source.get()))
-          .save(consumer, safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting");
+          .save(consumer, rl(safeId(result.get()) + "_from_" + safeName(source.get()) + "_stonecutting"));
     }
   }
 
@@ -423,7 +423,7 @@ public class RecipeGenerator {
         .define('S', Tags.Items.RODS_WOODEN)
         .group(group)
         .unlockedBy("has_" + safeName(getId(material)), has(material))
-        .save(consumer, safeName(result.get()) + "_from_" + safeName(getId(material)));
+        .save(consumer, rl(safeName(result.get()) + "_from_" + safeName(getId(material))));
   }
 
   @SuppressWarnings("ConstantConditions")
@@ -460,7 +460,7 @@ public class RecipeGenerator {
         .define('S', Tags.Items.RODS_WOODEN)
         .group(group)
         .unlockedBy("has_" + safeName(sword.get()), has(sword.get()))
-        .save(consumer, new ResourceLocation(modid, Objects.requireNonNull(result.get().getRegistryName()).getPath()));
+        .save(consumer, rl(Objects.requireNonNull(result.get().getRegistryName()).getPath()));
   }
 
   @SuppressWarnings("ConstantConditions")
@@ -473,7 +473,7 @@ public class RecipeGenerator {
         .define('S', Tags.Items.RODS_WOODEN)
         .group(group)
         .unlockedBy("has_" + safeName(sword), has(sword))
-        .save(consumer, new ResourceLocation(modid, Objects.requireNonNull(result.get().getRegistryName()).getPath()));
+        .save(consumer, rl(Objects.requireNonNull(result.get().getRegistryName()).getPath()));
   }
 
   @SuppressWarnings("ConstantConditions")
