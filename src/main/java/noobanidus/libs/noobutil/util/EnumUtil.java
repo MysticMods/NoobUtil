@@ -11,4 +11,25 @@ public class EnumUtil {
     T[] values = i.getEnumConstants();
     return ordinal >= 0 && ordinal < values.length ? values[ordinal] : null;
   }
+
+  @SuppressWarnings("unchecked")
+  public static <T extends Enum<T>> T fromString (T i, String value) {
+    for (T t : ((Class<T>)i.getClass()).getEnumConstants()) {
+      if (t.toString().equalsIgnoreCase(value)) {
+        return t;
+      }
+    }
+
+    return null;
+  }
+
+  public static <T extends Enum<T>> T fromString (Class<T> i, String value) {
+    for (T t : i.getEnumConstants()) {
+      if (t.toString().equalsIgnoreCase(value)) {
+        return t;
+      }
+    }
+
+    return null;
+  }
 }
