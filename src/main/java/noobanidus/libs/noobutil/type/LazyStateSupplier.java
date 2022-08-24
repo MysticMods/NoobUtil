@@ -2,15 +2,15 @@ package noobanidus.libs.noobutil.type;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import net.minecraft.world.level.block.state.properties.Property;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.registries.ForgeRegistries;
 import noobanidus.libs.noobutil.reference.ModData;
@@ -69,7 +69,7 @@ public class LazyStateSupplier extends LazySupplier<BlockState> implements INBTS
       this.properties.addAll(pairs);
     }
     this.supplier = () -> this.apply(this.state.orElse(Blocks.AIR.defaultBlockState()));
-    this.location = stateIn.getBlock().getRegistryName();
+    this.location = ForgeRegistries.BLOCKS.getKey(stateIn.getBlock());
   }
 
   public BlockState apply (BlockState state) {

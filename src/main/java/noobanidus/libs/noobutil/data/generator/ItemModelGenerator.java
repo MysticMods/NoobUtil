@@ -2,12 +2,9 @@ package noobanidus.libs.noobutil.data.generator;
 
 import com.tterrag.registrate.providers.DataGenContext;
 import com.tterrag.registrate.providers.RegistrateItemModelProvider;
-import net.minecraft.world.item.Item;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraftforge.client.model.generators.ItemModelBuilder;
-import net.minecraftforge.registries.IForgeRegistryEntry;
-
-import java.util.Objects;
 
 public class ItemModelGenerator {
   public static <T extends Item> ItemModelBuilder itemModel(DataGenContext<Item, T> ctx, RegistrateItemModelProvider p) {

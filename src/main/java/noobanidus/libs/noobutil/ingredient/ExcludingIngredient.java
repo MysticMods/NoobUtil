@@ -2,12 +2,11 @@ package noobanidus.libs.noobutil.ingredient;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.tags.Tag;
 import net.minecraft.world.level.ItemLike;
 import net.minecraftforge.common.crafting.CraftingHelper;
 import net.minecraftforge.common.crafting.IIngredientSerializer;
@@ -20,10 +19,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-// Derived from Mekanism's ExcludingIngredient: https://github.com/mekanism/Mekanism/blob/1.16.x/src/main/java/mekanism/common/recipe/ingredient/ExcludingIngredient.java
-// MIT licensed.
-import net.minecraft.world.item.crafting.Ingredient.Value;
 
 public class ExcludingIngredient extends Ingredient {
 

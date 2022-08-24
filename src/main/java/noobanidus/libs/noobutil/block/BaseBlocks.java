@@ -1,31 +1,28 @@
 package noobanidus.libs.noobutil.block;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.tags.TagKey;
+import net.minecraft.util.RandomSource;
 import net.minecraft.util.valueproviders.UniformInt;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BushBlock;
+import net.minecraft.world.level.block.DropExperienceBlock;
+import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.grower.AbstractTreeGrower;
-import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.ItemLike;
-import net.minecraft.core.BlockPos;
-import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraft.world.level.BlockGetter;
 
 import javax.annotation.Nonnull;
-import java.util.Random;
 import java.util.function.Supplier;
-
-import net.minecraft.world.level.block.PressurePlateBlock.Sensitivity;
-import net.minecraft.world.level.block.state.BlockBehaviour.Properties;
 
 @SuppressWarnings("deprecation")
 public class BaseBlocks {
@@ -80,9 +77,8 @@ public class BaseBlocks {
       return false;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
-    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random) {
+    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, RandomSource random) {
     }
 
     @Override
@@ -97,14 +93,14 @@ public class BaseBlocks {
     }
   }
 
-  public static class OreBlock extends net.minecraft.world.level.block.OreBlock {
+  public static class OreBlock extends DropExperienceBlock {
     private final int minXP;
     private final int maxXP;
 
-    public OreBlock(Properties p_153992_, UniformInt p_153993_) {
-      super(p_153992_, p_153993_);
-      minXP = p_153993_.getMinValue();
-      maxXP = p_153993_.getMaxValue();
+    public OreBlock(Properties props, UniformInt xp) {
+      super(props, xp);
+      minXP = xp.getMinValue();
+      maxXP = xp.getMaxValue();
     }
 
     public OreBlock(Properties props, int minXP, int maxXP) {

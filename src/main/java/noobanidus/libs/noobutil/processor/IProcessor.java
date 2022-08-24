@@ -1,8 +1,6 @@
 package noobanidus.libs.noobutil.processor;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.IForgeRegistryEntry;
-import noobanidus.libs.noobutil.crafting.ContainerCrafting;
 import noobanidus.libs.noobutil.crafting.ICrafting;
 import noobanidus.libs.noobutil.ingredient.IngredientStack;
 
@@ -10,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public interface IProcessor<T extends ICrafting<?, ?>> extends IForgeRegistryEntry<IProcessor<?>> {
+public interface IProcessor<T extends ICrafting<?, ?>> {
 
   default List<List<ItemStack>> process(ItemStack incomingResult, List<IngredientStack> ingredients, List<ItemStack> usedItems, T crafter) {
     if (ingredients.size() != usedItems.size()) {
