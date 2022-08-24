@@ -5,11 +5,12 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.Sets;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.registries.ForgeRegistries;
 import noobanidus.libs.noobutil.network.AbstractNetworkObject;
 import noobanidus.libs.noobutil.util.ItemUtil;
 
@@ -97,7 +98,7 @@ public class ItemTracking extends AbstractNetworkObject<FriendlyByteBuf> {
     public TrackingEntry(Item canonicalItem) {
       this.canonicalItem = canonicalItem;
       this.canonicalStack = new ItemStack(canonicalItem);
-      this.location = canonicalItem.getRegistryName();
+      this.location = ForgeRegistries.ITEMS.getKey(canonicalItem);
     }
 
     public void clear() {

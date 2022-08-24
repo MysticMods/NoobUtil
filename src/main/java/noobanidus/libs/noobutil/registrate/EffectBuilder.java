@@ -2,15 +2,17 @@ package noobanidus.libs.noobutil.registrate;
 
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
+import net.minecraft.core.Registry;
 import net.minecraft.world.effect.MobEffect;
 
+import javax.annotation.Nonnull;
 import java.util.function.Supplier;
 
 public class EffectBuilder<T extends MobEffect, P> extends AbstractBuilder<MobEffect, T, P, EffectBuilder<T, P>> {
-  private Supplier<T> factory;
+  private final Supplier<T> factory;
 
   protected EffectBuilder(CustomRegistrate owner, P parent, String name, BuilderCallback callback, Supplier<T> factory) {
-    super(owner, parent, name, callback, MobEffect.class);
+    super(owner, parent, name, callback, Registry.MOB_EFFECT_REGISTRY);
     this.factory = factory;
   }
 
@@ -18,6 +20,7 @@ public class EffectBuilder<T extends MobEffect, P> extends AbstractBuilder<MobEf
     return new EffectBuilder<>(owner, parent, name, callback, factory).defaultLang();
   }
 
+  @Nonnull
   @Override
   protected T createEntry() {
     return factory.get();
