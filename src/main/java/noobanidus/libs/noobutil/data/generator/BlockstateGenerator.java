@@ -34,6 +34,7 @@ public class BlockstateGenerator {
           String file = prefix + state.getValue(((CropBlock) state.getBlock()).getAgeProperty());
           ModelFile stage = p.models().getBuilder(file)
               .parent(crop)
+              .renderType("cutout")
               .texture("crop", p.modLoc("block/crops/" + file));
           return ConfiguredModel.builder().modelFile(stage).build();
         });
@@ -47,6 +48,7 @@ public class BlockstateGenerator {
           String file = prefix + state.getValue(((CropBlock) state.getBlock()).getAgeProperty());
           ModelFile stage = p.models().getBuilder(file)
               .parent(crop)
+              .renderType("cutout")
               .texture("cross", p.modLoc("block/crops/" + file));
           return ConfiguredModel.builder().modelFile(stage).build();
         });
