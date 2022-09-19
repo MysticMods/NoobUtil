@@ -25,4 +25,11 @@ public class LazySupplier<T> implements Supplier<T> {
 
     return this.value;
   }
+
+  public static <T> LazySupplier<T> of (Supplier<T> supplier) {
+    if (supplier instanceof LazySupplier<T> lazySupplier) {
+      return lazySupplier;
+    }
+    return new LazySupplier<>(supplier);
+  }
 }
