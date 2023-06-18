@@ -1,11 +1,13 @@
 package noobanidus.libs.noobutil.recipe;
 
+import com.google.common.collect.ImmutableCollection;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.world.Container;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.util.profiling.ProfilerFiller;
@@ -13,6 +15,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.resources.ResourceLocation;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -35,8 +38,13 @@ public abstract class ResolvingRecipeType<C extends Container, T extends Recipe<
 
   public List<T> getRecipes() {
     if (cache == null) {
-      cache = getRecipesList(); // ArcaneArchivesAPI.getInstance().getRecipeManager().getAllRecipesFor(type.get());
-      cache.sort(comparator);
+      cache = getRecipesList();
+      try {
+        cache.sort(comparator);
+      } catch (UnsupportedOperationException exception) {
+        cache = new ArrayList<>(cache);
+        cache.sort(comparator);
+      }
       reverseLookup.clear();
       for (int i = 0; i < cache.size(); i++) {
         reverseLookup.put(cache.get(i).getId(), i);
