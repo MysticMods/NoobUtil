@@ -6,6 +6,7 @@ import com.google.common.collect.Sets;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import net.minecraft.advancements.CriterionTrigger;
+import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.server.PlayerAdvancements;
 import net.minecraft.advancements.critereon.AbstractCriterionTriggerInstance;
 import net.minecraft.advancements.critereon.EntityPredicate;
@@ -87,7 +88,7 @@ public class GenericTrigger<T> implements CriterionTrigger<GenericTrigger.Instan
     IGenericPredicate<T> predicate;
 
     Instance(ResourceLocation location, IGenericPredicate<T> predicate) {
-      super(location, EntityPredicate.Composite.ANY);
+      super(location, ContextAwarePredicate.ANY);
 
       this.predicate = predicate;
     }

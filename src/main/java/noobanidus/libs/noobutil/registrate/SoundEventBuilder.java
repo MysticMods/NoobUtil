@@ -1,3 +1,4 @@
+/*
 package noobanidus.libs.noobutil.registrate;
 
 import com.tterrag.registrate.builders.AbstractBuilder;
@@ -22,3 +23,4 @@ public class SoundEventBuilder<T extends SoundEvent, P> extends AbstractBuilder<
     return factory.get();
   }
 }
+*/

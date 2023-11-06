@@ -37,7 +37,7 @@ public class ItemUtil {
   }
 
   public static boolean equalWithoutDamage(ItemStack stack1, ItemStack stack2) {
-    return ItemStack.isSame(stack1, stack2) && ItemStack.tagMatches(stack1, stack2);
+    return ItemStack.isSameItemSameTags(stack1, stack2);
   }
 
   public static class Spawn {

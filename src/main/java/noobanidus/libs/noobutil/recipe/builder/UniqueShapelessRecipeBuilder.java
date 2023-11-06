@@ -1,3 +1,4 @@
+/*
 package noobanidus.libs.noobutil.recipe.builder;
 
 import com.google.common.collect.Lists;
@@ -7,6 +8,7 @@ import net.minecraft.advancements.CriterionTriggerInstance;
 import net.minecraft.advancements.RequirementsStrategy;
 import net.minecraft.advancements.critereon.RecipeUnlockedTrigger;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.FinishedRecipe;
 import net.minecraft.data.recipes.ShapelessRecipeBuilder;
 import net.minecraft.resources.ResourceLocation;
@@ -79,11 +81,11 @@ public class UniqueShapelessRecipeBuilder {
   }
 
   public void save(Consumer<FinishedRecipe> p_200482_1_) {
-    this.save(p_200482_1_, Registry.ITEM.getKey(this.result));
+    this.save(p_200482_1_, BuiltInRegistries.ITEM.getKey(this.result));
   }
 
   public void save(Consumer<FinishedRecipe> p_200484_1_, String p_200484_2_) {
-    ResourceLocation resourcelocation = Registry.ITEM.getKey(this.result);
+    ResourceLocation resourcelocation = BuiltInRegistries.ITEM.getKey(this.result);
     if ((new ResourceLocation(p_200484_2_)).equals(resourcelocation)) {
       throw new IllegalStateException("Unique Shapeless Recipe " + p_200484_2_ + " should remove its 'save' argument");
     } else {
@@ -117,3 +119,4 @@ public class UniqueShapelessRecipeBuilder {
     }
   }
 }
+*/

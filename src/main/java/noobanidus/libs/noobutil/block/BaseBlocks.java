@@ -16,6 +16,7 @@ import net.minecraft.world.level.block.grower.AbstractTreeGrower;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockSetType;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -88,8 +89,8 @@ public class BaseBlocks {
   }
 
   public static class DoorBlock extends net.minecraft.world.level.block.DoorBlock {
-    public DoorBlock(Properties builder) {
-      super(builder);
+    public DoorBlock(Properties builder, BlockSetType type) {
+      super(builder, type);
     }
   }
 
@@ -110,39 +111,9 @@ public class BaseBlocks {
     }
   }
 
-  public static class PressurePlateBlock extends net.minecraft.world.level.block.PressurePlateBlock {
-    public PressurePlateBlock(Sensitivity sensitivityIn, Properties propertiesIn) {
-      super(sensitivityIn, propertiesIn);
-    }
-  }
-
   public static class SaplingBlock extends net.minecraft.world.level.block.SaplingBlock {
     public SaplingBlock(AbstractTreeGrower tree, Properties proeprties) {
       super(tree, proeprties);
-    }
-  }
-
-  public static class StoneButtonBlock extends net.minecraft.world.level.block.StoneButtonBlock {
-    public StoneButtonBlock(Properties properties) {
-      super(properties);
-    }
-  }
-
-  public static class TrapDoorBlock extends net.minecraft.world.level.block.TrapDoorBlock {
-    public TrapDoorBlock(Properties properties) {
-      super(properties);
-    }
-  }
-
-  public static class WeightedPressurePlateBlock extends net.minecraft.world.level.block.WeightedPressurePlateBlock {
-    public WeightedPressurePlateBlock(int weight, Properties properties) {
-      super(weight, properties);
-    }
-  }
-
-  public static class WoodButtonBlock extends net.minecraft.world.level.block.WoodButtonBlock {
-    public WoodButtonBlock(Properties properties) {
-      super(properties);
     }
   }
 

@@ -1,8 +1,11 @@
+/*
 package noobanidus.libs.noobutil.registrate;
 
 import com.tterrag.registrate.builders.AbstractBuilder;
 import com.tterrag.registrate.builders.BuilderCallback;
 import net.minecraft.core.Registry;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.MenuType;
 
@@ -12,7 +15,7 @@ public class ContainerBuilder<T extends AbstractContainerMenu, P> extends Abstra
   private final MenuType.MenuSupplier<T> factory;
 
   public ContainerBuilder(CustomRegistrate owner, P parent, String name, BuilderCallback callback, MenuType.MenuSupplier<T> factory) {
-    super(owner, parent, name, callback, Registry.MENU_REGISTRY);
+    super(owner, parent, name, callback, Registries.MENU);
     this.factory = factory;
   }
 
@@ -22,3 +25,4 @@ public class ContainerBuilder<T extends AbstractContainerMenu, P> extends Abstra
     return new MenuType<>(factory);
   }
 }
+*/

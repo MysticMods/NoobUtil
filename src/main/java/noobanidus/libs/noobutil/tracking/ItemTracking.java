@@ -133,7 +133,7 @@ public class ItemTracking extends AbstractNetworkObject<FriendlyByteBuf> {
     }
 
     public boolean trackItem(ItemStack stack, UUID blockId, int slotIndex) {
-      if (!stack.sameItem(canonicalStack)) {
+      if (!ItemStack.isSameItem(stack, canonicalStack)) {
         return false;
       }
 

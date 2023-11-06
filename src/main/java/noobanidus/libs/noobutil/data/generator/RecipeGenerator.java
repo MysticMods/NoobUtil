@@ -1,3 +1,4 @@
+/*
 package noobanidus.libs.noobutil.data.generator;
 
 import com.tterrag.registrate.providers.DataGenContext;
@@ -645,3 +646,4 @@ public class RecipeGenerator {
   }
 }
 
+*/

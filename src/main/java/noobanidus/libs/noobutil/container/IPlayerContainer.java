@@ -15,7 +15,7 @@ public interface IPlayerContainer {
     if (getPlayer() == null) {
       return null;
     }
-    return getPlayer().level;
+    return getPlayer().level();
   }
 
   List<Slot> getPlayerSlots();

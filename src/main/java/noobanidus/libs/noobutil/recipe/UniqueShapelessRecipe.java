@@ -1,3 +1,4 @@
+/*
 package noobanidus.libs.noobutil.recipe;
 
 import net.minecraft.world.inventory.CraftingContainer;
@@ -55,3 +56,4 @@ public class UniqueShapelessRecipe extends ShapelessRecipe {
     return count == this.getIngredients().size() && RecipeMatcher.findMatches(inputs, this.getIngredients()) != null;
   }
 }
+*/

@@ -1,3 +1,4 @@
+/*
 package noobanidus.libs.noobutil.registrate;
 
 import com.tterrag.registrate.builders.AbstractBuilder;
@@ -34,3 +35,4 @@ public class EffectBuilder<T extends MobEffect, P> extends AbstractBuilder<MobEf
     return this.lang(MobEffect::getDescriptionId, name);
   }
 }
+*/
